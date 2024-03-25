@@ -12,6 +12,7 @@
   "dependencies": {
     "@dsnp/parquetjs": "^1.6.2",
     "axios": "^1.6.8",
+    "cheerio": "^1.0.0-rc.12",
     "parquetjs": "^0.11.2"
   }
 }
