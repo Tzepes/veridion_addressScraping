@@ -8,6 +8,7 @@ const brightusername = fs.readFileSync('.brightdataUsername').toString().trim();
 
 const axiosBrightDataInstance = axios.create({
     proxy: {
+        protocol: 'http',
         host: 'brd.superproxy.io',
         port: '9222',
         auth: {
@@ -28,16 +29,16 @@ const axiosBrightDataInstance = axios.create({
 
         try {
             console.log('trying...');
-            const response = await axiosBrightDataInstance.get('http://' + record.domain);
+            const response = await axios.get('http://' + record.domain, axiosBrightDataInstance);
             
             if (response.status === 200) {
-                // console.log(retrieveLocationData(response.data));
+                console.log(retrieveLocationData(response.data));
                 console.log('Success');
             } else {
                 console.log('Failed');
             }
         } catch (error) {
-            console.error("error");
+            console.error(error);
         }
     }
     console.log("");
@@ -51,12 +52,7 @@ async function retrieveLocationData(htmlContent) {
 
     const $ = cheerio.load(htmlContent);
 
-    const country = $('footer .country').text();
-    const region = $('footer .region').text();
-    const city = $('footer .city').text();
-    const postcode = $('footer .postcode').text();
-    const road = $('footer .road').text();
-    const roadNumbers = $('footer .road-number').text().split(',');
+    const body = $('body').text();
 
-    return { country, region, city, postcode, road, roadNumbers };
+    return body;
 }
