@@ -3,19 +3,19 @@ const axios = require('axios');
 const cheerio = require('cheerio');
 
 const fs = require('fs');
-const brightpassword = fs.readFileSync('.brightdataPassword').toString().trim();
 const brightusername = fs.readFileSync('.brightdataUsername').toString().trim();
+const brightpassword = fs.readFileSync('.brightdataPassword').toString().trim();
 
 const axiosBrightDataInstance = axios.create({
     proxy: {
-        protocol: 'http',
         host: 'brd.superproxy.io',
-        port: '9222',
+        port: 9222,
         auth: {
             username: brightusername,
             password: brightpassword
         }
-    }
+    },
+    timeout: 10000 // 10 seconds timeout
 });
 
 (async () => {
@@ -28,11 +28,22 @@ const axiosBrightDataInstance = axios.create({
         console.log(record.domain) // returns the URL
 
         try {
-            console.log('trying...');
-            const response = await axios.get('http://' + record.domain, axiosBrightDataInstance);
+            // console.log('Checking proxy...');
             
+            // // Test proxy connection
+            // const proxyResponse = await axiosBrightDataInstance.get('https://api.ipify.org?format=json');
+            
+            // // Return response of domain trough proxy
+            // const proxyResponse = await axiosBrightDataInstance.get('http://' + record.domain);
+            
+            // console.log('Proxy IP:', proxyResponse.data.ip);
+
+            const response = await axios.get('http://' + record.domain, {
+                timeout: 1000
+            });
+
             if (response.status === 200) {
-                console.log(retrieveLocationData(response.data));
+                retrieveLocationData(response.data);
                 console.log('Success');
             } else {
                 console.log('Failed');
@@ -52,7 +63,24 @@ async function retrieveLocationData(htmlContent) {
 
     const $ = cheerio.load(htmlContent);
 
-    const body = $('body').text();
+    // Extract text from relevant elements
+    const text = $('body').text();
 
-    return body;
+    // Example regex patterns to extract relevant information
+    const postcodeRegex = /\b\d{4}\b/g; // Matches 4-digit postcodes
+    const roadRegex = /Road:\s*(\w+)/i; // Matches road names preceded by 'Road:'
+
+    // Extract postcode
+    const postcodeMatch = text.match(postcodeRegex);
+    const postcode = postcodeMatch ? postcodeMatch[0] : null;
+
+    // Extract road
+    const roadMatch = text.match(roadRegex);
+    const road = roadMatch ? roadMatch[1] : null;
+
+    // Output extracted data
+    console.log('Postcode:', postcode);
+    console.log('Road:', road);
+
+    // return body;
 }
