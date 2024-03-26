@@ -95,15 +95,19 @@ async function retrieveLocationData(htmlContent) {
         }
     }
 
-    // Example regex patterns to extract relevant information
-    const postcodeRegex = /\b[A-Z]{2}\s*\d{4,10}\b/g; // Matches postcodes 
-    const roadRegex = /(Road|Street|Avenue|Boulevard|Drive|Lane|Way|Circle|Court|Place|Terrace)\s*([A-Z][a-zA-Z]*(\s+[A-Z][a-zA-Z]*)*)/i; // Matches road names preceded by 'Road:'
-
     // Extract postcode
-    const postcodeMatch = text.match(postcodeRegex);
-    const postcode = postcodeMatch ? postcodeMatch[0] : null;
+    const postcodeWithLabelRegex = /Postcode:\s*([A-Z]{2}\s*\d{4,10})\b/;
+    const postcodeRegexWithState = /\b[A-Z]{2}\s*\d{4,10}\b/g; // Matches postcodes 
+    let postcodeMatch = text.match(postcodeWithLabelRegex);
+    let postcode = postcodeMatch ? postcodeMatch[1] : null;
 
+    if (postcode === null) {
+        postcodeMatch = text.match(postcodeRegexWithState);
+        postcode = postcodeMatch ? postcodeMatch[0] : null;
+    }
+    
     // Extract road
+    const roadRegex = /(Road|Street|Avenue|Boulevard|Drive|Lane|Way|Circle|Court|Place|Terrace)\s*([A-Z][a-zA-Z]*(\s+[A-Z][a-zA-Z]*)*)/i; // Matches road names preceded by 'Road:'
     const roadMatch = text.match(roadRegex);
     const road = roadMatch ? roadMatch[2] : null;
 
