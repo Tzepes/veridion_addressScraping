@@ -6,6 +6,9 @@ const fs = require('fs');
 const brightusername = fs.readFileSync('.brightdataUsername').toString().trim();
 const brightpassword = fs.readFileSync('.brightdataPassword').toString().trim();
 
+const {countries, countryAbbreviations} = require('./countriesCodes.js');
+const postalcodeRegex = require('./postalcodeRegex.js')
+
 const axiosBrightDataInstance = axios.create({
     proxy: {
         protocol: 'https',
@@ -68,18 +71,6 @@ async function retrieveLocationData(htmlContent) {
     // Extract text from relevant elements
     const text = $('body').text();
 
-    const countries = [
-        'Albania', 'Andorra', 'Armenia', 'Austria', 'Azerbaijan', 'Belarus', 'Belgium', 'Bosnia and Herzegovina', 'Bulgaria', 'Croatia', 'Cyprus', 'Czech Republic', 'Denmark', 'Estonia', 'Finland', 'France', 'Georgia', 'Germany', 'Greece', 'Hungary', 'Iceland', 'Ireland', 'Italy', 'Kazakhstan', 'Kosovo', 'Latvia', 'Liechtenstein', 'Lithuania', 'Luxembourg', 'Malta', 'Moldova', 'Monaco', 'Montenegro', 'Netherlands', 'North Macedonia', 'Norway', 'Poland', 'Portugal', 'Romania', 'Russia', 'San Marino', 'Serbia', 'Slovakia', 'Slovenia', 'Spain', 'Sweden', 'Switzerland', 'Turkey', 'Ukraine', 'United Kingdom', 'Vatican City', // European countries
-        'Antigua and Barbuda', 'Bahamas', 'Barbados', 'Belize', 'Canada', 'Costa Rica', 'Cuba', 'Dominica', 'Dominican Republic', 'El Salvador', 'Grenada', 'Guatemala', 'Haiti', 'Honduras', 'Jamaica', 'Mexico', 'Nicaragua', 'Panama', 'Saint Kitts and Nevis', 'Saint Lucia', 'Saint Vincent and the Grenadines', 'Trinidad and Tobago', 'United States', // Americas countries
-        'Argentina', 'Bolivia', 'Brazil', 'Chile', 'Colombia', 'Ecuador', 'Guyana', 'Paraguay', 'Peru', 'Suriname', 'Uruguay', 'Venezuela' // South American countries
-    ];
-
-    const countryAbbreviations = [
-        'AL', 'AD', 'AM', 'AT', 'AZ', 'BY', 'BE', 'BA', 'BG', 'HR', 'CY', 'CZ', 'DK', 'EE', 'FI', 'FR', 'GE', 'DE', 'GR', 'HU', 'IS', 'IE', 'IT', 'KZ', 'XK', 'LV', 'LI', 'LT', 'LU', 'MT', 'MD', 'MC', 'ME', 'NL', 'MK', 'NO', 'PL', 'PT', 'RO', 'RU', 'SM', 'RS', 'SK', 'SI', 'ES', 'SE', 'CH', 'TR', 'UA', 'GB', 'VA', // European countries
-        'AG', 'BS', 'BB', 'BZ', 'CA', 'CR', 'CU', 'DM', 'DO', 'SV', 'GD', 'GT', 'HT', 'HN', 'JM', 'MX', 'NI', 'PA', 'KN', 'LC', 'VC', 'TT', 'US', // North American countries
-        'AR', 'BO', 'BR', 'CL', 'CO', 'EC', 'GY', 'PY', 'PE', 'SR', 'UY', 'VE' // South American countries
-    ];
-
     const countryRegex = new RegExp('\\b(' + countries.join('|') + ')\\b', 'i');
     const countryMatch = text.match(countryRegex);
     let country = countryMatch ? countryMatch[0] : null;
@@ -96,14 +87,29 @@ async function retrieveLocationData(htmlContent) {
     }
 
     // Extract postcode
-    const postcodeWithLabelRegex = /Postcode:\s*([A-Z]{2}\s*\d{4,10})\b/;
-    const postcodeRegexWithState = /\b[A-Z]{2}\s*\d{4,10}\b/g; // Matches postcodes 
-    let postcodeMatch = text.match(postcodeWithLabelRegex);
+
+    //Things to check for: 
+    // some states are spelled fully, such as Ohio instead of OH
+    // could return country based on postal code in most cases
+    const postalcode = postalcodeRegex[country];
+
+    const postcodeWithLabelRegex = /Postcode\s*([A-Z]{2}\s*\d{4,10})\b/;
+    const postcodeRegexWithState = /\b[A-Z]{2}\s*\d{4,10}\b/g; 
+    
+    // let postcodeMatch = text.match(postcodeWithLabelRegex);
+    let postcodeMatch = text.match(postalcode);
     let postcode = postcodeMatch ? postcodeMatch[1] : null;
 
-    if (postcode === null) {
-        postcodeMatch = text.match(postcodeRegexWithState);
-        postcode = postcodeMatch ? postcodeMatch[0] : null;
+    if(!postcode) {
+        postcodeMatch = text.match(postcodeWithLabelRegex);
+        if (postcodeMatch) {
+            postcode = postcodeMatch[1];
+        } else {
+            postcodeMatch = text.match(postcodeRegexWithState);
+            if (postcodeMatch) {
+                postcode = postcodeMatch[0];
+            }
+        }
     }
     
     // Extract road
@@ -112,9 +118,9 @@ async function retrieveLocationData(htmlContent) {
     const road = roadMatch ? roadMatch[2] : null;
 
     // Output extracted data
-    // console.log('Country:', country)
+    console.log('Country:', country)
     console.log('Postcode:', postcode);
-    // console.log('Road:', road);
+    console.log('Road:', road);
 
     // return body;
 }
