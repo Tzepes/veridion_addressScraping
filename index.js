@@ -7,7 +7,8 @@ const brightusername = fs.readFileSync('.brightdataUsername').toString().trim();
 const brightpassword = fs.readFileSync('.brightdataPassword').toString().trim();
 
 const {countries, countryAbbreviations} = require('./countriesCodes.js');
-const postalcodeRegex = require('./postalcodeRegex.js')
+const postalcodeRegex = require('./postalcodeRegex.js');
+const { url } = require('inspector');
 
 const axiosBrightDataInstance = axios.create({
     proxy: {
@@ -28,8 +29,8 @@ const axiosBrightDataInstance = axios.create({
 
     let record = null;
     while(record = await cursor.next()) {
-        console.log("");
-        console.log(record.domain) // returns the URL
+        // console.log("");
+        // console.log(record.domain) // returns the URL
 
         try {
             // console.log('Checking proxy...');
@@ -42,19 +43,20 @@ const axiosBrightDataInstance = axios.create({
             
             // console.log('Proxy IP:', proxyResponse.data.ip);
             // console.log(axiosBrightDataInstance);
-
+            
             const response = await axios.get('http://' + record.domain, {
                 timeout: 10000
             });
-
+            console.log("");
             if (response.status === 200) {
+                console.log(record.domain)
                 retrieveLocationData(response.data);
                 console.log('Success');
             } else {
                 console.log('Failed');
             }
         } catch (error) {
-            console.error(error);
+            // console.error(error);
         }
     }
     console.log("");
@@ -66,25 +68,23 @@ async function retrieveLocationData(htmlContent) {
     // Parse the HTML content to retrieve the location data
     // Return the location data
 
+    // Declare fields:
+    let country;
+    let region;
+    let city;
+    let postcode;
+    let road;
+    let roadNumber;
+
     const $ = cheerio.load(htmlContent);
 
     // Extract text from relevant elements
     const text = $('body').text();
 
+    // Extract country
     const countryRegex = new RegExp('\\b(' + countries.join('|') + ')\\b', 'i');
     const countryMatch = text.match(countryRegex);
-    let country = countryMatch ? countryMatch[0] : null;
-
-    if (country === null) {
-        const countryAbbreviationRegex = new RegExp('\\b(' + countryAbbreviations.join('|') + ')\\b');
-        const countryAbbreviationMatch = text.match(countryAbbreviationRegex);
-        if(countryAbbreviationMatch){
-            const abbreviationIndex = countryAbbreviations.indexOf(countryAbbreviationMatch[0]);
-            country = countries[abbreviationIndex];
-        } else {
-            country = null;
-        }
-    }
+    country = countryMatch ? countryMatch[0] : null;
 
     // Extract postcode
 
@@ -98,7 +98,7 @@ async function retrieveLocationData(htmlContent) {
     
     // let postcodeMatch = text.match(postcodeWithLabelRegex);
     let postcodeMatch = text.match(postalcode);
-    let postcode = postcodeMatch ? postcodeMatch[1] : null;
+    postcode = postcodeMatch ? postcodeMatch[1] : null;
 
     if(!postcode) {
         postcodeMatch = text.match(postcodeWithLabelRegex);
@@ -111,16 +111,44 @@ async function retrieveLocationData(htmlContent) {
             }
         }
     }
+
+    if (postcode) {
+        getDataFromPostalCode(postcode).then(data => {
+            console.log(data);
+            country = data?.country?.name;
+            if(country === 'United States') {
+                region = data?.state?.name;
+            }
+            city = data?.city?.name;
+        })
+    }
     
     // Extract road
-    const roadRegex = /(Road|Street|Avenue|Boulevard|Drive|Lane|Way|Circle|Court|Place|Terrace)\s*([A-Z][a-zA-Z]*(\s+[A-Z][a-zA-Z]*)*)/i; // Matches road names preceded by 'Road:'
+    const roadRegex = /(Road|Street|Avenue|Boulevard|Drive|Lane|Way|Circle|Court|Place|Terrace|Location)\s*([A-Z][a-zA-Z]*(\s+[A-Z][a-zA-Z]*)*)/i; // Matches road names preceded by 'Road:'
     const roadMatch = text.match(roadRegex);
-    const road = roadMatch ? roadMatch[2] : null;
+    road = roadMatch ? roadMatch[2] : null;
 
     // Output extracted data
     console.log('Country:', country)
+    console.log('Region:', region);
+    console.log('City:', city);
     console.log('Postcode:', postcode);
     console.log('Road:', road);
+    console.log('Road number:', roadNumber);
 
     // return body;
+}
+
+async function getDataFromPostalCode(postalCode) {
+    const apiKey = 'f7fcba63dcd2e57b5af452e35b42b1e5';
+    const apiUrl = `http://postalcode.parseapi.com/api/${apiKey}/${postalCode}`;
+    
+    try {
+        const response = await axios.get(apiUrl);
+        const data = response.data;
+
+        return data;
+    } catch (error) {
+        console.error(error);
+    }
 }
