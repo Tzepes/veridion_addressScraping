@@ -8,7 +8,9 @@ const brightpassword = fs.readFileSync('.brightdataPassword').toString().trim();
 
 const {countries, countryAbbreviations} = require('./countriesCodes.js');
 const postalcodeRegex = require('./postalcodeRegex.js');
-const { url } = require('inspector');
+
+const findCountry = require('./Extractors/countryExtractor.js');
+const findPostcode = require('./Extractors/postcodeExtractor.js');
 
 const axiosBrightDataInstance = axios.create({
     proxy: {
@@ -33,17 +35,6 @@ const axiosBrightDataInstance = axios.create({
         // console.log(record.domain) // returns the URL
 
         try {
-            // console.log('Checking proxy...');
-            
-            // Test proxy connection
-            // const proxyResponse = await axiosBrightDataInstance.get('https://api.ipify.org?format=json');
-
-            // // Return response of domain trough proxy
-            // const proxyResponse = await axiosBrightDataInstance.get('http://' + record.domain);
-            
-            // console.log('Proxy IP:', proxyResponse.data.ip);
-            // console.log(axiosBrightDataInstance);
-            
             const response = await axios.get('http://' + record.domain, {
                 timeout: 10000
             });
@@ -51,7 +42,6 @@ const axiosBrightDataInstance = axios.create({
             if (response.status === 200) {
                 console.log(record.domain)
                 retrieveLocationData(response.data);
-                console.log('Success');
             } else {
                 console.log('Failed');
             }
@@ -81,53 +71,29 @@ async function retrieveLocationData(htmlContent) {
     // Extract text from relevant elements
     const text = $('body').text();
 
-    // Extract country
-    const countryRegex = new RegExp('\\b(' + countries.join('|') + ')\\b', 'i');
-    const countryMatch = text.match(countryRegex);
-    country = countryMatch ? countryMatch[0] : null;
+    country = findCountry(text, countries);
 
     // Extract postcode
 
-    //Things to check for: 
-    // some states are spelled fully, such as Ohio instead of OH
-    // could return country based on postal code in most cases
-    const postalcode = postalcodeRegex[country];
+    postcode = findPostcode(text, countries[country]);
 
-    const postcodeWithLabelRegex = /Postcode\s*([A-Z]{2}\s*\d{4,10})\b/;
-    const postcodeRegexWithState = /\b[A-Z]{2}\s*\d{4,10}\b/g; 
-    
-    // let postcodeMatch = text.match(postcodeWithLabelRegex);
-    let postcodeMatch = text.match(postalcode);
-    postcode = postcodeMatch ? postcodeMatch[1] : null;
 
-    if(!postcode) {
-        postcodeMatch = text.match(postcodeWithLabelRegex);
-        if (postcodeMatch) {
-            postcode = postcodeMatch[1];
-        } else {
-            postcodeMatch = text.match(postcodeRegexWithState);
-            if (postcodeMatch) {
-                postcode = postcodeMatch[0];
-            }
-        }
-    }
-
+    // country, region and city dont get assigned, maybe because async ?
     if (postcode) {
-        getDataFromPostalCode(postcode).then(data => {
-            console.log(data);
-            country = data?.country?.name;
-            if(country === 'United States') {
-                region = data?.state?.name;
-            }
-            city = data?.city?.name;
-        })
+        const data = await getDataFromPostalCode(postcode);
+        country = data?.country?.name;
+        if(country === 'United States') {
+            region = data?.state?.name;
+        }
+        city = data?.city?.name;
     }
+    
     
     // Extract road
     const roadRegex = /(Road|Street|Avenue|Boulevard|Drive|Lane|Way|Circle|Court|Place|Terrace|Location)\s*([A-Z][a-zA-Z]*(\s+[A-Z][a-zA-Z]*)*)/i; // Matches road names preceded by 'Road:'
     const roadMatch = text.match(roadRegex);
     road = roadMatch ? roadMatch[2] : null;
-
+    
     // Output extracted data
     console.log('Country:', country)
     console.log('Region:', region);
@@ -136,7 +102,6 @@ async function retrieveLocationData(htmlContent) {
     console.log('Road:', road);
     console.log('Road number:', roadNumber);
 
-    // return body;
 }
 
 async function getDataFromPostalCode(postalCode) {
