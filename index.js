@@ -9,7 +9,7 @@ const brightpassword = fs.readFileSync('./brightdata/.brightdataPassword').toStr
 const {countries, countryAbbreviations} = require('./countriesCodes.js');
 const postalcodeRegex = require('./postalcodeRegex.js');
 
-const findCountry = require('./Extractors/countryExtractor.js');
+const {findCountry, getCountryFromURL} = require('./Extractors/countryExtractor.js');
 const findPostcode = require('./Extractors/postcodeExtractor.js');
 const findRoad = require('./Extractors/roadExtractor.js');
 
@@ -44,7 +44,7 @@ const axiosBrightDataInstance = axios.create({
             console.log("");
             if (response.status === 200) {
                 console.log(record.domain)
-                retrieveLocationData(response.data);
+                retrieveLocationData(response.data, record.domain);
             } else {
                 console.log('Failed');
             }
@@ -57,7 +57,7 @@ const axiosBrightDataInstance = axios.create({
     await reader.close();
 })();
 
-async function retrieveLocationData(htmlContent) {
+async function retrieveLocationData(htmlContent, url) {
     // Declare fields:
     let country;
     let region;
@@ -71,7 +71,11 @@ async function retrieveLocationData(htmlContent) {
     // Extract text from relevant elements
     const text = $('body').text();
 
-    country = findCountry(text, countries);
+    country = getCountryFromURL(url);
+    if (!country)
+    {
+        country = findCountry(text, countries);
+    }
 
     // Extract postcode
     postcode = findPostcode(text, countries[country]);

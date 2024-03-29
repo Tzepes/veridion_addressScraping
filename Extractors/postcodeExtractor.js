@@ -16,7 +16,7 @@ function findPostcode(text, country) {
     // } else {
 
         const postcodeWithLabelRegex = /Postcode\s*([A-Z]{2}\s*\d{4,10})\b/;
-        const postcodeRegexWithState = /\b[A-Z]{2}\s*(\d{4,10})\b/; // capture only the postcode part
+        const postcodeRegexWithState = /\b[A-Z]{2}\s*(\d{5})\b/; // capture only the postcode part
         
         let postcodeMatch = postalcodeFormat ? postalcodeFormat.exec(text) : null;
         postcode = postcodeMatch && postcodeMatch[1] ? postcodeMatch[1] : null;
@@ -28,7 +28,14 @@ function findPostcode(text, country) {
             } else {
                 postcodeMatch = postcodeRegexWithState.exec(text);
                 if (postcodeMatch && postcodeMatch[1]) {
-                    postcode = postcodeMatch[1]; // assign only the postcode part
+                    postcode = postcodeMatch[1].trim(); 
+                }
+                if (!postcode) {
+                    const genericPostcodeRegex = /\b\d{5}\b/;
+                    const genericPostcodeMatch = genericPostcodeRegex.exec(text);
+                    if (genericPostcodeMatch && genericPostcodeMatch[0]) {
+                        postcode = genericPostcodeMatch[0].trim();
+                    }
                 }
             }
         }
