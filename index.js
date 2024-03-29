@@ -3,8 +3,8 @@ const axios = require('axios');
 const cheerio = require('cheerio');
 
 const fs = require('fs');
-const brightusername = fs.readFileSync('.brightdataUsername').toString().trim();
-const brightpassword = fs.readFileSync('.brightdataPassword').toString().trim();
+const brightusername = fs.readFileSync('./brightdata/.brightdataUsername').toString().trim();
+const brightpassword = fs.readFileSync('./brightdata/.brightdataPassword').toString().trim();
 
 const {countries, countryAbbreviations} = require('./countriesCodes.js');
 const postalcodeRegex = require('./postalcodeRegex.js');
