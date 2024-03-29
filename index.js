@@ -11,6 +11,7 @@ const postalcodeRegex = require('./postalcodeRegex.js');
 
 const findCountry = require('./Extractors/countryExtractor.js');
 const findPostcode = require('./Extractors/postcodeExtractor.js');
+const findRoad = require('./Extractors/roadExtractor.js');
 
 const axiosBrightDataInstance = axios.create({
     proxy: {
@@ -55,9 +56,6 @@ const axiosBrightDataInstance = axios.create({
 })();
 
 async function retrieveLocationData(htmlContent) {
-    // Parse the HTML content to retrieve the location data
-    // Return the location data
-
     // Declare fields:
     let country;
     let region;
@@ -74,9 +72,7 @@ async function retrieveLocationData(htmlContent) {
     country = findCountry(text, countries);
 
     // Extract postcode
-
     postcode = findPostcode(text, countries[country]);
-
 
     // country, region and city dont get assigned, maybe because async ?
     if (postcode) {
@@ -87,12 +83,9 @@ async function retrieveLocationData(htmlContent) {
         }
         city = data?.city?.name;
     }
-    
-    
+       
     // Extract road
-    const roadRegex = /(Road|Street|Avenue|Boulevard|Drive|Lane|Way|Circle|Court|Place|Terrace|Location)\s*([A-Z][a-zA-Z]*(\s+[A-Z][a-zA-Z]*)*)/i; // Matches road names preceded by 'Road:'
-    const roadMatch = text.match(roadRegex);
-    road = roadMatch ? roadMatch[2] : null;
+    road = findRoad(text);
     
     // Output extracted data
     console.log('Country:', country)
