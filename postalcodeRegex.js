@@ -87,4 +87,8 @@ const postalCodeRegex = {
     Venezuela: /^\d{4}$/,
 }
 
-module.exports = postalCodeRegex;
+function getPostalCodeFormat(country) {
+    return postalCodeRegex[country];
+}
+
+module.exports = getPostalCodeFormat;

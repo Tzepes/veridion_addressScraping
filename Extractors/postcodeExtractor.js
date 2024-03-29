@@ -2,7 +2,6 @@ function findPostcode(text, country) {
     //Things to check for: 
     // some states are spelled fully, such as Ohio instead of OH
     // could return country based on postal code in most cases
-
     let postalcodeFormat = new RegExp(country);
     // if(!country) {
     //     for(let zipFormat in countries){

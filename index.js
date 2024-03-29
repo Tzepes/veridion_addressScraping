@@ -7,7 +7,7 @@ const brightusername = fs.readFileSync('./brightdata/.brightdataUsername').toStr
 const brightpassword = fs.readFileSync('./brightdata/.brightdataPassword').toString().trim();
 
 const {countries, countryAbbreviations} = require('./countriesCodes.js');
-const postalcodeRegex = require('./postalcodeRegex.js');
+const getPostalCodeFormat = require('./postalcodeRegex.js');
 
 const {findCountry, getCountryFromURL} = require('./Extractors/countryExtractor.js');
 const findPostcode = require('./Extractors/postcodeExtractor.js');
@@ -71,22 +71,28 @@ async function retrieveLocationData(htmlContent, url) {
     // Extract text from relevant elements
     const text = $('body').text();
 
+    let countryGotFromURL = false;
     country = getCountryFromURL(url);
     if (!country)
     {
         country = findCountry(text, countries);
+    } else {
+        countryGotFromURL = true;
     }
 
     // Extract postcode
-    postcode = findPostcode(text, countries[country]);
+    postcode = findPostcode(text, getPostalCodeFormat(country));
 
     // country, region and city dont get assigned, maybe because async ?
     if (postcode) {
         const data = await getDataFromPostalCode(postcode, axios);
-        country = data?.country?.name;
-        if(country === 'United States') {
-            region = data?.state?.name;
+        if(!countryGotFromURL){
+            country = data?.country?.name;
         }
+        if(!country || country === 'Unknown'){
+            country = data?.country?.name;
+        } 
+        region = data?.state?.name;   
         city = data?.city?.name;
     }
        
