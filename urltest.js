@@ -1,11 +1,16 @@
 const axios = require('axios');
 const cheerio = require('cheerio');
-const { getCountryFromURL } = require('./Extractors/countryExtractor.js');
+const {countries, countryAbbreviations} = require('./countriesCodes.js');
+const getPostalCodeFormat = require('./postalcodeRegex.js');
+const { findCountry, getCountryFromURL } = require('./Extractors/countryExtractor.js');
 const findPostcode = require('./Extractors/postcodeExtractor.js');
 const findRoad = require('./Extractors/roadExtractor.js');
 const getDataFromPostalCode = require('./apis/postalcodeParseAPI.js');
 
+let countryGotFromURL = false;
+
 async function retrieveLocationData(url) {
+    console.log(url);
     try {
         const response = await axios.get(url, { timeout: 10000 });
         if (response.status === 200) {
@@ -17,18 +22,23 @@ async function retrieveLocationData(url) {
             if (!country) {
                 // Extract country from text if not found in URL
                 // You need to implement findCountry function accordingly
-                country = findCountry(text);
+                // country = findCountry(text);
+            } else { 
+                countryGotFromURL = true;
             }
-
-            let postcode = findPostcode(text);
+            
+            let postcode = findPostcode(text, getPostalCodeFormat(country));
             let region, city;
 
             if (postcode) {
                 const data = await getDataFromPostalCode(postcode, axios);
-                country = data?.country?.name;
-                if (country === 'United States') {
-                    region = data?.state?.name;
+                if(!countryGotFromURL){
+                    country = data?.country?.name;
                 }
+                if(!country || country === 'Unknown'){
+                    country = data?.country?.name;
+                } 
+                region = data?.state?.name;   
                 city = data?.city?.name;
             }
 
@@ -49,5 +59,5 @@ async function retrieveLocationData(url) {
 }
 
 // Manually pass the URL to test
-const testUrl = 'https://thegrindcoffeebar.com/';
+const testUrl = 'https://www.fesa.de/';
 retrieveLocationData(testUrl);
