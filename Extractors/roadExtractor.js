@@ -1,30 +1,43 @@
+const cheerio = require('cheerio');
+
 const addressSelectors = [
     '.address',             
     '.contact-info',        
     '.footer-address',      
     'address',              
     '.footer .address',     
-    '.footer .contact-info' 
+    '.footer .contact-info',
+    'address .address-block',
 ];
 
-function findRoad(text) {
-    let roadName = null;
+function findRoad(htmlContent) {
+    let road = '';
+    const $ = cheerio.load(htmlContent);
 
     for (const selector of addressSelectors) {
-        const match = text.match(new RegExp(`<[^>]*${selector.replace('.', '')}[^>]*>(.*?)</[^>]*${selector.replace('.', '')}[^>]*>`, 'i'));
-        if (match) {
-            roadName = match[1].trim();
+        const elements = $(selector);
+
+        // Check if any elements were found
+        if (elements.length > 0) {
+            // Extract the text content of the first element
+            const roadText = elements.first().text().trim();
+
+            // Split the road text by newline to separate street name and other details
+            const roadLines = roadText.split('\n');
+
+            // The street name is typically the first line
+            roadName = roadLines[0].trim();
+
+            // Break the loop if a street name is found
             break;
         }
     }
 
-    if (!roadName) {
-        const streetPattern = /\b\d+\s[A-Za-z]+\s(?:Street|St|Avenue|Ave|Road|Rd|Lane|Ln|Boulevard|Blvd|Drive|Dr)\b/g;
-        const matches = text.match(streetPattern);
-        if (matches && matches.length > 0) {
-            roadName = matches[0].trim();
-        }
+    if(!road) {
+
     }
+
+    return road;
 }
 
 module.exports = findRoad;

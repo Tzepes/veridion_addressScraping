@@ -3,11 +3,17 @@ const cheerio = require('cheerio');
 const {countries, countryAbbreviations} = require('./countriesCodes.js');
 const getPostalCodeFormat = require('./postalcodeRegex.js');
 const { findCountry, getCountryFromURL } = require('./Extractors/countryExtractor.js');
-const findPostcode = require('./Extractors/postcodeExtractor.js');
+const {findPostcode, loopForPostcodeIfCountry} = require('./Extractors/postcodeExtractor.js');
 const findRoad = require('./Extractors/roadExtractor.js');
 const getDataFromPostalCode = require('./apis/postalcodeParseAPI.js');
 
+let country;
 let countryGotFromURL = false;
+let postcode;
+let region;
+let city;
+let road;
+let roadNumber
 
 async function retrieveLocationData(url) {
     console.log(url);
@@ -18,7 +24,7 @@ async function retrieveLocationData(url) {
             const $ = cheerio.load(htmlContent);
             const text = $('body').text();
 
-            let country = getCountryFromURL(url);
+            country = getCountryFromURL(url);
             if (!country) {
                 // Extract country from text if not found in URL
                 // You need to implement findCountry function accordingly
@@ -27,22 +33,16 @@ async function retrieveLocationData(url) {
                 countryGotFromURL = true;
             }
             
-            let postcode = findPostcode(text, getPostalCodeFormat(country), country);
-            let region, city;
+            postcode = findPostcode(text, getPostalCodeFormat(country), country);
+            let postcodeData = getPostcodeData(postcode);
 
-            if (postcode) {
-                const data = await getDataFromPostalCode(postcode, axios);
-                if(!countryGotFromURL){
-                    country = data?.country?.name;
+            if (countryGotFromURL) {
+                if(country !== postcodeData?.country?.name){
+                    postcode = await loopForPostcodeIfCountry(text, country, $);
                 }
-                if(!country || country === 'Unknown'){
-                    country = data?.country?.name;
-                } 
-                region = data?.state?.name;   
-                city = data?.city?.name;
             }
 
-            const road = findRoad(text);
+            const road = findRoad(htmlContent);
 
             // Output extracted data
             console.log('Country:', country);
@@ -54,8 +54,26 @@ async function retrieveLocationData(url) {
             console.log('Failed to fetch URL:', url);
         }
     } catch (error) {
-        console.error('Error:', error);
     }
+}
+
+async function getPostcodeData(postcode) {
+    let data;
+    if (postcode) {
+        data = await getDataFromPostalCode(postcode, axios);
+        
+        if(!countryGotFromURL){
+            country = data?.country?.name;
+        }
+        
+        if(!country || country === 'Unknown'){
+            country = data?.country?.name;
+        } 
+        
+        region = data?.state?.name;   
+        city = data?.city?.name;
+    }
+    return data;
 }
 
 // Manually pass the URL to test
