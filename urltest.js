@@ -33,7 +33,7 @@ async function retrieveLocationData(url) {
                 countryGotFromURL = true;
             }
             
-            postcode = findPostcode(text, getPostalCodeFormat(country), country);
+            postcode = findPostcode(text, getPostalCodeFormat(country), country, $);
             let postcodeData = getPostcodeData(postcode);
 
             if (countryGotFromURL) {
@@ -77,5 +77,10 @@ async function getPostcodeData(postcode) {
 }
 
 // Manually pass the URL to test
-const testUrl = 'https://www.fesa.de/';
+/* URLS TO TEST:
+https://www.wyandottewinery.com/ 
+https://www.fesa.de/
+*/
+
+const testUrl = 'https://www.wyandottewinery.com/';
 retrieveLocationData(testUrl);

@@ -1,6 +1,17 @@
 const getDataFromPostalCode = require('../apis/postalcodeParseAPI.js');
 
-function findPostcode(text, countryRegex, Country = null) {
+const postcodeSelectors = [
+    'footer',        
+    '.address',             
+    '.contact-info',
+    '.footer-address',      
+    '.footer .address',     
+    '.footer .contact-info',
+    '.address-block',
+    'address .address-block',
+];
+
+function findPostcode(text, countryRegex, Country = null, $ = null) {
     //Things to check for: 
     // some states are spelled fully, such as Ohio instead of OH
     // could return country based on postal code in most cases
@@ -22,11 +33,7 @@ function findPostcode(text, countryRegex, Country = null) {
                 postcode = postcodeMatch[1].trim(); 
             }
             if (!postcode) {
-                const genericPostcodeRegex = /\b\d{5}\b/;
-                const genericPostcodeMatch = genericPostcodeRegex.exec(text);
-                if (genericPostcodeMatch && genericPostcodeMatch[0]) {
-                    postcode = genericPostcodeMatch[0].trim();
-                }
+                loopForPostcodeIfCountry(null, null, $);
             }
         }
     }
@@ -34,9 +41,7 @@ function findPostcode(text, countryRegex, Country = null) {
   return postcode;
 }
 
-async function loopForPostcodeIfCountry(text, countryFromURL, $) {
-    console.log("Country from URL and postcode API do not match");
-    console.log($)
+async function loopForPostcodeIfCountry(text = null, countryFromURL = null, $) {
     // if postcode found and country from URL doesnt match country from postcode API
     // until looped trough whole webpage
         // loop trough JSON of postcode API till country matchs
@@ -52,15 +57,17 @@ async function loopForPostcodeIfCountry(text, countryFromURL, $) {
     let postcode = null;
 
     let postcodeAPIResponse;
+    for(const selector of postcodeSelectors) {
+        $(selector).each((index, element) => {
+            const text = $(element).text();
+            const postcodeMatch = text.match(postcodeDefaultRegex);
+            if (postcodeMatch) {
+                postcode = postcodeMatch[0];
+                return false; // Exit the loop after finding the first postcode
+            }
+        });
 
-    $('.address-block').each((index, element) => {
-        const text = $(element).text();
-        const postcodeMatch = text.match(postcodeDefaultRegex);
-        if (postcodeMatch) {
-            postcode = postcodeMatch[0];
-            return false; // Exit the loop after finding the first postcode
-        }
-    });
+    }
     return postcode;
 }
 
