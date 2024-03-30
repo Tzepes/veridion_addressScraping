@@ -27,7 +27,7 @@ async function retrieveLocationData(url) {
                 countryGotFromURL = true;
             }
             
-            let postcode = findPostcode(text, getPostalCodeFormat(country));
+            let postcode = findPostcode(text, getPostalCodeFormat(country), country);
             let region, city;
 
             if (postcode) {

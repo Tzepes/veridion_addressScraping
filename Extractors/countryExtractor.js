@@ -83,7 +83,7 @@ function getCountryFromURL(url) {
     const parts = domain.split('.');
     const tld = parts[parts.length - 1];
 
-    return domainExtensionMap[tld] || 'Unknown';
+    return domainExtensionMap[tld];
 }
 
 function findCountry(text, countries) {

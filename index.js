@@ -10,10 +10,18 @@ const {countries, countryAbbreviations} = require('./countriesCodes.js');
 const getPostalCodeFormat = require('./postalcodeRegex.js');
 
 const {findCountry, getCountryFromURL} = require('./Extractors/countryExtractor.js');
-const findPostcode = require('./Extractors/postcodeExtractor.js');
+const {findPostcode, loopForPostcodeIfCountry} = require('./Extractors/postcodeExtractor.js');
 const findRoad = require('./Extractors/roadExtractor.js');
 
 const getDataFromPostalCode = require('./apis/postalcodeParseAPI.js');
+
+// Declare fields:
+let country;
+let region;
+let city;
+let postcode;
+let road;
+let roadNumber;
 
 const axiosBrightDataInstance = axios.create({
     proxy: {
@@ -58,14 +66,6 @@ const axiosBrightDataInstance = axios.create({
 })();
 
 async function retrieveLocationData(htmlContent, url) {
-    // Declare fields:
-    let country;
-    let region;
-    let city;
-    let postcode;
-    let road;
-    let roadNumber;
-
     const $ = cheerio.load(htmlContent);
 
     // Extract text from relevant elements
@@ -83,17 +83,12 @@ async function retrieveLocationData(htmlContent, url) {
     // Extract postcode
     postcode = findPostcode(text, getPostalCodeFormat(country));
 
-    // country, region and city dont get assigned, maybe because async ?
-    if (postcode) {
-        const data = await getDataFromPostalCode(postcode, axios);
-        if(!countryGotFromURL){
-            country = data?.country?.name;
+    let postcodeData = await getPostcodeData(postcode, countryGotFromURL)
+    
+    if (countryGotFromURL) {
+        if(country !== postcodeData?.country?.name){
+            postcode = await loopForPostcodeIfCountry(text, country, $);
         }
-        if(!country || country === 'Unknown'){
-            country = data?.country?.name;
-        } 
-        region = data?.state?.name;   
-        city = data?.city?.name;
     }
        
     // Extract road
@@ -106,5 +101,23 @@ async function retrieveLocationData(htmlContent, url) {
     console.log('Postcode:', postcode);
     console.log('Road:', road);
     console.log('Road number:', roadNumber);
+}
 
+async function getPostcodeData(postcode, countryGotFromURL) {
+    let data;
+    if (postcode) {
+        data = await getDataFromPostalCode(postcode, axios);
+        
+        if(!countryGotFromURL){
+            country = data?.country?.name;
+        }
+        
+        if(!country){
+            country = data?.country?.name;
+        } 
+        
+        region = data?.state?.name;   
+        city = data?.city?.name;
+    }
+    return data;
 }
