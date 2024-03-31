@@ -59,8 +59,11 @@ async function loopForPostcodeIfCountry(text = null, countryFromURL = null, $) {
 
     let postcodeAPIResponse;
 
+    const filteredElements = $('body').find('*').not('script, link, meta, style');
+    const reversedElements = $(filteredElements).get().reverse(); // reverse the webpage elements since most postcodes are at the base of the page
+
     for(const selector of postcodeSelectors) {
-        $(selector).each((index, element) => {
+        $(reversedElements).each((index, element) => {
             const text = $(element).text();
             postcodeMatch = text.match(postcodeDefaultRegex);
             if (postcodeMatch) {

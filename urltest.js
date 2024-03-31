@@ -81,7 +81,8 @@ async function getPostcodeData(postcode) {
 /* URLS TO TEST:
 https://www.wyandottewinery.com/ 
 https://www.fesa.de/
+https://thegrindcoffeebar.com/
 */
 
-const testUrl = 'https://www.fesa.de/';
+const testUrl = 'https://thegrindcoffeebar.com/';
 retrieveLocationData(testUrl);
