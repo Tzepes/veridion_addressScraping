@@ -55,18 +55,24 @@ async function loopForPostcodeIfCountry(text = null, countryFromURL = null, $) {
     const postcodeDefaultRegex = /\b\d{5}\b/;
     let postcodeMatch = null;
     let postcode = null;
+    let postcodeFound = false;
 
     let postcodeAPIResponse;
+
     for(const selector of postcodeSelectors) {
         $(selector).each((index, element) => {
             const text = $(element).text();
-            const postcodeMatch = text.match(postcodeDefaultRegex);
+            postcodeMatch = text.match(postcodeDefaultRegex);
             if (postcodeMatch) {
                 postcode = postcodeMatch[0];
+                postcodeFound = true;
                 return false; // Exit the loop after finding the first postcode
             }
         });
 
+        if(postcodeFound){
+            break;
+        }
     }
     return postcode;
 }

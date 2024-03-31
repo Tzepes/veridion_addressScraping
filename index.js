@@ -81,15 +81,14 @@ async function retrieveLocationData(htmlContent, url) {
     }
 
     // Extract postcode
-    postcode = findPostcode(text, getPostalCodeFormat(country));
-
-    let postcodeData = await getPostcodeData(postcode, countryGotFromURL)
+    postcode = findPostcode(text, getPostalCodeFormat(country), country, $);
+    let postcodeData = await getPostcodeData(postcode);
     
-    if (countryGotFromURL) {
-        if(country !== postcodeData?.country?.name){
-            postcode = await loopForPostcodeIfCountry(text, country, $);
-        }
+    if (countryGotFromURL && country !== postcodeData?.country?.name || !postcode) {
+        postcode = await loopForPostcodeIfCountry(text, country, $);
     }
+
+    postcodeData = await getPostcodeData(postcode);
        
     // Extract road
     road = findRoad(text);

@@ -34,13 +34,13 @@ async function retrieveLocationData(url) {
             }
             
             postcode = findPostcode(text, getPostalCodeFormat(country), country, $);
-            let postcodeData = getPostcodeData(postcode);
-
-            if (countryGotFromURL) {
-                if(country !== postcodeData?.country?.name){
-                    postcode = await loopForPostcodeIfCountry(text, country, $);
-                }
+            let postcodeData = await getPostcodeData(postcode);
+            
+            if (countryGotFromURL && country !== postcodeData?.country?.name || !postcode) {
+                postcode = await loopForPostcodeIfCountry(text, country, $);
             }
+
+            postcodeData = await getPostcodeData(postcode);
 
             const road = findRoad(htmlContent);
 
@@ -54,6 +54,7 @@ async function retrieveLocationData(url) {
             console.log('Failed to fetch URL:', url);
         }
     } catch (error) {
+        console.error(error);
     }
 }
 
@@ -82,5 +83,5 @@ https://www.wyandottewinery.com/
 https://www.fesa.de/
 */
 
-const testUrl = 'https://www.wyandottewinery.com/';
+const testUrl = 'https://www.fesa.de/';
 retrieveLocationData(testUrl);
