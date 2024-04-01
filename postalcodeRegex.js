@@ -37,7 +37,7 @@ const postalCodeRegex = {
     Norway: /^\d{4}$/,
     Poland: /^\d{2}-\d{3}$/,
     Portugal: /^\d{4}-\d{3}$/,
-    Romania: /^\d{6}$/,
+    Romania: /\b\d{5,6}\b/,
     Russia: /^\d{6}$/,
     'San Marino': /^(4789\d)$/,
     Serbia: /^\d{5}$/,

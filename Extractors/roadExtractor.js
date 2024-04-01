@@ -17,9 +17,9 @@ function findRoad(htmlContent, $) {
         const streetNameRegex = /([^\d]+)\s+(\d+.*)/;
         const matches = elements.match(streetNameRegex);
 
-        if (elements.length > 0) {
-            road = matches[1].trim();
-            const streetNumber = matches[2].trim();
+        if (matches && elements.length > 0) {
+            road = matches[1].trim() ?? null;
+            const streetNumber = matches[2].trim() ?? null;
 
             road += " " + streetNumber;
 

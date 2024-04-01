@@ -10,4 +10,13 @@ const countryAbbreviations = [
     'AR', 'BO', 'BR', 'CL', 'CO', 'EC', 'GY', 'PY', 'PE', 'SR', 'UY', 'VE' // South American countries
 ];
 
-module.exports = { countries, countryAbbreviations };
+function getCountryAbbreviation(countryName) {
+    const index = countries.indexOf(countryName);
+    if (index !== -1) {
+        return countryAbbreviations[index];
+    } else {
+        return null;
+    }
+}
+
+module.exports = { countries, countryAbbreviations, getCountryAbbreviation };

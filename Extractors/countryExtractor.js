@@ -39,7 +39,7 @@ function getCountryFromURL(url) {
         'xk': 'Kosovo',
 
         // North American Countries
-        'us': 'United States',
+        'com': 'United States',
         'ca': 'Canada',
         'mx': 'Mexico',
 

@@ -1,11 +1,10 @@
 const axios = require('axios');
 const cheerio = require('cheerio');
-const {countries, countryAbbreviations} = require('./countriesCodes.js');
+const {countries, countryAbbreviations, getCountryAbbreviation} = require('./countriesCodes.js');
 const getPostalCodeFormat = require('./postalcodeRegex.js');
 const { findCountry, getCountryFromURL } = require('./Extractors/countryExtractor.js');
 const {findPostcode, loopForPostcodeIfCountry} = require('./Extractors/postcodeExtractor.js');
 const findRoad = require('./Extractors/roadExtractor.js');
-const {getDataFromParseAPI, getDataFromZipcodeBase} = require('./apis/postalcodeParseAPI.js');
 
 let country;
 let countryGotFromURL = false;
@@ -32,18 +31,38 @@ async function retrieveLocationData(url) {
             } else { 
                 countryGotFromURL = true;
             }
+
+            let postcodeObject;
+            let parseAPIsuccesful = false;
+            let zipcodebaseAPIsuccesful = false;
             
-            postcode = findPostcode(text, getPostalCodeFormat(country), country, $);
-            let postcodeData = await getDataFromParseAPI(postcode);
+            postcodeObject = await findPostcode(text, getPostalCodeFormat(country), country, $, axios);
+            if(postcodeObject){
+                parseAPIsuccesful = true;
+            }
             
-            if (countryGotFromURL && country !== postcodeData?.country?.name || !postcode) {
-                postcode = await loopForPostcodeIfCountry(text, country, null, $, axios);
-                // postcodeObject = loopForPostcodeIfCountry(text, country, postcodeData, $); + add axios as parametere 
-                // postcode = postcodeObject.postcode;
-                // postcodeData = postcodeObject.postcodeData;
+            if(!postcodeObject) {
+                postcodeObject = await loopForPostcodeIfCountry(text, country, getCountryAbbreviation(country),null, $, axios);  
+                if(postcodeObject){
+                    zipcodebaseAPIsuccesful = true;
+                }
+            }
+            
+            postcode = postcodeObject.postcode;
+            if(zipcodebaseAPIsuccesful){  // satisfay different API response formats
+                city = postcodeObject.postcodeAPIResponse[0]?.city;
+                region = postcodeObject.postcodeAPIResponse[0]?.state;
+            } else if (parseAPIsuccesful) {
+                city = postcodeObject.postcodeAPIResponse?.city.name;
+                region = postcodeObject.postcodeAPIResponse?.state.name;
             }
 
-            postcodeData = await getPostcodeDataParseAPI(postcode);
+            if (!country) {
+                country = postcodeObject.postcodeAPIResponse?.country?.name ?? postcodeObject.postcodeAPIResponse?.country;
+            }
+
+
+            // postcodeData = await getPostcodeDataParseAPI(postcode);
 
             const road = findRoad(htmlContent, $);
 
@@ -61,50 +80,6 @@ async function retrieveLocationData(url) {
     }
 }
 
-async function getPostcodeDataParseAPI(postcode) { // parsecodeAPI
-    let data;
-    if (postcode) {
-        data = await getDataFromParseAPI(postcode, axios);
-        
-        if(!countryGotFromURL){
-            country = data?.country?.name;
-        }
-        
-        if(!country || country === 'Unknown'){
-            country = data?.country?.name;
-        } 
-        
-        region = data?.state?.name;   
-        city = data?.city?.name;
-    }
-    return data;
-}
-
-async function getZipcodeBaseAPI(postcode) { // pass country code as parametere if needed
-    let data;
-    if (postcode) {
-        data = await getDataFromZipcodeBase(postcode, axios); 
-
-        if(data[postcode].length() > 1) {
-            for (let i = 0; i < data[postcode].length(); i++) {
-                if(data[postcode][i].country_code === country) { // Change country to countryCode from countriesCodes.js
-                    region = data[postcode][i].state;
-                    city = data[postcode][i].city;
-                    return data;
-                }
-            }
-        }
-
-        if(!countryGotFromURL || !country || country === 'Unknown'){
-            country = data[postcode][0].country_code;
-        }
-
-        region = data[postcode][0].state;
-        city = data[postcode][0].city;
-    }
-    return data;
-}
-
 // Manually pass the URL to test
 /* URLS TO TEST:
 https://www.wyandottewinery.com/ 
@@ -112,7 +87,10 @@ https://www.fesa.de/
 https://thegrindcoffeebar.com/
 https://irrigationcontrol.co.uk 
 https://www.mackay.co.uk/contact-us.html
+https://embcmonroe.org/
+https://blackbookmarketresearch.com
+https://www.hophooligans.ro/
 */
 
-const testUrl = 'https://www.wyandottewinery.com/';
+const testUrl = 'https://www.hophooligans.ro/';
 retrieveLocationData(testUrl);

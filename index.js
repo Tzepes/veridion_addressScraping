@@ -6,16 +6,16 @@ const fs = require('fs');
 const brightusername = fs.readFileSync('./brightdata/.brightdataUsername').toString().trim();
 const brightpassword = fs.readFileSync('./brightdata/.brightdataPassword').toString().trim();
 
-const {countries, countryAbbreviations} = require('./countriesCodes.js');
+const {countries, countryAbbreviations, getCountryAbbreviation} = require('./countriesCodes.js');
 
 const {findCountry, getCountryFromURL} = require('./Extractors/countryExtractor.js');
 const {findPostcode, loopForPostcodeIfCountry} = require('./Extractors/postcodeExtractor.js');
 const findRoad = require('./Extractors/roadExtractor.js');
-
-const {getDataFromParseAPI} = require('./apis/postalcodeParseAPI.js');
+const getPostalCodeFormat = require('./postalcodeRegex.js');
 
 // Declare fields:
 let country;
+let countryGotFromURL = false;
 let region;
 let city;
 let postcode;
@@ -34,6 +34,9 @@ const axiosBrightDataInstance = axios.create({
     },
     timeout: 10000 // 10 seconds timeout
 });
+
+// TODO:
+    // 1. if post code, city, and region or city have not been found, try access /contact, /about, /contact-us, /about-us, /contactus, /aboutus, /contact-us.html, /about-us.html, /contactus.html, /aboutus.html, /contact.html, /about.html, /locations
 
 (async () => {
     let reader = await parquet.ParquetReader.openFile('websites.snappy .parquet');
@@ -56,7 +59,7 @@ const axiosBrightDataInstance = axios.create({
                 console.log('Failed');
             }
         } catch (error) {
-            // console.error(error);
+            console.log('axios error connection');
         }
     }
     console.log("");
@@ -66,11 +69,8 @@ const axiosBrightDataInstance = axios.create({
 
 async function retrieveLocationData(htmlContent, url) {
     const $ = cheerio.load(htmlContent);
-
-    // Extract text from relevant elements
     const text = $('body').text();
 
-    let countryGotFromURL = false;
     country = getCountryFromURL(url);
     if (!country)
     {
@@ -80,16 +80,34 @@ async function retrieveLocationData(htmlContent, url) {
     }
 
     // Extract postcode
-    postcode = findPostcode(text, getDataFromParseAPI(country), country, $);
-    let postcodeData = await getPostcodeData(postcode);
+    let postcodeObject;
+    let parseAPIsuccesful = false;
+    let zipcodebaseAPIsuccesful = false;
     
-    if (countryGotFromURL && country !== postcodeData?.country?.name || !postcode) {
-        postcode = await loopForPostcodeIfCountry(text, country, postcodeData, $, axios);
+    postcodeObject = await findPostcode(text, getPostalCodeFormat(country), country, $, axios);
+    if(postcodeObject){
+        parseAPIsuccesful = true;
+    }
+    
+    if(!postcodeObject) {
+        postcodeObject = await loopForPostcodeIfCountry(text, country, getCountryAbbreviation(country),null, $, axios);  
+        if(postcodeObject){
+            zipcodebaseAPIsuccesful = true;
+        }
+    }
+    
+    postcode = postcodeObject.postcode;
+    if(zipcodebaseAPIsuccesful){  // satisfay different API response formats
+        city = postcodeObject.postcodeAPIResponse[0]?.city;
+        region = postcodeObject.postcodeAPIResponse[0]?.state;
+    } else if (parseAPIsuccesful) {
+        city = postcodeObject.postcodeAPIResponse?.city.name;
+        region = postcodeObject.postcodeAPIResponse?.state.name;
     }
 
-    postcodeData = await getPostcodeData(postcode);
-    // if postcode data can't be retrieved, use zipcodedatabase api within another function
-
+    if (!country) {
+        country = postcodeObject.postcodeAPIResponse?.country?.name ?? postcodeObject.postcodeAPIResponse?.country;
+    }
     // if postcode not found but road name and number found, find postcode trough geolocator API
        
     // Extract road
@@ -101,23 +119,4 @@ async function retrieveLocationData(htmlContent, url) {
     console.log('City:', city);
     console.log('Postcode:', postcode);
     console.log('Road:', road);
-}
-
-async function getPostcodeData(postcode, countryGotFromURL) {
-    let data;
-    if (postcode) {
-        data = await getDataFromParseAPI(postcode, axios);
-        
-        if(!countryGotFromURL){
-            country = data?.country?.name;
-        }
-        
-        if(!country){
-            country = data?.country?.name;
-        } 
-        
-        region = data?.state?.name;   
-        city = data?.city?.name;
-    }
-    return data;
 }
