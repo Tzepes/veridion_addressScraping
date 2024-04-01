@@ -1,4 +1,4 @@
-const getDataFromPostalCode = require('../apis/postalcodeParseAPI.js');
+const {getDataFromParseAPI, getDataFromZipcodeBase} = require('../apis/postalcodeParseAPI.js');
 
 const postcodeSelectors = [
     'footer',        
@@ -11,7 +11,8 @@ const postcodeSelectors = [
     'address .address-block',
 ];
 
-function findPostcode(text, countryRegex, Country = null, $ = null) {
+function findPostcode(text, countryRegex, Country = null, $ = null) { // function can be removed and use loopForPostcodeIfCountry instead
+
     //Things to check for: 
     // some states are spelled fully, such as Ohio instead of OH
     // could return country based on postal code in most cases
@@ -33,7 +34,7 @@ function findPostcode(text, countryRegex, Country = null, $ = null) {
                 postcode = postcodeMatch[1].trim(); 
             }
             if (!postcode) {
-                loopForPostcodeIfCountry(null, null, $);
+                loopForPostcodeIfCountry(null, null, null, $);
             }
         }
     }
@@ -41,17 +42,30 @@ function findPostcode(text, countryRegex, Country = null, $ = null) {
   return postcode;
 }
 
-async function loopForPostcodeIfCountry(text = null, countryFromURL = null, $) {
-    // if postcode found and country from URL doesnt match country from postcode API
-    // until looped trough whole webpage
-        // loop trough JSON of postcode API till country matchs
-            // if no match found, find the next number matching postcode regex
-                // if country no match, begin loop again
+async function loopForPostcodeIfCountry(text = null, countryFromURL = null, postcodeData = null, $, axios) {
+    // V2 search
+    // (if postcode data)
+    // if country from url doesnt match country from postcode API
+        // from parse api to zipcodebase API
+            // loop trough JSON objects to find matching country
+                // (check for matching city and region name trough webpage)
+                // remember the last postcode data
+                   // if city/region not found, find next matching postcode
 
-    // if county match remember code
-        // if remembered postcode retursn no city or region from API
-            // find next postcode but remember the last one found
-                // if no other postcode found, return the last one found
+
+
+    // we need a loop for postcode search if number is not postcode
+    
+    // while(countryFromURL !== postcodeData?.country?.name) {
+
+    // }
+
+    // is code checking if postcode is valid ? (check for api error, in which case continue search for postcode until end of page)
+
+    
+    // if postcode data received form zipcodebase API AND multiple JSON objects with multiple instances of the same country
+        // take city and/or region name and loop trough page to find matching city and/or region name
+    
     const postcodeDefaultRegex = /\b\d{5}\b/;
     let postcodeMatch = null;
     let postcode = null;
@@ -59,17 +73,20 @@ async function loopForPostcodeIfCountry(text = null, countryFromURL = null, $) {
 
     let postcodeAPIResponse;
 
-    const filteredElements = $('body').find('*').not('script, link, meta, style');
+    const filteredElements = $('body').find('*').not('script, link, meta, style, path, symbol, noscript');
     const reversedElements = $(filteredElements).get().reverse(); // reverse the webpage elements since most postcodes are at the base of the page
 
-    for(const selector of postcodeSelectors) {
+    for(const selector of postcodeSelectors) { 
         $(reversedElements).each((index, element) => {
             const text = $(element).text();
             postcodeMatch = text.match(postcodeDefaultRegex);
             if (postcodeMatch) {
                 postcode = postcodeMatch[0];
+                // pass postcode to parse API
+                    // if postcode data received then return postcode
+                    // else pass trough getZipcodeBaseAPI()
                 postcodeFound = true;
-                return false; // Exit the loop after finding the first postcode
+                return false; 
             }
         });
 
@@ -77,7 +94,7 @@ async function loopForPostcodeIfCountry(text = null, countryFromURL = null, $) {
             break;
         }
     }
-    return postcode;
+    return postcode; // return {postcode, postcodeData} (postcodeObject)
 }
 
 function searchTroughSelectors(text, $) {

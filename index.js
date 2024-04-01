@@ -7,13 +7,12 @@ const brightusername = fs.readFileSync('./brightdata/.brightdataUsername').toStr
 const brightpassword = fs.readFileSync('./brightdata/.brightdataPassword').toString().trim();
 
 const {countries, countryAbbreviations} = require('./countriesCodes.js');
-const getPostalCodeFormat = require('./postalcodeRegex.js');
 
 const {findCountry, getCountryFromURL} = require('./Extractors/countryExtractor.js');
 const {findPostcode, loopForPostcodeIfCountry} = require('./Extractors/postcodeExtractor.js');
 const findRoad = require('./Extractors/roadExtractor.js');
 
-const getDataFromPostalCode = require('./apis/postalcodeParseAPI.js');
+const {getDataFromParseAPI} = require('./apis/postalcodeParseAPI.js');
 
 // Declare fields:
 let country;
@@ -81,17 +80,20 @@ async function retrieveLocationData(htmlContent, url) {
     }
 
     // Extract postcode
-    postcode = findPostcode(text, getPostalCodeFormat(country), country, $);
+    postcode = findPostcode(text, getDataFromParseAPI(country), country, $);
     let postcodeData = await getPostcodeData(postcode);
     
     if (countryGotFromURL && country !== postcodeData?.country?.name || !postcode) {
-        postcode = await loopForPostcodeIfCountry(text, country, $);
+        postcode = await loopForPostcodeIfCountry(text, country, postcodeData, $, axios);
     }
 
     postcodeData = await getPostcodeData(postcode);
+    // if postcode data can't be retrieved, use zipcodedatabase api within another function
+
+    // if postcode not found but road name and number found, find postcode trough geolocator API
        
     // Extract road
-    road = findRoad(text);
+    road = findRoad(text, $);
     
     // Output extracted data
     console.log('Country:', country)
@@ -99,13 +101,12 @@ async function retrieveLocationData(htmlContent, url) {
     console.log('City:', city);
     console.log('Postcode:', postcode);
     console.log('Road:', road);
-    console.log('Road number:', roadNumber);
 }
 
 async function getPostcodeData(postcode, countryGotFromURL) {
     let data;
     if (postcode) {
-        data = await getDataFromPostalCode(postcode, axios);
+        data = await getDataFromParseAPI(postcode, axios);
         
         if(!countryGotFromURL){
             country = data?.country?.name;
