@@ -1,5 +1,3 @@
-const cheerio = require('cheerio');
-
 const addressSelectors = [
     '.address',             
     '.contact-info',        
@@ -10,25 +8,21 @@ const addressSelectors = [
     'address .address-block',
 ];
 
-function findRoad(htmlContent) {
+function findRoad(htmlContent, $) {
     let road = '';
-    const $ = cheerio.load(htmlContent);
 
     for (const selector of addressSelectors) {
-        const elements = $(selector);
+        const elements = $(selector).text().trim();
 
-        // Check if any elements were found
+        const streetNameRegex = /([^\d]+)\s+(\d+.*)/;
+        const matches = elements.match(streetNameRegex);
+
         if (elements.length > 0) {
-            // Extract the text content of the first element
-            const roadText = elements.first().text().trim();
+            road = matches[1].trim();
+            const streetNumber = matches[2].trim();
 
-            // Split the road text by newline to separate street name and other details
-            const roadLines = roadText.split('\n');
+            road += " " + streetNumber;
 
-            // The street name is typically the first line
-            roadName = roadLines[0].trim();
-
-            // Break the loop if a street name is found
             break;
         }
     }
@@ -39,5 +33,8 @@ function findRoad(htmlContent) {
 
     return road;
 }
+
+// get all possible matches for road name
+    // pass in all matched to geolocator API till positive data is returned
 
 module.exports = findRoad;
