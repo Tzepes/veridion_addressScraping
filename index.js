@@ -21,6 +21,7 @@ let city;
 let postcode;
 let road;
 let roadNumber;
+const routes = ['/contact', '/about', '/contact-us', '/about-us', '/contactus', '/aboutus', '/contact-us.html', '/about-us.html', '/contactus.html', '/aboutus.html', '/contact.html', '/about.html', '/locations'];
 
 const axiosBrightDataInstance = axios.create({
     proxy: {
@@ -43,29 +44,64 @@ const axiosBrightDataInstance = axios.create({
     let cursor = reader.getCursor();
 
     let record = null;
+    let retreivedData = null;
     while(record = await cursor.next()) {
         // console.log("");
         // console.log(record.domain) // returns the URL
-
+        let response;
         try {
-            const response = await axios.get('http://' + record.domain, {
+            response = await axios.get('http://' + record.domain, {
                 timeout: 10000
             });
             console.log("");
             if (response.status === 200) {
                 console.log(record.domain)
-                retrieveLocationData(response.data, record.domain);
+                retreivedData = retrieveLocationData(response.data, record.domain);
             } else {
                 console.log('Failed');
             }
         } catch (error) {
             console.log('axios error connection');
         }
+
+        // if not enough info (for example, no postcode)
+            // try other routes
+                // if postcode found 
+                    // break
+            //if no response from other routes
+                // return at least country by url and road (remember the data durring route looping)
+
+        if(response && !retreivedData.postcode){
+            checkRoutes('http://' + record.domain, retreivedData)
+        }
     }
     console.log("");
 
     await reader.close();
 })();
+
+async function checkRoutes(domain, retreivedData) {
+    for (const route of routes) {
+        try {
+            const response = await axios.get('http://' + domain + route, {
+                timeout: 10000
+            });
+            console.log("");
+            if (response.status === 200) {
+                console.log(domain + route)
+                retreivedData = retrieveLocationData(response.data, domain + route);
+            } else {
+                console.log('Failed');
+            }
+        } catch (error) {
+            //console.log('axios error connection');
+        }
+
+        if(retreivedData.postcode){
+            break;
+        }
+    }
+}
 
 async function retrieveLocationData(htmlContent, url) {
     const $ = cheerio.load(htmlContent);
@@ -105,7 +141,7 @@ async function retrieveLocationData(htmlContent, url) {
         region = postcodeObject.postcodeAPIResponse?.state.name;
     }
 
-    if (!country) {
+    if (!country && !countryGotFromURL) {
         country = postcodeObject.postcodeAPIResponse?.country?.name ?? postcodeObject.postcodeAPIResponse?.country;
     }
     // if postcode not found but road name and number found, find postcode trough geolocator API
@@ -119,4 +155,6 @@ async function retrieveLocationData(htmlContent, url) {
     console.log('City:', city);
     console.log('Postcode:', postcode);
     console.log('Road:', road);
+
+    return {country, region, city, postcode, road, countryGotFromURL};
 }
