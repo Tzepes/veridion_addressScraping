@@ -5,6 +5,7 @@ const cheerio = require('cheerio');
 const fs = require('fs');
 const brightusername = fs.readFileSync('./brightdata/.brightdataUsername').toString().trim();
 const brightpassword = fs.readFileSync('./brightdata/.brightdataPassword').toString().trim();
+const createCsvWriter = require('csv-writer').createObjectCsvWriter;
 
 const {countries, countryAbbreviations, getCountryAbbreviation} = require('./countriesCodes.js');
 
@@ -16,6 +17,18 @@ const getPostalCodeFormat = require('./postalcodeRegex.js');
 // Declare routes:
 
 const routes = ['/contact', '/about', '/contact-us', '/about-us', '/contactus', '/aboutus', '/contact-us.html', '/about-us.html', '/contactus.html', '/aboutus.html', '/contact.html', '/about.html', '/locations'];
+
+const csvWriter = createCsvWriter({
+    path: 'results/linkResultsTable.csv',
+    header: [
+        {id: 'domain', title: 'Domain'},
+        {id: 'country', title: 'Country'},
+        {id: 'region', title: 'Region'},
+        {id: 'city', title: 'City'},
+        {id: 'postcode', title: 'Postcode'},
+        {id: 'road', title: 'Road'},
+    ]
+});
 
 const axiosBrightDataInstance = axios.create({
     proxy: {
@@ -128,6 +141,9 @@ async function retrieveLocationData(htmlContent, url) {
         postcodeObject = await loopForPostcodeIfCountry(text, getPostalCodeFormat(country), country, getCountryAbbreviation(country),null, $, axios);  
     }
 
+    // postcodeObject = await loopForPostcodeIfCountry(text, getPostalCodeFormat(country), country, getCountryAbbreviation(country),null, $, axios);  
+
+
     postcode = postcodeObject.postcode;
     if(postcodeObject.postcodeAPIResponse && postcodeObject.postcodeAPIResponse[0]?.city){  // satisfay different API response formats
         city = postcodeObject.postcodeAPIResponse[0]?.city;
@@ -151,6 +167,18 @@ async function retrieveLocationData(htmlContent, url) {
     console.log('City:', city);
     console.log('Postcode:', postcode);
     console.log('Road:', road);
+
+    // Write to CSV
+    let data = [{
+        domain: url,
+        country: country,
+        region: region,
+        city: city,
+        postcode: postcode,
+        road: road
+    }];
+
+    csvWriter.writeRecords(data);
 
     return {country, region, city, postcode, road, countryGotFromURL};
 }

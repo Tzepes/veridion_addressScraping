@@ -42,14 +42,14 @@ async function retrieveLocationData(url) {
             }
 
             postcode = postcodeObject.postcode;
-            if(postcodeObject.postcodeAPIResponse[0]?.city){  // satisfay different API response formats
+            if(postcodeObject.postcodeAPIResponse && postcodeObject.postcodeAPIResponse[0]?.city){  // satisfay different API response formats
                 city = postcodeObject.postcodeAPIResponse[0]?.city;
                 region = postcodeObject.postcodeAPIResponse[0]?.state;
-            } else if (postcodeObject.postcodeAPIResponse?.city.name) {
+            } else if (postcodeObject.postcodeAPIResponse && postcodeObject.postcodeAPIResponse?.city.name) {
                 city = postcodeObject.postcodeAPIResponse?.city.name;
                 region = postcodeObject.postcodeAPIResponse?.state.name;
             }
-
+        
             if (!country) {
                 country = postcodeObject.postcodeAPIResponse?.country?.name ?? postcodeObject.postcodeAPIResponse?.country;
             }
@@ -87,5 +87,5 @@ https://cabwhp.org
 https://glacier.chat
 */
 
-const testUrl = 'https://glacier.chat';
+const testUrl = 'https://www.wyandottewinery.com/ ';
 retrieveLocationData(testUrl);
