@@ -12,70 +12,21 @@ const postcodeSelectors = [
     'address .address-block',
 ];
 
-async function findPostcode(text, countryRegex, Country = null, $ = null, axios) { // function can be removed and use loopForPostcodeIfCountry instead
-    //Things to check for: 
-    // some states are spelled fully, such as Ohio instead of OH
-    // could return country based on postal code in most cases
-    
-    let postalcodeFormat = new RegExp(countryRegex);
-    let postcodeAPIResponse;
-    const postcodeWithLabelRegex = /Postcode\s*([A-Z]{2}\s*\d{4,10})\b/;
-    const postcodeRegexWithState = /\b[A-Z]{2}\s*(\d{5})\b/; // capture only the postcode part
-
-    let postcodeMatch = postalcodeFormat ? postalcodeFormat.exec(text) : null;
-    postcode = postcodeMatch && postcodeMatch[1] ? postcodeMatch[1] : null;
-
-    // Look for postcode
-    if(!postcode) {
-        postcodeMatch = postcodeWithLabelRegex.exec(text);
-        if (postcodeMatch && postcodeMatch[1]) {
-            postcode = postcodeMatch[1];
-        } 
-        if(!postcode){
-            postcodeMatch = postcodeRegexWithState.exec(text);
-            if (postcodeMatch && postcodeMatch[1]) {
-                postcode = postcodeMatch[1].trim(); 
-            }
-        }
-    }
-
-    // Pass postcode into APIS
-    if(postcode){
-        try {
-            postcodeAPIResponse = await getPostcodeDataParseAPI(postcode, axios, Country);
-        } catch(error) {
-            postcodeAPIResponse = null;
-            console.log('erronus postcode for API');
-        }
-        if(!postcodeAPIResponse){
-            try {
-                postcodeAPIResponse = await getZipcodeBaseAPI(postcode, axios, Country);
-                if(!postcodeAPIResponse[postcode]){
-                    postcode = null;
-                }
-            } catch(error) {
-                console.log(error);
-            }
-        }
-    }
-    
-    return {postcode, postcodeAPIResponse};
-}
-
-async function loopForPostcodeIfCountry(text = null, countryRegex = null,  countryFromURL = null, countryCode = null, postcodeData = null, $, axios) {  
+async function loopForPostcodeIfCountry(text = null, countryRegex = null, countryFromURL = null, countryCode = null, postcodeData = null, $, axios) {  
     let postcodeDefaultRegex = /\b\d{5}\b/;
     if(countryRegex){
-        postcodeDefaultRegex = new RegExp(countryRegex);
+        postcodeCountryRegex = new RegExp(countryRegex);
     }
     let postcodeMatch = null;
     let postcode = null;
-    let postcodeFound = false;
-
     let postcodeAPIResponse;
+
+    const postcodeWithLabelRegex = /Postcode\s*([A-Z]{2}\s*\d{4,10})\b/;
+    const postcodeRegexWithState = /\b[A-Z]{2}\s*(\d{5})\b/; // capture only the postcode part
 
     const filteredElements = $('body').find('*').not('script, link, meta, style, path, symbol, noscript');
     const reversedElements = $(filteredElements).get().reverse(); // reverse the webpage elements since most postcodes are at the base of the page
-
+    
     // Start search for postcode
     for(const selector of postcodeSelectors) { 
         for(let index = 0; index < reversedElements.length; index++) {
@@ -84,21 +35,43 @@ async function loopForPostcodeIfCountry(text = null, countryRegex = null,  count
                 continue;
             }
             const text = $(element).text();
+
             postcodeMatch = text.match(postcodeDefaultRegex);
             if (postcodeMatch) {
+                postcode = postcodeMatch[0];
+                break;
+            }
+
+            // Look for postcode using default regex
+            postcodeMatch = text.match(postcodeCountryRegex);
+            if (postcodeMatch) {
                 postcode = postcodeMatch[0]; 
-                // once a match is found, parse into APIs
-                // check if postcode is valid
-                postcodeAPIResponse = (await passPostcodeToAPI(postcode, axios, countryFromURL)).postcodeAPIResponse;
-                return {postcode, postcodeAPIResponse};
+                break;
+            }
+
+            // Look for postcode using postcodeWithLabelRegex
+            const postcodeWithLabelMatch = postcodeWithLabelRegex.exec(text);
+            if (postcodeWithLabelMatch && postcodeWithLabelMatch[1]) {
+                postcode = postcodeWithLabelMatch[1];
+                break;
+            }
+
+            // Look for postcode using postcodeRegexWithState
+            const postcodeRegexWithStateMatch = postcodeRegexWithState.exec(text);
+            if (postcodeRegexWithStateMatch && postcodeRegexWithStateMatch[1]) {
+                postcode = postcodeRegexWithStateMatch[1].trim(); 
+                break;
             }
         }
 
-        if(postcodeFound){
-            break;
+        if(postcode){
+            // Once a postcode is found, parse into APIs
+            let postcodeInfo = await passPostcodeToAPI(postcode, axios, countryFromURL);
+            postcodeAPIResponse = postcodeInfo.postcodeAPIResponse;
+            return { postcode, postcodeAPIResponse };
         }
     }
-    return {postcode, postcodeAPIResponse}; 
+    return { postcode, postcodeAPIResponse }; 
 }
 
 async function passPostcodeToAPI(postcode, axios, countryFromURL) {

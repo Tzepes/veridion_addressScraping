@@ -134,14 +134,8 @@ async function retrieveLocationData(htmlContent, url) {
     let postcodeObject;
     let parseAPIsuccesful = false;
     let zipcodebaseAPIsuccesful = false;
-    
-    postcodeObject = await findPostcode(text, getPostalCodeFormat(country), country, $, axios);
-  
-    if(!postcodeObject.postcode) {
-        postcodeObject = await loopForPostcodeIfCountry(text, getPostalCodeFormat(country), country, getCountryAbbreviation(country),null, $, axios);  
-    }
 
-    // postcodeObject = await loopForPostcodeIfCountry(text, getPostalCodeFormat(country), country, getCountryAbbreviation(country),null, $, axios);  
+    postcodeObject = await loopForPostcodeIfCountry(text, getPostalCodeFormat(country), country, getCountryAbbreviation(country),null, $, axios);  
 
 
     postcode = postcodeObject.postcode;
