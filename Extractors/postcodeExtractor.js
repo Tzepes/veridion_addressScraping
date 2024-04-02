@@ -89,23 +89,7 @@ async function loopForPostcodeIfCountry(text = null, countryRegex = null,  count
                 postcode = postcodeMatch[0]; 
                 // once a match is found, parse into APIs
                 // check if postcode is valid
-                try {
-                    postcodeAPIResponse = await getPostcodeDataParseAPI(postcode, axios, countryFromURL);
-                } catch(error) {
-                    postcodeAPIResponse = null;
-                    console.log('erronus postcode for API');
-                }
-                
-                if(!postcodeAPIResponse || ((postcodeAPIResponse?.country?.name !== countryFromURL) && countryFromURL !== null)) {
-                    try {
-                        postcodeAPIResponse = await getZipcodeBaseAPI(postcode, axios, countryFromURL);
-                    } catch(error) {
-                        postcodeAPIResponse = null;
-                        console.log('erronus postcode for API');
-                        console.log(error);
-                    }
-
-                }
+                postcodeAPIResponse = (await passPostcodeToAPI(postcode, axios, countryFromURL)).postcodeAPIResponse;
                 return {postcode, postcodeAPIResponse};
             }
         }
@@ -115,6 +99,28 @@ async function loopForPostcodeIfCountry(text = null, countryRegex = null,  count
         }
     }
     return {postcode, postcodeAPIResponse}; 
+}
+
+async function passPostcodeToAPI(postcode, axios, countryFromURL) {
+    let postcodeAPIResponse;
+    try {
+        postcodeAPIResponse = await getPostcodeDataParseAPI(postcode, axios, countryFromURL);
+    } catch(error) {
+        postcodeAPIResponse = null;
+        console.log('erronus postcode for API');
+    }
+    
+    if(!postcodeAPIResponse || ((postcodeAPIResponse?.country?.name !== countryFromURL) && countryFromURL !== null)) {
+        try {
+            postcodeAPIResponse = await getZipcodeBaseAPI(postcode, axios, countryFromURL);
+        } catch(error) {
+            postcodeAPIResponse = null;
+            console.log('erronus postcode for API');
+            console.log(error);
+        }
+
+    }
+    return {postcode, postcodeAPIResponse};
 }
 
 async function getPostcodeDataParseAPI(postcode, axios, countryFromURL) { // parsecodeAPI
