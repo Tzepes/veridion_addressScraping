@@ -80,6 +80,9 @@ async function loopForPostcodeIfCountry(text = null, countryRegex = null,  count
     for(const selector of postcodeSelectors) { 
         for(let index = 0; index < reversedElements.length; index++) {
             const element = reversedElements[index];
+            if ($(element).is('script') || $(element).find('script').length > 0) {
+                continue;
+            }
             const text = $(element).text();
             postcodeMatch = text.match(postcodeDefaultRegex);
             if (postcodeMatch) {
