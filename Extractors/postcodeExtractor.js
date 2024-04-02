@@ -21,7 +21,7 @@ async function findPostcode(text, countryRegex, Country = null, $ = null, axios)
     let postcodeAPIResponse;
     const postcodeWithLabelRegex = /Postcode\s*([A-Z]{2}\s*\d{4,10})\b/;
     const postcodeRegexWithState = /\b[A-Z]{2}\s*(\d{5})\b/; // capture only the postcode part
-    
+
     let postcodeMatch = postalcodeFormat ? postalcodeFormat.exec(text) : null;
     postcode = postcodeMatch && postcodeMatch[1] ? postcodeMatch[1] : null;
 
@@ -62,9 +62,11 @@ async function findPostcode(text, countryRegex, Country = null, $ = null, axios)
     return {postcode, postcodeAPIResponse};
 }
 
-async function loopForPostcodeIfCountry(text = null, countryFromURL = null, countryCode = null, postcodeData = null, $, axios) {  
-    console.log('looping to find code');
-    const postcodeDefaultRegex = /\b\d{5}\b/;
+async function loopForPostcodeIfCountry(text = null, countryRegex = null,  countryFromURL = null, countryCode = null, postcodeData = null, $, axios) {  
+    let postcodeDefaultRegex = /\b\d{5}\b/;
+    if(countryRegex){
+        postcodeDefaultRegex = new RegExp(countryRegex);
+    }
     let postcodeMatch = null;
     let postcode = null;
     let postcodeFound = false;
@@ -90,11 +92,13 @@ async function loopForPostcodeIfCountry(text = null, countryFromURL = null, coun
                     postcodeAPIResponse = null;
                     console.log('erronus postcode for API');
                 }
-                if(!postcodeAPIResponse || postcodeAPIResponse?.country?.name !== countryFromURL) {
+                
+                if(!postcodeAPIResponse || ((postcodeAPIResponse?.country?.name !== countryFromURL) && countryFromURL !== null)) {
                     try {
                         postcodeAPIResponse = await getZipcodeBaseAPI(postcode, axios, countryFromURL);
                     } catch(error) {
                         postcodeAPIResponse = null;
+                        console.log('erronus postcode for API');
                         console.log(error);
                     }
 

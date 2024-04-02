@@ -6,19 +6,18 @@ const { findCountry, getCountryFromURL } = require('./Extractors/countryExtracto
 const {findPostcode, loopForPostcodeIfCountry} = require('./Extractors/postcodeExtractor.js');
 const findRoad = require('./Extractors/roadExtractor.js');
 
-let country;
-let countryGotFromURL = false;
-let postcode;
-let region;
-let city;
-let road;
-let roadNumber
 
 async function retrieveLocationData(url) {
     console.log(url);
     try {
         const response = await axios.get(url, { timeout: 10000 });
         if (response.status === 200) {
+            let country;
+            let countryGotFromURL = false;
+            let region;
+            let city;
+            let postcode;
+            let roadNumber;
             const htmlContent = response.data;
             const $ = cheerio.load(htmlContent);
             const text = $('body').text();
@@ -37,22 +36,16 @@ async function retrieveLocationData(url) {
             let zipcodebaseAPIsuccesful = false;
             
             postcodeObject = await findPostcode(text, getPostalCodeFormat(country), country, $, axios);
-            if(postcodeObject){
-                parseAPIsuccesful = true;
+  
+            if(!postcodeObject.postcode) {
+                postcodeObject = await loopForPostcodeIfCountry(text, getPostalCodeFormat(country), country, getCountryAbbreviation(country),null, $, axios);  
             }
-            
-            if(!postcodeObject) {
-                postcodeObject = await loopForPostcodeIfCountry(text, country, getCountryAbbreviation(country),null, $, axios);  
-                if(postcodeObject){
-                    zipcodebaseAPIsuccesful = true;
-                }
-            }
-            
+
             postcode = postcodeObject.postcode;
-            if(zipcodebaseAPIsuccesful){  // satisfay different API response formats
+            if(postcodeObject.postcodeAPIResponse[0]?.city){  // satisfay different API response formats
                 city = postcodeObject.postcodeAPIResponse[0]?.city;
                 region = postcodeObject.postcodeAPIResponse[0]?.state;
-            } else if (parseAPIsuccesful) {
+            } else if (postcodeObject.postcodeAPIResponse?.city.name) {
                 city = postcodeObject.postcodeAPIResponse?.city.name;
                 region = postcodeObject.postcodeAPIResponse?.state.name;
             }
@@ -90,7 +83,9 @@ https://www.mackay.co.uk/contact-us.html
 https://embcmonroe.org/
 https://blackbookmarketresearch.com
 https://www.hophooligans.ro/
+https://cabwhp.org
+https://glacier.chat
 */
 
-const testUrl = 'https://www.hophooligans.ro/';
+const testUrl = 'https://glacier.chat';
 retrieveLocationData(testUrl);

@@ -13,14 +13,8 @@ const {findPostcode, loopForPostcodeIfCountry} = require('./Extractors/postcodeE
 const findRoad = require('./Extractors/roadExtractor.js');
 const getPostalCodeFormat = require('./postalcodeRegex.js');
 
-// Declare fields:
-let country;
-let countryGotFromURL = false;
-let region;
-let city;
-let postcode;
-let road;
-let roadNumber;
+// Declare routes:
+
 const routes = ['/contact', '/about', '/contact-us', '/about-us', '/contactus', '/aboutus', '/contact-us.html', '/about-us.html', '/contactus.html', '/aboutus.html', '/contact.html', '/about.html', '/locations'];
 
 const axiosBrightDataInstance = axios.create({
@@ -38,7 +32,7 @@ const axiosBrightDataInstance = axios.create({
 
 // TODO:
     // 1. if post code, city, and region or city have not been found, try access /contact, /about, /contact-us, /about-us, /contactus, /aboutus, /contact-us.html, /about-us.html, /contactus.html, /aboutus.html, /contact.html, /about.html, /locations
-
+    // Check country extraction, seems like in the case of .org, the country comes out null even if post code taken
 (async () => {
     let reader = await parquet.ParquetReader.openFile('websites.snappy .parquet');
     let cursor = reader.getCursor();
@@ -104,6 +98,14 @@ async function checkRoutes(domain, retreivedData) {
 }
 
 async function retrieveLocationData(htmlContent, url) {
+    let country;
+    let countryGotFromURL = false;
+    let region;
+    let city;
+    let postcode;
+    let road;
+    let roadNumber;
+
     const $ = cheerio.load(htmlContent);
     const text = $('body').text();
 
@@ -121,27 +123,21 @@ async function retrieveLocationData(htmlContent, url) {
     let zipcodebaseAPIsuccesful = false;
     
     postcodeObject = await findPostcode(text, getPostalCodeFormat(country), country, $, axios);
-    if(postcodeObject){
-        parseAPIsuccesful = true;
+  
+    if(!postcodeObject.postcode) {
+        postcodeObject = await loopForPostcodeIfCountry(text, getPostalCodeFormat(country), country, getCountryAbbreviation(country),null, $, axios);  
     }
-    
-    if(!postcodeObject) {
-        postcodeObject = await loopForPostcodeIfCountry(text, country, getCountryAbbreviation(country),null, $, axios);  
-        if(postcodeObject){
-            zipcodebaseAPIsuccesful = true;
-        }
-    }
-    
+
     postcode = postcodeObject.postcode;
-    if(zipcodebaseAPIsuccesful){  // satisfay different API response formats
+    if(postcodeObject.postcodeAPIResponse && postcodeObject.postcodeAPIResponse[0]?.city){  // satisfay different API response formats
         city = postcodeObject.postcodeAPIResponse[0]?.city;
         region = postcodeObject.postcodeAPIResponse[0]?.state;
-    } else if (parseAPIsuccesful) {
+    } else if (postcodeObject.postcodeAPIResponse && postcodeObject.postcodeAPIResponse?.city.name) {
         city = postcodeObject.postcodeAPIResponse?.city.name;
         region = postcodeObject.postcodeAPIResponse?.state.name;
     }
 
-    if (!country && !countryGotFromURL) {
+    if (!country) {
         country = postcodeObject.postcodeAPIResponse?.country?.name ?? postcodeObject.postcodeAPIResponse?.country;
     }
     // if postcode not found but road name and number found, find postcode trough geolocator API
