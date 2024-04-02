@@ -43,14 +43,14 @@ async function retrieveLocationData(url) {
 
             postcodeObject = await loopForPostcodeIfCountry(text, getPostalCodeFormat(country), country, getCountryAbbreviation(country),null, $, axios);  
 
-
             postcode = postcodeObject.postcode;
-            if(postcodeObject.postcodeAPIResponse && postcodeObject.postcodeAPIResponse[0]?.city){  // satisfay different API response formats
-                city = postcodeObject.postcodeAPIResponse[0]?.city;
-                region = postcodeObject.postcodeAPIResponse[0]?.state;
-            } else if (postcodeObject.postcodeAPIResponse && postcodeObject.postcodeAPIResponse?.city.name) {
-                city = postcodeObject.postcodeAPIResponse?.city.name;
-                region = postcodeObject.postcodeAPIResponse?.state.name;
+            postcodeAPIResponse = postcodeObject.postcodeAPIResponse;
+            if(postcodeAPIResponse && postcodeAPIResponse?.city){  // check for zpicodeBase api response
+                city = postcodeAPIResponse?.city;
+                region = postcodeAPIResponse?.state;
+            } else if (postcodeAPIResponse && postcodeAPIResponse?.city?.name) { // check for parseAPI response
+                city = postcodeAPIResponse?.city?.name;
+                region = postcodeAPIResponse?.state?.name;
             }
         
             if (!country) {
@@ -88,7 +88,8 @@ https://blackbookmarketresearch.com
 https://www.hophooligans.ro/
 https://cabwhp.org
 https://glacier.chat
+https://kuk24.de 
 */
 
-const testUrl = 'https://www.wyandottewinery.com/ ';
+const testUrl = 'https://akzent-personal.de';
 retrieveLocationData(testUrl);

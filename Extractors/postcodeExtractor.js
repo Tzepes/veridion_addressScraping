@@ -118,9 +118,9 @@ async function getZipcodeBaseAPI(postcode, axios, country) { // pass country cod
     if (postcode) {
         data = await getDataFromZipcodeBase(postcode, axios)
 
-        data.results[postcode].forEach(location => {
-            if(location.country_code == countryCode) { // Change country to countryCode from countriesCodes.js
-                return location;
+        data.results[postcode].forEach(postcodeInfo => {
+            if(postcodeInfo.country_code == countryCode) { 
+                return postcodeInfo;
             }
         })
         

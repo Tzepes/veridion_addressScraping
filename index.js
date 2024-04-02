@@ -117,6 +117,7 @@ async function retrieveLocationData(htmlContent, url) {
     let region;
     let city;
     let postcode;
+    let postcodeAPIResponse;
     let roadObject;
     let road;
     let roadNumber;
@@ -139,14 +140,14 @@ async function retrieveLocationData(htmlContent, url) {
 
     postcodeObject = await loopForPostcodeIfCountry(text, getPostalCodeFormat(country), country, getCountryAbbreviation(country),null, $, axios);  
 
-
     postcode = postcodeObject.postcode;
-    if(postcodeObject.postcodeAPIResponse && postcodeObject.postcodeAPIResponse[0]?.city){  // satisfay different API response formats
-        city = postcodeObject.postcodeAPIResponse[0]?.city;
-        region = postcodeObject.postcodeAPIResponse[0]?.state;
-    } else if (postcodeObject.postcodeAPIResponse && postcodeObject.postcodeAPIResponse?.city.name) {
-        city = postcodeObject.postcodeAPIResponse?.city.name;
-        region = postcodeObject.postcodeAPIResponse?.state.name;
+    postcodeAPIResponse = postcodeObject.postcodeAPIResponse;
+    if(postcodeAPIResponse && postcodeAPIResponse?.city){  // check for zpicodeBase api response
+        city = postcodeAPIResponse?.city;
+        region = postcodeAPIResponse?.state;
+    } else if (postcodeAPIResponse && postcodeAPIResponse?.city?.name) { // check for parseAPI response
+        city = postcodeAPIResponse?.city?.name;
+        region = postcodeAPIResponse?.state?.name;
     }
 
     if (!country) {
