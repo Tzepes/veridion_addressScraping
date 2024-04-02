@@ -10,7 +10,7 @@ const createCsvWriter = require('csv-writer').createObjectCsvWriter;
 const {countries, countryAbbreviations, getCountryAbbreviation} = require('./countriesCodes.js');
 
 const {findCountry, getCountryFromURL} = require('./Extractors/countryExtractor.js');
-const {findPostcode, loopForPostcodeIfCountry} = require('./Extractors/postcodeExtractor.js');
+const {loopForPostcodeIfCountry} = require('./Extractors/postcodeExtractor.js');
 const findRoad = require('./Extractors/roadExtractor.js');
 const getPostalCodeFormat = require('./postalcodeRegex.js');
 
@@ -27,6 +27,7 @@ const csvWriter = createCsvWriter({
         {id: 'city', title: 'City'},
         {id: 'postcode', title: 'Postcode'},
         {id: 'road', title: 'Road'},
+        {id: 'roadNumber', title: 'Road Number'}
     ]
 });
 
@@ -116,6 +117,7 @@ async function retrieveLocationData(htmlContent, url) {
     let region;
     let city;
     let postcode;
+    let roadObject;
     let road;
     let roadNumber;
 
@@ -153,7 +155,9 @@ async function retrieveLocationData(htmlContent, url) {
     // if postcode not found but road name and number found, find postcode trough geolocator API
        
     // Extract road
-    road = findRoad(text, $);
+    roadObject = findRoad(text, $);
+    road = roadObject.road;
+    roadNumber = roadObject.streetNumber;
     
     // Output extracted data
     console.log('Country:', country)
@@ -169,7 +173,8 @@ async function retrieveLocationData(htmlContent, url) {
         region: region,
         city: city,
         postcode: postcode,
-        road: road
+        road: road,
+        roadNumber: roadNumber
     }];
 
     csvWriter.writeRecords(data);

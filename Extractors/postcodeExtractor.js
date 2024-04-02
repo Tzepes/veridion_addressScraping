@@ -132,4 +132,4 @@ async function getZipcodeBaseAPI(postcode, axios, country) { // pass country cod
     return data?.results[postcode][0];
 }
 
-module.exports = {findPostcode, loopForPostcodeIfCountry};
+module.exports = {loopForPostcodeIfCountry};
