@@ -14,6 +14,7 @@ const postcodeSelectors = [
 
 async function loopForPostcodeIfCountry(text = null, countryRegex = null, countryFromURL = null, countryCode = null, postcodeData = null, $, axios) {  
     let postcodeDefaultRegex = /\b\d{5}\b/;
+    let postcodeCountryRegex = null;
     if(countryRegex){
         postcodeCountryRegex = new RegExp(countryRegex);
     }
@@ -124,7 +125,8 @@ async function getZipcodeBaseAPI(postcode, axios, country) { // pass country cod
             }
         })
         
-        if(!country || country === 'Unknown'){
+        if(!country || country === 'Unknown' || country !== 'United States'){ // US is asigned automatically to country if url is .com
+                                                                              // ignore US to asing to postcode country
             country = data.results[postcode][0].country_code;
         }
     }

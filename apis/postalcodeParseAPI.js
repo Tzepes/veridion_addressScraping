@@ -10,6 +10,7 @@ async function getDataFromParseAPI(postalCode, axios) {
         return data;
     } catch (error) {
         console.log('error from getDataFromParseAPI');
+        return null;
     }
 }
 

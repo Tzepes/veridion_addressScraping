@@ -44,9 +44,6 @@ const axiosBrightDataInstance = axios.create({
     timeout: 10000 // 10 seconds timeout
 });
 
-// TODO:
-    // 1. if post code, city, and region or city have not been found, try access /contact, /about, /contact-us, /about-us, /contactus, /aboutus, /contact-us.html, /about-us.html, /contactus.html, /aboutus.html, /contact.html, /about.html, /locations
-    // Check country extraction, seems like in the case of .org, the country comes out null even if post code taken
 (async () => {
     let reader = await parquet.ParquetReader.openFile('websites.snappy .parquet');
     let cursor = reader.getCursor();
@@ -142,13 +139,13 @@ async function retrieveLocationData(htmlContent, url) {
 
     postcode = postcodeObject.postcode;
     postcodeAPIResponse = postcodeObject.postcodeAPIResponse;
-    if(postcodeAPIResponse && postcodeAPIResponse?.city){  // check for zpicodeBase api response
-        city = postcodeAPIResponse?.city;
-        region = postcodeAPIResponse?.state;
-    } else if (postcodeAPIResponse && postcodeAPIResponse?.city?.name) { // check for parseAPI response
+    if (postcodeAPIResponse && postcodeAPIResponse?.city?.name) { // check for parseAPI response
         city = postcodeAPIResponse?.city?.name;
         region = postcodeAPIResponse?.state?.name;
-    }
+    } else if(postcodeAPIResponse && postcodeAPIResponse?.city){  // check for zpicodeBase api response
+        city = postcodeAPIResponse?.city;
+        region = postcodeAPIResponse?.state;
+    } 
 
     if (!country) {
         country = postcodeObject.postcodeAPIResponse?.country?.name ?? postcodeObject.postcodeAPIResponse?.country;

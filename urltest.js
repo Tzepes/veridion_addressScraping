@@ -34,33 +34,29 @@ async function retrieveLocationData(url) {
             let postcodeObject;
             let parseAPIsuccesful = false;
             let zipcodebaseAPIsuccesful = false;
-            
-            // postcodeObject = await findPostcode(text, getPostalCodeFormat(country), country, $, axios);
-  
-            // if(!postcodeObject.postcode) {
-            //     postcodeObject = await loopForPostcodeIfCountry(text, getPostalCodeFormat(country), country, getCountryAbbreviation(country),null, $, axios);  
-            // }
 
             postcodeObject = await loopForPostcodeIfCountry(text, getPostalCodeFormat(country), country, getCountryAbbreviation(country),null, $, axios);  
 
             postcode = postcodeObject.postcode;
             postcodeAPIResponse = postcodeObject.postcodeAPIResponse;
-            if(postcodeAPIResponse && postcodeAPIResponse?.city){  // check for zpicodeBase api response
-                city = postcodeAPIResponse?.city;
-                region = postcodeAPIResponse?.state;
-            } else if (postcodeAPIResponse && postcodeAPIResponse?.city?.name) { // check for parseAPI response
+            if (postcodeAPIResponse && postcodeAPIResponse?.city?.name) { // check for parseAPI response
                 city = postcodeAPIResponse?.city?.name;
                 region = postcodeAPIResponse?.state?.name;
-            }
-        
-            if (!country) {
-                country = postcodeObject.postcodeAPIResponse?.country?.name ?? postcodeObject.postcodeAPIResponse?.country;
-            }
+            } else if(postcodeAPIResponse && postcodeAPIResponse?.city){  // check for zpicodeBase api response
+                city = postcodeAPIResponse?.city;
+                region = postcodeAPIResponse?.state;
+            } 
 
+            const road = findRoad(htmlContent, $);
+                // sometimes road can be correct but postcode not
+                    // pass road to geolocator API
+                        // compare returned postcode with postcode from other APIs
+                            // if different
+                                // compare countries of two post codes
+                            // else return postcode
 
             // postcodeData = await getPostcodeDataParseAPI(postcode);
 
-            const road = findRoad(htmlContent, $);
 
             // Output extracted data
             console.log('Country:', country);
@@ -89,7 +85,10 @@ https://www.hophooligans.ro/
 https://cabwhp.org
 https://glacier.chat
 https://kuk24.de 
+
+https://bridge.legal  -> country taken as mexico even tho postoce is for Italy Scilia
+https://pchandy.net -> asian postcode, country not asinged probably because no country in country list file
 */
 
-const testUrl = 'https://akzent-personal.de';
+const testUrl = 'https://pchandy.net';
 retrieveLocationData(testUrl);
