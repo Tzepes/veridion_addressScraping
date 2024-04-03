@@ -90,5 +90,5 @@ https://bridge.legal  -> country taken as mexico even tho postoce is for Italy S
 https://pchandy.net -> asian postcode, country not asinged probably because no country in country list file
 */
 
-const testUrl = 'https://pchandy.net';
+const testUrl = 'https://www.airspaceconsulting.com/contact-us';
 retrieveLocationData(testUrl);

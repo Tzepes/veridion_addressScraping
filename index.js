@@ -16,7 +16,7 @@ const getPostalCodeFormat = require('./postalcodeRegex.js');
 
 // Declare routes:
 
-const routes = ['/contact', '/about'];
+const routes = ['/contact', '/contact-us','/about'];
 
 const csvWriter = createCsvWriter({
     path: 'results/linkResultsTable.csv',
@@ -54,6 +54,14 @@ const axiosBrightDataInstance = axios.create({
         // console.log("");
         // console.log(record.domain) // returns the URL
         let retreivedData = await accessDomain('http://' + record.domain);
+        if(!retreivedData?.postcode){
+            for(let route of routes){
+                retreivedData = await accessDomain('http://' + record.domain + route);
+                if(retreivedData?.postcode){
+                    break;
+                }
+            }
+        }
         writeCSV(retreivedData, record.domain);
     }
     console.log("");
@@ -64,7 +72,7 @@ const axiosBrightDataInstance = axios.create({
 async function accessDomain(domain){
     let response;
     let retreivedData = null;
-
+    console.log(domain);
     try {
         response = await axios.get(domain, {
             timeout: 2000
