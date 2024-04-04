@@ -1,19 +1,6 @@
 const {getDataFromParseAPI, getDataFromZipcodeBase} = require('../apis/postalcodeParseAPI.js');
 const { getCountryAbbreviation } = require('../countriesCodes.js');
 
-const postcodeSelectors = [
-    'footer',   
-    'address',     
-    '.address',             
-    '.contact-info',
-    '.footer-address',      
-    '.footer .address',     
-    '.footer .contact-info',
-    '.address-block',
-    'address .address-block',
-];
-let postcodeCountry;
-
 async function loopForPostcodeIfCountry(text = null, countryRegex = null, countryFromURL = null, countryCode = null, postcodeData = null, $, axios) {  
     let postcodeDefaultRegex = /\b\d{5}\b/;
     let postcodeCountryRegex = null;
@@ -23,9 +10,6 @@ async function loopForPostcodeIfCountry(text = null, countryRegex = null, countr
     let postcodeMatch = null;
     let postcode = null;
     let postcodeAPIResponse;
-
-    const postcodeWithLabelRegex = /Postcode\s*([A-Z]{2}\s*\d{4,10})\b/;
-    const postcodeRegexWithState = /\b[A-Z]{2}\s*(\d{5})\b/; // capture only the postcode part
 
     const filteredElements = $('body').find('*').not('script, link, meta, style, path, symbol, noscript');
     const reversedElements = $(filteredElements).get().reverse(); // reverse the webpage elements since most postcodes are at the base of the page

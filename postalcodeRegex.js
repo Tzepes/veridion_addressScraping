@@ -48,7 +48,7 @@ const postalCodeRegex = {
     Switzerland: /^\d{4}$/,
     Turkey: /^\d{5}$/,
     Ukraine: /^\d{5}$/,
-    'United Kingdom': /^([A-PR-UWYZa-pr-uwyz][A-HK-Ya-hk-y]?[0-9][0-9]?[ABEHMNPRVWXYa-behmnprvwxy]? ?[0-9][ABD-HJLN-UW-Zabd-hjln-uw-z]{2}|GIR ?0A{2})$/,
+    'United Kingdom': /\b([A-PR-UWYZa-pr-uwyz][A-HK-Ya-hk-y]?[0-9][0-9]?[ABEHMNPRVWXYa-behmnprvwxy]? ?[0-9][ABD-HJLN-UW-Zabd-hjln-uw-z]{2})\b/,
     'Vatican City': /^00120$/,
     'Antigua and Barbuda': /^(?:ANT)?[0-9]{4}$/,
     Bahamas: /^(?:BAH)?[0-9]{5}$/,
