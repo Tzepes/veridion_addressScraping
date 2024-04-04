@@ -32,8 +32,6 @@ async function retrieveLocationData(url) {
             }
 
             let postcodeObject;
-            let parseAPIsuccesful = false;
-            let zipcodebaseAPIsuccesful = false;
 
             postcodeObject = await loopForPostcodeIfCountry(text, getPostalCodeFormat(country), country, getCountryAbbreviation(country),null, $, axios);  
             if(postcodeObject){
@@ -78,24 +76,38 @@ async function retrieveLocationData(url) {
 }
 
 // Manually pass the URL to test
-/* URLS TO TEST:
-https://www.wyandottewinery.com/ 
-https://www.fesa.de/
-https://thegrindcoffeebar.com/
-https://www.irrigationcontrol.co.uk/contact-us/
-https://www.mackay.co.uk/contact-us.html
-https://embcmonroe.org/
-https://blackbookmarketresearch.com
-https://www.hophooligans.ro/
-https://cabwhp.org
-https://glacier.chat
-https://kuk24.de 
+/* URLS TO TEST:*/
+const urlsToTest = [
+    // 1
+    'https://www.wyandottewinery.com/',
+    // 2
+    'https://www.fesa.de/',
+    // 3
+    'https://thegrindcoffeebar.com/',
+    // 4
+    'https://www.irrigationcontrol.co.uk/contact-us/',
+    // 5
+    'https://www.mackay.co.uk/contact-us.html',
+    // 6
+    'https://embcmonroe.org/',
+    // 7
+    'https://blackbookmarketresearch.com',
+    // 8
+    'https://www.hophooligans.ro/',
+    // 9
+    'https://cabwhp.org',
+    // 10
+    'https://glacier.chat',
+    // 11
+    'https://kuk24.de',
+    // 12 - country taken as mexico even tho postoce is for Italy Scilia
+    'https://bridge.legal',
+    // 13 - asian postcode, country not asinged probably because no country in country list file
+    'https://pchandy.net',
+    // 14 - german postcode found but information hasn t been retrieved
+    'http://portraitbox.com',
+    // 15
+    'https://www.shalom-israel-reisen.de/'
+];
 
-https://bridge.legal  -> country taken as mexico even tho postoce is for Italy Scilia
-https://pchandy.net -> asian postcode, country not asinged probably because no country in country list file
-http://portraitbox.com -> german postcode found but information hasn t been retrieved 
-https://https://www.shalom-israel-reisen.de/
-*/
-
-const testUrl = 'https://www.irrigationcontrol.co.uk/contact-us/';
-retrieveLocationData(testUrl);
+retrieveLocationData(urlsToTest[8]);
