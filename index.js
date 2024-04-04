@@ -114,21 +114,22 @@ async function retrieveLocationData(htmlContent, url) {
     let postcodeObject;
 
     postcodeObject = await loopForPostcodeIfCountry(text, getPostalCodeFormat(country), country, getCountryAbbreviation(country),null, $, axios);  
-
-    postcode = postcodeObject.postcode;
-    postcodeAPIResponse = postcodeObject.postcodeAPIResponse;
-    if (postcodeAPIResponse && postcodeAPIResponse?.city?.name) { // check for parseAPI response
-        city = postcodeAPIResponse?.city?.name;
-        region = postcodeAPIResponse?.state?.name;
-    } else if(postcodeAPIResponse && postcodeAPIResponse?.city){  // check for zpicodeBase api response
-        city = postcodeAPIResponse?.city;
-        region = postcodeAPIResponse?.state;
-    } 
-
-    if (!country) {
-        country = postcodeObject.postcodeAPIResponse?.country?.name ?? postcodeObject.postcodeAPIResponse?.country;
+    if(postcodeObject){
+        postcode = postcodeObject.postcode;
+        postcodeAPIResponse = postcodeObject.postcodeAPIResponse;
+        if (postcodeAPIResponse && postcodeAPIResponse?.city?.name) { // check for parseAPI response
+            city = postcodeAPIResponse?.city?.name;
+            region = postcodeAPIResponse?.state?.name;
+        } else if(postcodeAPIResponse && postcodeAPIResponse?.city){  // check for zpicodeBase api response
+            city = postcodeAPIResponse?.city;
+            region = postcodeAPIResponse?.state;
+        } 
+        
+        if (!country) {
+            country = postcodeObject.postcodeAPIResponse?.country?.name ?? postcodeObject.postcodeAPIResponse?.country;
+        }
     }
-    // if postcode not found but road name and number found, find postcode trough geolocator API
+        // if postcode not found but road name and number found, find postcode trough geolocator API
        
     // Extract road
     roadObject = findRoad(text, $);

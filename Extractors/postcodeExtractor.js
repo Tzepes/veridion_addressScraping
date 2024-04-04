@@ -2,7 +2,8 @@ const {getDataFromParseAPI, getDataFromZipcodeBase} = require('../apis/postalcod
 const { getCountryAbbreviation } = require('../countriesCodes.js');
 
 const postcodeSelectors = [
-    'footer',        
+    'footer',   
+    'address',     
     '.address',             
     '.contact-info',
     '.footer-address',      
@@ -11,6 +12,7 @@ const postcodeSelectors = [
     '.address-block',
     'address .address-block',
 ];
+let postcodeCountry;
 
 async function loopForPostcodeIfCountry(text = null, countryRegex = null, countryFromURL = null, countryCode = null, postcodeData = null, $, axios) {  
     let postcodeDefaultRegex = /\b\d{5}\b/;
@@ -27,52 +29,39 @@ async function loopForPostcodeIfCountry(text = null, countryRegex = null, countr
 
     const filteredElements = $('body').find('*').not('script, link, meta, style, path, symbol, noscript');
     const reversedElements = $(filteredElements).get().reverse(); // reverse the webpage elements since most postcodes are at the base of the page
-    
+
     // Start search for postcode
-    for(const selector of postcodeSelectors) { 
-        for(let index = 0; index < reversedElements.length; index++) {
-            const element = reversedElements[index];
-            if ($(element).is('script') || $(element).find('script').length > 0) {
-                continue;
-            }
-            const text = $(element).text();
-
-            postcodeMatch = text.match(postcodeDefaultRegex);
-            if (postcodeMatch) {
-                postcode = postcodeMatch[0];
-                break;
-            }
-
-            // Look for postcode using default regex
-            postcodeMatch = text.match(postcodeCountryRegex);
-            if (postcodeMatch) {
-                postcode = postcodeMatch[0]; 
-                break;
-            }
-
-            // Look for postcode using postcodeWithLabelRegex
-            const postcodeWithLabelMatch = postcodeWithLabelRegex.exec(text);
-            if (postcodeWithLabelMatch && postcodeWithLabelMatch[1]) {
-                postcode = postcodeWithLabelMatch[1];
-                break;
-            }
-
-            // Look for postcode using postcodeRegexWithState
-            const postcodeRegexWithStateMatch = postcodeRegexWithState.exec(text);
-            if (postcodeRegexWithStateMatch && postcodeRegexWithStateMatch[1]) {
-                postcode = postcodeRegexWithStateMatch[1].trim(); 
-                break;
-            }
+    for(let index = 0; index < reversedElements.length; index++) {
+        const element = reversedElements[index];
+        if ($(element).is('script') || $(element).find('script').length > 0) {
+            continue;
         }
-
+        const text = $(element).text();
+        
+        postcodeMatch = text.match(postcodeDefaultRegex);
+        if (postcodeMatch) {
+            postcode = postcodeMatch[0];
+            // continue;
+        }
+        
+        // Look for postcode using country regex
+        postcodeMatch = text.match(postcodeCountryRegex);
+        if (postcodeMatch) {
+            postcode = postcodeMatch[0]; 
+            // continue;
+        }
+        
         if(postcode){
             // Once a postcode is found, parse into APIs
             let postcodeInfo = await passPostcodeToAPI(postcode, axios, countryFromURL);
             postcodeAPIResponse = postcodeInfo.postcodeAPIResponse;
+            if(postcodeAPIResponse == null){
+                postcode = null;
+                continue;
+            }
             return { postcode, postcodeAPIResponse };
         }
     }
-    return { postcode, postcodeAPIResponse }; 
 }
 
 async function passPostcodeToAPI(postcode, axios, countryFromURL) {
@@ -107,9 +96,8 @@ async function getPostcodeDataParseAPI(postcode, axios, countryFromURL) { // par
         } else {
             return data;
         }
-    } else { 
-        return null;
     }
+    return null;
 }
 
 async function getZipcodeBaseAPI(postcode, axios, country) { // pass country code as parametere if needed
@@ -119,19 +107,23 @@ async function getZipcodeBaseAPI(postcode, axios, country) { // pass country cod
     if (postcode) {
         data = await getDataFromZipcodeBase(postcode, axios)
 
-        data.results[postcode].forEach(postcodeInfo => {
-            if(postcodeInfo.country_code == countryCode) { 
-                return postcodeInfo;
+        const postcodeInfo = data.results[postcode].find(postcodeInfo => {
+            return postcodeInfo.country_code === countryCode;
+        });
+
+        if (postcodeInfo) {
+            if (!country || country === 'Unknown' || country !== 'United States') {
+                country = postcodeInfo.country_code;
+                setCountryFromPostCode(country);
             }
-        })
-        
-        if(!country || country === 'Unknown' || country !== 'United States'){ // US is asigned automatically to country if url is .com
-                                                                              // ignore US to asing to postcode country
-            country = data.results[postcode][0].country_code;
+            return postcodeInfo;
         }
     }
+    return null;
+}
 
-    return data?.results[postcode][0];
+function setCountryFromPostCode(_country) {
+    postcodeCountry = _country;
 }
 
 module.exports = {loopForPostcodeIfCountry};

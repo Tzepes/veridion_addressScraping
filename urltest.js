@@ -36,16 +36,21 @@ async function retrieveLocationData(url) {
             let zipcodebaseAPIsuccesful = false;
 
             postcodeObject = await loopForPostcodeIfCountry(text, getPostalCodeFormat(country), country, getCountryAbbreviation(country),null, $, axios);  
-
-            postcode = postcodeObject.postcode;
-            postcodeAPIResponse = postcodeObject.postcodeAPIResponse;
-            if (postcodeAPIResponse && postcodeAPIResponse?.city?.name) { // check for parseAPI response
-                city = postcodeAPIResponse?.city?.name;
-                region = postcodeAPIResponse?.state?.name;
-            } else if(postcodeAPIResponse && postcodeAPIResponse?.city){  // check for zpicodeBase api response
-                city = postcodeAPIResponse?.city;
-                region = postcodeAPIResponse?.state;
-            } 
+            if(postcodeObject){
+                postcode = postcodeObject.postcode;
+                postcodeAPIResponse = postcodeObject.postcodeAPIResponse;
+                if (postcodeAPIResponse && postcodeAPIResponse?.city?.name) { // check for parseAPI response
+                    city = postcodeAPIResponse?.city?.name;
+                    region = postcodeAPIResponse?.state?.name;
+                } else if(postcodeAPIResponse && postcodeAPIResponse?.city){  // check for zpicodeBase api response
+                    city = postcodeAPIResponse?.city;
+                    region = postcodeAPIResponse?.state;
+                } 
+                
+                if (!country) {
+                    country = postcodeObject.postcodeAPIResponse?.country?.name ?? postcodeObject.postcodeAPIResponse?.country;
+                }
+            }
 
             const road = findRoad(htmlContent, $);
                 // sometimes road can be correct but postcode not
@@ -77,7 +82,7 @@ async function retrieveLocationData(url) {
 https://www.wyandottewinery.com/ 
 https://www.fesa.de/
 https://thegrindcoffeebar.com/
-https://irrigationcontrol.co.uk 
+https://www.irrigationcontrol.co.uk/contact-us/
 https://www.mackay.co.uk/contact-us.html
 https://embcmonroe.org/
 https://blackbookmarketresearch.com
@@ -88,7 +93,9 @@ https://kuk24.de
 
 https://bridge.legal  -> country taken as mexico even tho postoce is for Italy Scilia
 https://pchandy.net -> asian postcode, country not asinged probably because no country in country list file
+http://portraitbox.com -> german postcode found but information hasn t been retrieved 
+https://https://www.shalom-israel-reisen.de/
 */
 
-const testUrl = 'https://www.airspaceconsulting.com/contact-us';
+const testUrl = 'https://www.irrigationcontrol.co.uk/contact-us/';
 retrieveLocationData(testUrl);
