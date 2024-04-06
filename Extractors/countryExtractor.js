@@ -40,6 +40,7 @@ function getCountryFromURL(url) {
 
         // North American Countries
         'com': 'United States',
+        'us': 'United States',
         'ca': 'Canada',
         'mx': 'Mexico',
 

@@ -22,6 +22,7 @@ async function retrieveLocationData(url) {
             const $ = cheerio.load(htmlContent);
             const text = $('body').text();
 
+            console.log('getting country');
             country = getCountryFromURL(url);
             if (!country) {
                 // Extract country from text if not found in URL
@@ -30,9 +31,9 @@ async function retrieveLocationData(url) {
             } else { 
                 countryGotFromURL = true;
             }
-
             let postcodeObject;
-
+            
+            console.log('getting postcode');
             postcodeObject = await loopForPostcodeIfCountry(text, getPostalCodeFormat(country), country, getCountryAbbreviation(country),null, $, axios);  
             if(postcodeObject){
                 postcode = postcodeObject.postcode;
@@ -49,7 +50,7 @@ async function retrieveLocationData(url) {
                     country = postcodeObject.postcodeAPIResponse?.country?.name ?? postcodeObject.postcodeAPIResponse?.country;
                 }
             }
-
+            console.log('getting road');
             const road = findRoad(htmlContent, $);
                 // sometimes road can be correct but postcode not
                     // pass road to geolocator API
@@ -60,7 +61,7 @@ async function retrieveLocationData(url) {
 
             // postcodeData = await getPostcodeDataParseAPI(postcode);
 
-
+            console.log('outputing');
             // Output extracted data
             console.log('Country:', country);
             console.log('Region:', region);
@@ -78,6 +79,8 @@ async function retrieveLocationData(url) {
 // Manually pass the URL to test
 /* URLS TO TEST:*/
 const urlsToTest = [
+    // 0
+    'https://www.umbrawindowtinting.com/',
     // 1
     'https://www.wyandottewinery.com/',
     // 2
@@ -107,7 +110,17 @@ const urlsToTest = [
     // 14 - german postcode found but information hasn t been retrieved
     'http://portraitbox.com',
     // 15
-    'https://www.shalom-israel-reisen.de/'
+    'https://www.shalom-israel-reisen.de/',
+    // 16
+    'http://www.iqfitness.net/contact',
+    // 17
+    'http://ekiem.de',
+    // 18
+    'https://fastbolt.com',
+    //19s
+    'http://unitedairconditioning.com/contact',
+    //20
+    'https://www.seedsourceag.com/'
 ];
 
-retrieveLocationData(urlsToTest[8]);
+retrieveLocationData(urlsToTest[20]);
