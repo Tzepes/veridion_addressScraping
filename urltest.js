@@ -137,7 +137,7 @@ const urlsToTest = [
     //23
     'https://aiwoodwork.com',
     //24
-    'https://www.actconcreteconstruction.com/',
+    'https://luckyprints.com/contact/',
 ];
 
 retrieveLocationData(urlsToTest[24]);

@@ -3,7 +3,7 @@ const url = require('url');
 async function getFirstPageLinks(domain, htmlContent, $) {
     let links = new Set();
     const aTags = $('a');
-    const unwantedLinkRegex = /^#|javascript:|mailto:|tel:|ftp:|data:|\.pdf$/;
+    const unwantedLinkRegex = /^#|javascript:|mailto:|tel:|ftp:|data:|\.(pdf|jpg|png)$/;
 
     aTags.each((i, el) => {
         if (links.size >= 15) {
