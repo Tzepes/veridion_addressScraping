@@ -1,7 +1,7 @@
 const {parseapiKey, zipcodeBaseKey} =  require('./apiKeys.js');
 
-async function getDataFromParseAPI(postalCode, axios) {
-    const apiUrl = `http://postalcode.parseapi.com/api/${parseapiKey}/${postalCode}`;
+async function getDataFromParseAPI(postcode, axios) {
+    const apiUrl = `http://postalcode.parseapi.com/api/${parseapiKey}/${postcode}`;
     
     try {
         const response = await axios.get(apiUrl);
@@ -9,13 +9,17 @@ async function getDataFromParseAPI(postalCode, axios) {
 
         return data;
     } catch (error) {
-        console.log('error from getDataFromParseAPI');
+        if (error.code === 'ENOTFOUND') {
+            console.error('Could not resolve API URL. Please check your internet connection and DNS settings.');
+        } else {
+            // console.error(error);
+        }
         return null;
     }
 }
 
-async function getDataFromZipcodeBase(postalCode, axios) {
-    const apiUrl = `https://app.zipcodebase.com/api/v1/search?apikey=${zipcodeBaseKey}&codes=${postalCode}`;
+async function getDataFromZipcodeBase(postcode, axios) {
+    const apiUrl = `https://app.zipcodebase.com/api/v1/search?apikey=${zipcodeBaseKey}&codes=${postcode}`;
 
     try {
         const response = await axios.get(apiUrl);
