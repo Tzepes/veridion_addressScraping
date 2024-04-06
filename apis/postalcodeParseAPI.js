@@ -1,6 +1,7 @@
 const {parseapiKey, zipcodeBaseKey} =  require('./apiKeys.js');
+const axios = require('axios');
 
-async function getDataFromParseAPI(postcode, axios) {
+async function getDataFromParseAPI(postcode) {
     const apiUrl = `http://postalcode.parseapi.com/api/${parseapiKey}/${postcode}`;
     
     try {
@@ -18,7 +19,7 @@ async function getDataFromParseAPI(postcode, axios) {
     }
 }
 
-async function getDataFromZipcodeBase(postcode, axios) {
+async function getDataFromZipcodeBase(postcode) {
     const apiUrl = `https://app.zipcodebase.com/api/v1/search?apikey=${zipcodeBaseKey}&codes=${postcode}`;
 
     try {

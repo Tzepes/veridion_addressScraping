@@ -1,7 +1,7 @@
 const {getDataFromParseAPI, getDataFromZipcodeBase} = require('../apis/postalcodeParseAPI.js');
 const { getCountryAbbreviation } = require('../countriesCodes.js');
 
-async function loopForPostcodeIfCountry(text = null, countryRegex = null, countryFromURL = null, countryCode = null, postcodeData = null, $, axios) {  
+async function loopForPostcodeIfCountry(text = null, countryRegex = null, countryFromURL = null, countryCode = null, postcodeData = null, $) {  
     let postcodeDefaultRegex = /\b\d{5}\b/;
     let postcodeCountryRegex = null;
     if(countryRegex){
@@ -40,28 +40,29 @@ async function loopForPostcodeIfCountry(text = null, countryRegex = null, countr
     let uniquePostcodes = Array.from(matchingPostcodes);
     console.log(uniquePostcodes);
     for (let postcodeOfArr of uniquePostcodes) {
-        let postcodeInfo = await passPostcodeToAPI(postcodeOfArr, axios, countryFromURL);
+        let postcodeInfo = await passPostcodeToAPI(postcodeOfArr, countryFromURL);
         postcodeAPIResponse = postcodeInfo.postcodeAPIResponse;
-        
+        console.log(postcodeAPIResponse);
         if(postcodeAPIResponse == null){
             postcode = null;
+        } else {
+            return { postcode, postcodeAPIResponse };
         }
     }
-    return { postcode, postcodeAPIResponse };
 }
 
-async function passPostcodeToAPI(postcode, axios, countryFromURL) {
+async function passPostcodeToAPI(postcode, countryFromURL) {
     let postcodeAPIResponse;
 
     try {
-        postcodeAPIResponse = await getPostcodeDataParseAPI(postcode, axios, countryFromURL);
+        postcodeAPIResponse = await getPostcodeDataParseAPI(postcode, countryFromURL);
     } catch(error) {
         postcodeAPIResponse = null;
         console.log('erronus postcode for API');
     }
     if(!postcodeAPIResponse) { // check logic here it should not trigger if postcodeAPIResponse succeded
         try {
-            postcodeAPIResponse = await getZipcodeBaseAPI(postcode, axios, countryFromURL);
+            postcodeAPIResponse = await getZipcodeBaseAPI(postcode, countryFromURL);
         } catch(error) {
             postcodeAPIResponse = null;
             console.log('erronus postcode for API');
@@ -73,11 +74,11 @@ async function passPostcodeToAPI(postcode, axios, countryFromURL) {
     return {postcode, postcodeAPIResponse};
 }
 
-async function getPostcodeDataParseAPI(postcode, axios, countryFromURL) { // parsecodeAPI
+async function getPostcodeDataParseAPI(postcode, countryFromURL) { // parsecodeAPI
     let data;
 
     if (postcode) {
-        data = await getDataFromParseAPI(postcode, axios);
+        data = await getDataFromParseAPI(postcode);
         if(countryFromURL !== data?.country?.name && countryFromURL !== null){
             return null;
         } else {
@@ -87,9 +88,9 @@ async function getPostcodeDataParseAPI(postcode, axios, countryFromURL) { // par
     return null;
 }
 
-async function getZipcodeBaseAPI(postcode, axios, country) { // pass country code as parametere if needed
+async function getZipcodeBaseAPI(postcode, country) { // pass country code as parametere if needed
     let data;
-    data = await getDataFromZipcodeBase(postcode, axios)
+    data = await getDataFromZipcodeBase(postcode)
     if (data.results[postcode] && data.results[postcode].length > 0) {
         if (data.results[postcode].length === 1) {
             return data.results[postcode][0];
