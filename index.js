@@ -104,7 +104,7 @@ async function retrieveLocationData(htmlContent, url) {
     const $ = cheerio.load(htmlContent);
     const text = $('body').text();
 
-    firstPageLinks = await getFirstPageLinks(htmlContent, $);
+    firstPageLinks = await getFirstPageLinks(url, htmlContent, $);
 
     country = getCountryFromURL(url);
 

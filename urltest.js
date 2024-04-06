@@ -24,7 +24,7 @@ async function retrieveLocationData(url) {
             const $ = cheerio.load(htmlContent);
             const text = $('body').text();
 
-            let firstPageLinks = await getFirstPageLinks(htmlContent, $);
+            let firstPageLinks = await getFirstPageLinks(url, htmlContent, $);
 
             console.log('getting country');
             country = getCountryFromURL(url);
@@ -137,7 +137,7 @@ const urlsToTest = [
     //23
     'https://aiwoodwork.com',
     //24
-    'https://www.njng.com',
+    'https://www.actconcreteconstruction.com/',
 ];
 
 retrieveLocationData(urlsToTest[24]);

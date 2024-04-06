@@ -1,14 +1,22 @@
-async function getFirstPageLinks(htmlContent, $) {
+const url = require('url');
+
+async function getFirstPageLinks(domain, htmlContent, $) {
     let links = new Set();
     const aTags = $('a');
-    const urlRegex = /^(http|https):\/\//;
+    const unwantedLinkRegex = /^#|javascript:|mailto:|tel:|ftp:|data:|\.pdf$/;
 
     aTags.each((i, el) => {
         if (links.size >= 15) {
             return false; // stop iteration
         }
-        const link = $(el).attr('href');
-        if (link && urlRegex.test(link)) {
+        let link = $(el).attr('href');
+        if (link && !unwantedLinkRegex.test(link)) {
+            // If the link is a protocol-relative URL, add "https:"
+            if (link.startsWith('//')) {
+                link = 'https:' + link;
+            }
+            // Resolve all links against the domain, whether they're relative or absolute
+            link = url.resolve(domain, link);
             links.add(link);
         }
     });
