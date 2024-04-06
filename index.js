@@ -56,6 +56,7 @@ const axiosBrightDataInstance = axios.create({
         let retreivedData = await accessDomain('http://' + record.domain);
         if(!retreivedData?.postcode){
             for(let route of routes){
+                await new Promise(resolve => setTimeout(resolve, 1000));
                 retreivedData = await accessDomain('http://' + record.domain + route);
                 if(retreivedData?.postcode){
                     break;
@@ -130,7 +131,8 @@ async function retrieveLocationData(htmlContent, url) {
         }
     }
         // if postcode not found but road name and number found, find postcode trough geolocator API
-       
+
+
     // Extract road
     roadObject = findRoad(text, $);
     road = roadObject.road;
@@ -149,7 +151,7 @@ async function retrieveLocationData(htmlContent, url) {
 function writeCSV(data, domain) {
     let dataObject = [{
         domain: domain,
-        country: data?.country,
+        country: data?.country || getCountryFromURL(domain),
         region: data?.region,
         city: data?.city,
         postcode: data?.postcode,

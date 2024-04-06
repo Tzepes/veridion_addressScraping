@@ -10,10 +10,11 @@ async function loopForPostcodeIfCountry(text = null, countryRegex = null, countr
     let postcodeMatch = null;
     let postcode = null;
     let postcodeAPIResponse;
+    let matchingPostcodes = new Set();
 
     const filteredElements = $('body').find('*').not('script, link, meta, style, path, symbol, noscript');
     const reversedElements = $(filteredElements).get().reverse(); // reverse the webpage elements since most postcodes are at the base of the page
-
+   
     // Start search for postcode
     for(let index = 0; index < reversedElements.length; index++) {
         const element = reversedElements[index];
@@ -21,10 +22,10 @@ async function loopForPostcodeIfCountry(text = null, countryRegex = null, countr
             continue;
         }
         const text = $(element).text();
-        
         postcodeMatch = text.match(postcodeDefaultRegex);
         if (postcodeMatch) {
             postcode = postcodeMatch[0];
+            matchingPostcodes.add(postcode);
             // continue;
         }
         
@@ -32,42 +33,41 @@ async function loopForPostcodeIfCountry(text = null, countryRegex = null, countr
         postcodeMatch = text.match(postcodeCountryRegex);
         if (postcodeMatch) {
             postcode = postcodeMatch[0]; 
+            matchingPostcodes.add(postcode);
             // continue;
         }
+    }
+    let uniquePostcodes = Array.from(matchingPostcodes);
+    console.log(uniquePostcodes);
+    for (let postcodeOfArr of uniquePostcodes) {
+        let postcodeInfo = await passPostcodeToAPI(postcodeOfArr, axios, countryFromURL);
+        postcodeAPIResponse = postcodeInfo.postcodeAPIResponse;
         
-        if(postcode){
-            // Once a postcode is found, parse into APIs
-            let postcodeInfo = await passPostcodeToAPI(postcode, axios, countryFromURL);
-            postcodeAPIResponse = postcodeInfo.postcodeAPIResponse;
-            if(postcodeAPIResponse == null){
-                postcode = null;
-                continue;
-            }
-            return { postcode, postcodeAPIResponse };
+        if(postcodeAPIResponse == null){
+            postcode = null;
         }
     }
+    return { postcode, postcodeAPIResponse };
 }
 
 async function passPostcodeToAPI(postcode, axios, countryFromURL) {
     let postcodeAPIResponse;
-    if(countryFromURL === 'United States' || countryFromURL == null){
+
+    try {
+        postcodeAPIResponse = await getPostcodeDataParseAPI(postcode, axios, countryFromURL);
+    } catch(error) {
+        postcodeAPIResponse = null;
+        console.log('erronus postcode for API');
+    }
+    if(!postcodeAPIResponse) { // check logic here it should not trigger if postcodeAPIResponse succeded
         try {
-            postcodeAPIResponse = await getPostcodeDataParseAPI(postcode, axios, countryFromURL);
+            postcodeAPIResponse = await getZipcodeBaseAPI(postcode, axios, countryFromURL);
         } catch(error) {
             postcodeAPIResponse = null;
             console.log('erronus postcode for API');
+            console.log(error);
         }
-    } else {
-        if(!postcodeAPIResponse || ((postcodeAPIResponse?.country?.name !== countryFromURL) && countryFromURL !== null)) {
-            try {
-                postcodeAPIResponse = await getZipcodeBaseAPI(postcode, axios, countryFromURL);
-            } catch(error) {
-                postcodeAPIResponse = null;
-                console.log('erronus postcode for API');
-                console.log(error);
-            }
-    
-        }
+        
     }
     
     return {postcode, postcodeAPIResponse};
@@ -89,20 +89,17 @@ async function getPostcodeDataParseAPI(postcode, axios, countryFromURL) { // par
 
 async function getZipcodeBaseAPI(postcode, axios, country) { // pass country code as parametere if needed
     let data;
-    let countryCode = getCountryAbbreviation(country);
-    if (postcode) {
-        data = await getDataFromZipcodeBase(postcode, axios)
-
-        const postcodeInfo = data.results[postcode].find(postcodeInfo => {
-            return postcodeInfo.country_code === countryCode;
-        });
-
-        if (postcodeInfo) {
-            if (!country || country === 'Unknown' || country !== 'United States') {
-                country = postcodeInfo.country_code;
-                setCountryFromPostCode(country);
+    data = await getDataFromZipcodeBase(postcode, axios)
+    if (data.results[postcode] && data.results[postcode].length > 0) {
+        if (data.results[postcode].length === 1) {
+            return data.results[postcode][0];
+        } else {
+            let countryCode = getCountryAbbreviation(country);
+            for (let postcodeInfo of data.results[postcode]) {
+                if (postcodeInfo.country_code === countryCode) {
+                    return postcodeInfo;
+                }
             }
-            return postcodeInfo;
         }
     }
     return null;
