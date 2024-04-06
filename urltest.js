@@ -1,6 +1,7 @@
 const axios = require('axios');
 const cheerio = require('cheerio');
 const {countries, countryAbbreviations, getCountryAbbreviation} = require('./countriesCodes.js');
+const getFirstPageLinks = require('./Extractors/firstPageLinksExtractor.js');
 const getPostalCodeFormat = require('./postalcodeRegex.js');
 const { findCountry, getCountryFromURL } = require('./Extractors/countryExtractor.js');
 const {findPostcode, loopForPostcodeIfCountry} = require('./Extractors/postcodeExtractor.js');
@@ -19,15 +20,18 @@ async function retrieveLocationData(url) {
             let postcode;
             let roadNumber;
             const htmlContent = response.data;
+
             const $ = cheerio.load(htmlContent);
             const text = $('body').text();
+
+            let firstPageLinks = await getFirstPageLinks(htmlContent, $);
 
             console.log('getting country');
             country = getCountryFromURL(url);
             if (!country) {
                 // Extract country from text if not found in URL
                 // implement findCountry function accordingly
-                // country = findCountry(text);
+                // country = findCountry(text, countries);
             } else { 
                 countryGotFromURL = true;
             }
@@ -50,6 +54,11 @@ async function retrieveLocationData(url) {
                     country = postcodeObject.postcodeAPIResponse?.country?.name ?? postcodeObject.postcodeAPIResponse?.country;
                 }
             }
+
+            if(!postcode && !country){
+                country = findCountry(text, countries);
+            }
+
             console.log('getting road');
             const road = findRoad(htmlContent, $);
                 // sometimes road can be correct but postcode not
@@ -120,7 +129,15 @@ const urlsToTest = [
     //19s
     'http://unitedairconditioning.com/contact',
     //20
-    'https://www.seedsourceag.com/'
+    'http://seedsourceag.com',
+    //21
+    'https://www.umbrawindowtinting.com/',
+    //22
+    'http://societyfortheblind.org',
+    //23
+    'https://aiwoodwork.com',
+    //24
+    'https://www.njng.com',
 ];
 
-retrieveLocationData(urlsToTest[20]);
+retrieveLocationData(urlsToTest[24]);

@@ -46,6 +46,8 @@ async function loopForPostcodeIfCountry(text = null, countryRegex = null, countr
         if(postcodeAPIResponse == null){
             postcode = null;
         } else {
+            console.log(postcodeOfArr);
+            postcode = postcodeOfArr;
             return { postcode, postcodeAPIResponse };
         }
     }
