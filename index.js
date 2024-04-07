@@ -50,10 +50,9 @@ const axiosBrightDataInstance = axios.create({
 
     let record = null;
     while(record = await cursor.next()) {
-        // console.log("");
-        // console.log(record.domain) // returns the URL
-        await new Promise(resolve => setTimeout(resolve, 500));
+
         let retreivedData = await accessDomain('http://' + record.domain);
+
         if(!retreivedData?.postcode){
             for(let link of firstPageLinks){
                 await new Promise(resolve => setTimeout(resolve, 500));
@@ -75,33 +74,25 @@ const axiosBrightDataInstance = axios.create({
 async function accessDomain(domain){
     let response;
     let retreivedData = null;
-    console.log(domain);
+    console.log('Accesing domain: ' + domain);
     try {
-        response = await axios.get(domain, { timeout: 2000 });
-        console.log("");
+        response = await axios.get(domain, { timeout: 5000 });
         if (response.status === 200) {
-            console.log(domain)
+            console.log(`Response status: ${response.status}`);
+            console.log(`Response headers: ${response.headers}`);
             retreivedData = await retrieveLocationData(response.data, domain);
         } else {
-            console.log('Failed');
+            console.log(`Failed to access domain. Response status: ${response.status}`);
         }
     } catch (error) {
+        console.log(`Error accessing domain: ${error.message}`);
         if (error.response) {
-            // The request was made and the server responded with a status code
-            // that falls out of the range of 2xx
-            console.log(error.response.data);
-            console.log(error.response.status);
-            console.log(error.response.headers);
-          } else if (error.request) {
-            // The request was made but no response was received
-            // `error.request` is an instance of XMLHttpRequest in the browser and an instance of
-            // http.ClientRequest in node.js
-            console.log(error.request);
-          } else {
-            // Something happened in setting up the request that triggered an Error
-            console.log('Error', error.message);
-          }
-          console.log(error.config);
+            console.log(`Error response data: ${error.response.data}`);
+            console.log(`Error response status: ${error.response.status}`);
+            console.log(`Error response headers: ${error.response.headers}`);
+        } else if (error.request) {
+            console.log(`Error request: ${error.request}`);
+        }
     }
 
     return retreivedData;

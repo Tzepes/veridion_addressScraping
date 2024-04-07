@@ -133,7 +133,7 @@ const urlsToTest = [
     //24
     'https://www.seedsourceag.com',
     //25
-    'https://animaledzoocation.com/contactus.html',
+    'https://namastereiki.com',
 ];
 
-retrieveLocationData(urlsToTest[24]);
+retrieveLocationData(urlsToTest[25]);
