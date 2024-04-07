@@ -28,13 +28,7 @@ async function retrieveLocationData(url) {
 
             console.log('getting country');
             country = getCountryFromURL(url);
-            if (!country) {
-                // Extract country from text if not found in URL
-                // implement findCountry function accordingly
-                // country = findCountry(text, countries);
-            } else { 
-                countryGotFromURL = true;
-            }
+
             let postcodeObject;
             
             console.log('getting postcode');
@@ -137,7 +131,9 @@ const urlsToTest = [
     //23
     'https://aiwoodwork.com',
     //24
-    'https://luckyprints.com/contact/',
+    'https://www.seedsourceag.com',
+    //25
+    'https://animaledzoocation.com/contactus.html',
 ];
 
 retrieveLocationData(urlsToTest[24]);
