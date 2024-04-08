@@ -2,9 +2,6 @@ const parquet = require('@dsnp/parquetjs');
 const axios = require('axios-https-proxy-fix');
 const cheerio = require('cheerio');
 
-const fs = require('fs');
-const brightusername = fs.readFileSync('./brightdata/.brightdataUsername').toString().trim();
-const brightpassword = fs.readFileSync('./brightdata/.brightdataPassword').toString().trim();
 const createCsvWriter = require('csv-writer').createObjectCsvWriter;
 
 const {countries, getCountryAbbreviation} = require('./countriesCodes.js');
@@ -14,8 +11,7 @@ const {loopForPostcodeIfCountry} = require('./Extractors/postcodeExtractor.js');
 const findRoad = require('./Extractors/roadExtractor.js');
 const getPostalCodeFormat = require('./postalcodeRegex.js');
 
-// Declare routes:
-
+// Declare links array:
 let firstPageLinks = [];
 
 const csvWriter = createCsvWriter({
@@ -31,20 +27,7 @@ const csvWriter = createCsvWriter({
     ]
 });
 
-const axiosBrightDataInstance = axios.create({
-    proxy: {
-        protocol: 'https',
-        host: 'brd.superproxy.io',
-        port: 22225,
-        auth: {
-            username: brightusername,
-            password: brightpassword
-        }
-    },
-    timeout: 5000 // 5 seconds timeout
-});
-
-(async () => {
+(async () => {  // the main function that starts the search, loops trough all linkfs from .parquet and starts search for data
     let reader = await parquet.ParquetReader.openFile('websites.snappy .parquet');
     let cursor = reader.getCursor();
 
@@ -53,9 +36,9 @@ const axiosBrightDataInstance = axios.create({
 
         let retreivedData = await accessDomain('http://' + record.domain);
 
-        if(!retreivedData?.postcode){
+        if(!retreivedData?.postcode){ //incase the postcode hasn't been found, get the linkfs of the landing page and search trough them as well (initiate only if postcode missing since street tends to be placed next to it)
             for(let link of firstPageLinks){
-                await new Promise(resolve => setTimeout(resolve, 500));
+                await new Promise(resolve => setTimeout(resolve, 500)); // delay to prevent blocking by the server
                 retreivedData = await accessDomain(link);
                 if(retreivedData?.postcode){
                     firstPageLinks = [];
@@ -64,7 +47,7 @@ const axiosBrightDataInstance = axios.create({
             }
         }
         firstPageLinks = [];
-        writeCSV(retreivedData, record.domain);
+        writeCSV(retreivedData, record.domain); //write data into CSV file
     }
     console.log("");
 
@@ -119,7 +102,8 @@ async function retrieveLocationData(htmlContent, url) {
 
     // Extract postcode
     let postcodeObject;
-
+    // the returned JSONs are different for parseAPI and zipcodebase API
+    // we first check if the JSON is of parseAPI, otherwise, we try zipcodebase JSON format
     postcodeObject = await loopForPostcodeIfCountry(text, getPostalCodeFormat(country), country, getCountryAbbreviation(country),null, $);  
     if(postcodeObject){
         postcode = postcodeObject.postcode;
@@ -132,12 +116,11 @@ async function retrieveLocationData(htmlContent, url) {
             region = postcodeAPIResponse?.state;
         } 
         
-        if (!country) {
+        if (!country) { //in case country hasn't been found off the URLm take it from the postcode if available
             country = postcodeObject.postcodeAPIResponse?.country?.name ?? postcodeObject.postcodeAPIResponse?.country;
         }
     }
-        // if postcode not found but road name and number found, find postcode trough geolocator API
-
+    // if neither options worked for finding at least the country, search for it trough the text of the page
     if(!postcode && !country){
         country = findCountry(text, countries);
     }
@@ -154,7 +137,7 @@ async function retrieveLocationData(htmlContent, url) {
     console.log('Postcode:', postcode);
     console.log('Road:', road);
 
-    return {country, region, city, postcode, road, roadNumber}; // Postcode sometimes is taken as the one from the first link instead the correct one, maybe assing it as APIresponse.postcode
+    return {country, region, city, postcode, road, roadNumber}; // Return extracted data
 }
 
 function writeCSV(data, domain) {

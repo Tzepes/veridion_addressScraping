@@ -14,11 +14,9 @@ async function retrieveLocationData(url) {
         const response = await axios.get(url, { timeout: 10000 });
         if (response.status === 200) {
             let country;
-            let countryGotFromURL = false;
             let region;
             let city;
             let postcode;
-            let roadNumber;
             const htmlContent = response.data;
 
             const $ = cheerio.load(htmlContent);
@@ -133,7 +131,9 @@ const urlsToTest = [
     //24
     'https://www.seedsourceag.com',
     //25
-    'https://namastereiki.com',
+    'https://azcrystal.com',
+    //26
+    'https://sites.google.com/chathamboat.com/tours/home'
 ];
 
-retrieveLocationData(urlsToTest[25]);
+retrieveLocationData(urlsToTest[26]);

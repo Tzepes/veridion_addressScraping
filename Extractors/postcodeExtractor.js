@@ -2,10 +2,10 @@ const {getDataFromParseAPI, getDataFromZipcodeBase} = require('../apis/postalcod
 const { getCountryAbbreviation } = require('../countriesCodes.js');
 
 async function loopForPostcodeIfCountry(text = null, countryRegex = null, countryFromURL = null, countryCode = null, postcodeData = null, $) {  
-    let postcodeDefaultRegex = /\b\d{5}\b/;
+    let postcodeDefaultRegex = /\b\d{5}\b/; // use a defalt regex that could match most postcodes
     let postcodeCountryRegex = null;
     if(countryRegex){
-        postcodeCountryRegex = new RegExp(countryRegex);
+        postcodeCountryRegex = new RegExp(countryRegex); // get the zipcode regex format based on the country
     }
     let postcodeMatch = null;
     let postcode = null;
@@ -16,6 +16,7 @@ async function loopForPostcodeIfCountry(text = null, countryRegex = null, countr
     const reversedElements = $(filteredElements).get().reverse(); // reverse the webpage elements since most postcodes are at the base of the page
    
     // Start search for postcode
+    // we insert each matching string of numbers into a Set() array, then we loop them until the valid postcode is found
     for(let index = 0; index < reversedElements.length; index++) {
         const element = reversedElements[index];
         if ($(element).is('script') || $(element).find('script').length > 0 || $(element).find('style').length > 0){
@@ -39,9 +40,11 @@ async function loopForPostcodeIfCountry(text = null, countryRegex = null, countr
             // continue;
         }
     }
+
     let uniquePostcodes = Array.from(matchingPostcodes);
     console.log(uniquePostcodes);
-    for (let postcodeOfArr of uniquePostcodes) {
+
+    for (let postcodeOfArr of uniquePostcodes) { // check each matching string
         let postcodeInfo = await passPostcodeToAPI(postcodeOfArr, countryFromURL);
         postcodeAPIResponse = postcodeInfo.postcodeAPIResponse;
         console.log(postcodeAPIResponse);
@@ -57,7 +60,9 @@ async function loopForPostcodeIfCountry(text = null, countryRegex = null, countr
 
 async function passPostcodeToAPI(postcode, countryFromURL) {
     let postcodeAPIResponse;
-
+    
+        // postcode is first passed trough ParseAPI which is free and only for US postcodes
+        // if no data retrieved off ParseAPI, it could be invalid or non US, thereforse we try zipcodebase which is worldwide but paid, so we limit requests
     try {
         postcodeAPIResponse = await getPostcodeDataParseAPI(postcode, countryFromURL);
     } catch(error) {
@@ -100,7 +105,7 @@ async function getZipcodeBaseAPI(postcode, country) { // pass country code as pa
             return data.results[postcode][0];
         } else {
             let countryCode = getCountryAbbreviation(country);
-            for (let postcodeInfo of data.results[postcode]) {
+            for (let postcodeInfo of data.results[postcode]) { // zipcodebase API could return multiple JSON objects for the same zipcode, therefore we loop trough them until country of postcode matches
                 if (postcodeInfo.country_code === countryCode) {
                     return postcodeInfo;
                 }
@@ -108,10 +113,6 @@ async function getZipcodeBaseAPI(postcode, country) { // pass country code as pa
         }
     }
     return null;
-}
-
-function setCountryFromPostCode(_country) {
-    postcodeCountry = _country;
 }
 
 module.exports = {loopForPostcodeIfCountry};
