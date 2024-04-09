@@ -32,9 +32,12 @@ const csvWriter = createCsvWriter({
     let cursor = reader.getCursor();
 
     let record = null;
+    let counter = 0;
     while(record = await cursor.next()) {
+        counter++;
+        if (counter < 1211) continue;
 
-        let retreivedData = await accessDomain('http://' + record.domain);
+        let retreivedData = await accessDomain('https://' + record.domain);
 
         if(!retreivedData?.postcode){ //incase the postcode hasn't been found, get the linkfs of the landing page and search trough them as well (initiate only if postcode missing since street tends to be placed next to it)
             for(let link of firstPageLinks){
@@ -63,6 +66,10 @@ async function accessDomain(domain){
         if (response.status === 200) {
             console.log(`Response status: ${response.status}`);
             console.log(`Response headers: ${response.headers}`);
+            if (response.headers['content-type'] === 'application/pdf' || response.headers['content-type'] === 'audio/mpeg' || response.headers['content-type'] === 'video/mp4') {
+                console.log('Irrelevant file detected. Skipping...');
+                return;
+            }
             retreivedData = await retrieveLocationData(response.data, domain);
         } else {
             console.log(`Failed to access domain. Response status: ${response.status}`);
