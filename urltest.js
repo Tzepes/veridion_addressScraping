@@ -133,7 +133,7 @@ const urlsToTest = [
     //25
     'https://azcrystal.com',
     //26
-    'https://sites.google.com/chathamboat.com/tours/home'
+    'https://www.gpmoto.de/shop/wg/bekleidung/lederkombis/lederkombis-damen/lederkombis-1-teilig/'
 ];
 
 retrieveLocationData(urlsToTest[26]);

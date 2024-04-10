@@ -108,6 +108,8 @@ async function getZipcodeBaseAPI(postcode, country) { // pass country code as pa
             for (let postcodeInfo of data.results[postcode]) { // zipcodebase API could return multiple JSON objects for the same zipcode, therefore we loop trough them until country of postcode matches
                 if (postcodeInfo.country_code === countryCode) {
                     return postcodeInfo;
+                } else {
+                    continue;
                 }
             }
         }
