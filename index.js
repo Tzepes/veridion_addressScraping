@@ -32,11 +32,7 @@ const csvWriter = createCsvWriter({
     let cursor = reader.getCursor();
 
     let record = null;
-    let counter = 0;
     while(record = await cursor.next()) {
-        counter++;
-        if (counter < 1211) continue;
-
         let retreivedData = await accessDomain('https://' + record.domain);
 
         if(!retreivedData?.postcode){ //incase the postcode hasn't been found, get the linkfs of the landing page and search trough them as well (initiate only if postcode missing since street tends to be placed next to it)
