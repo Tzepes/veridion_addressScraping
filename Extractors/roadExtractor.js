@@ -26,25 +26,28 @@ function findRoad(htmlContent, $) {
             console.log('Num begin:', text.match(streetRegexNumBegin));
             console.log('Num end:', text.match(streetRegexNumEnd));
             // take road
-            if (text.match(streetRegexNumBegin)) 
-            {
-                let matches = text.match(streetRegexNumBegin);
-
-                let splitMatches = matches[0].split(' ');
-
-                roadNumber = splitMatches[0].trim();
-                road = splitMatches.slice(1).join(' ').trim();
-                roadMatches.add([roadNumber, road]);
-            } 
-            else if (text.match(streetRegexNumEnd))
-            {
-                let matches = text.match(streetRegexNumEnd);
-                let splitMatches = matches[0].split(' ');
-
-                road = splitMatches.slice(0, -1).join(' ').trim();
-                roadNumber = splitMatches[splitMatches.length - 1].trim();
+            if(text.match(streetNameRegex)){
+                let matches = text.match(streetNameRegex);
+                roadNumber = matches[1].trim();
+                road = matches[2].trim();
                 roadMatches.add([roadNumber, road]);
             }
+            // else if (text.match(streetRegexNumBegin)) 
+            // {
+            //     let matches = text.match(streetRegexNumBegin);
+            //     let splitMatches = matches[0].split(' ');
+            //     roadNumber = splitMatches[0].trim();
+            //     road = splitMatches.slice(1).join(' ').trim();
+            //     roadMatches.add([roadNumber, road]);
+            // } 
+            // else if (text.match(streetRegexNumEnd))
+            // {
+            //     let matches = text.match(streetRegexNumEnd);
+            //     let splitMatches = matches[0].split(' ');
+            //     road = splitMatches.slice(0, -1).join(' ').trim();
+            //     roadNumber = splitMatches[splitMatches.length - 1].trim();
+            //     roadMatches.add([roadNumber, road]);
+            // }
             console.log('done looking for match');
             // pass trough geocoding API
                 // if valid road
@@ -61,6 +64,7 @@ function findRoad(htmlContent, $) {
         }
     }
     console.log('street array:', roadMatches);
+    roadMatches.clear();
     return { roadNumber, road: road || null };
 }
 
