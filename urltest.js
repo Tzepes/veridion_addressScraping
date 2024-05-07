@@ -122,18 +122,16 @@ const urlsToTest = [
     'http://unitedairconditioning.com/contact',
     //20
     'http://seedsourceag.com',
-    //21
-    'https://www.umbrawindowtinting.com/',
     //22
     'http://societyfortheblind.org',
     //23
     'https://aiwoodwork.com',
-    //24
-    'https://www.seedsourceag.com',
     //25
     'https://azcrystal.com',
     //26
-    'https://www.gpmoto.de/shop/wg/bekleidung/lederkombis/lederkombis-damen/lederkombis-1-teilig/'
+    'https://www.gpmoto.de/shop/wg/bekleidung/lederkombis/lederkombis-damen/lederkombis-1-teilig/',
+    //27
+    'https://www.lampenwelt.de'
 ];
 
 retrieveLocationData(urlsToTest[26]);

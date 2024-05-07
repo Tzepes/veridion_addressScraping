@@ -123,6 +123,7 @@ async function retrieveLocationData(htmlContent, url) {
             country = postcodeObject.postcodeAPIResponse?.country?.name ?? postcodeObject.postcodeAPIResponse?.country;
         }
     }
+
     // if neither options worked for finding at least the country, search for it trough the text of the page
     if(!postcode && !country){
         country = findCountry(text, countries);
@@ -131,7 +132,7 @@ async function retrieveLocationData(htmlContent, url) {
     // Extract road
     roadObject = findRoad(text, $);
     road = roadObject.road;
-    roadNumber = roadObject.streetNumber;
+    roadNumber = roadObject.roadNumber;
     
     // Output extracted data
     console.log('Country:', country)
