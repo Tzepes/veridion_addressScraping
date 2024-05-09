@@ -1,0 +1,1224 @@
+{
+  "settings": {
+    "languages": [
+      "en",
+      "de",
+      "fr",
+      "es"
+    ],
+    "nlu": {
+      "useNoneFeature": false
+    },
+    "tag": "nlp",
+    "threshold": 0.5,
+    "autoLoad": true,
+    "autoSave": true,
+    "modelFileName": "model.nlp",
+    "executeActionsBeforeAnswers": false,
+    "calculateSentiment": true
+  },
+  "nluManager": {
+    "settings": {
+      "tag": "nlu-manager",
+      "useNoneFeature": false
+    },
+    "locales": [
+      "en",
+      "de",
+      "fr",
+      "es"
+    ],
+    "languageNames": {},
+    "domainManagers": {
+      "en": {
+        "settings": {
+          "locale": "en",
+          "useNoneFeature": false,
+          "trainByDomain": false,
+          "tag": "domain-manager-en",
+          "nluByDomain": {
+            "default": {
+              "className": "NeuralNlu",
+              "settings": {}
+            }
+          },
+          "useStemDict": true
+        },
+        "stemDict": {
+          "%number%,%street%,street": {
+            "intent": "address",
+            "domain": "default"
+          },
+          "%number%,%street%,address": {
+            "intent": "address",
+            "domain": "default"
+          },
+          "%number%,%street%": {
+            "intent": "address",
+            "domain": "default"
+          },
+          "%city%,%number%,%postalcode%,%street%,address,contact,info": {
+            "intent": "address",
+            "domain": "default"
+          },
+          "%city%,%number%,%postalcode%,%street%,address": {
+            "intent": "address",
+            "domain": "default"
+          },
+          "%city%,%number%,%postalcode%,%street%": {
+            "intent": "address",
+            "domain": "default"
+          }
+        },
+        "intentDict": {
+          "address": "default"
+        },
+        "sentences": [
+          {
+            "domain": "default",
+            "utterance": "Street: %number% %street%",
+            "intent": "address"
+          },
+          {
+            "domain": "default",
+            "utterance": "Address: %number% %street%",
+            "intent": "address"
+          },
+          {
+            "domain": "default",
+            "utterance": "%number% %street%",
+            "intent": "address"
+          },
+          {
+            "domain": "default",
+            "utterance": "%street% %number%",
+            "intent": "address"
+          },
+          {
+            "domain": "default",
+            "utterance": "Contact Info Address: %number% %street% %city% %postalcode%",
+            "intent": "address"
+          },
+          {
+            "domain": "default",
+            "utterance": "Address: %number% %street% %city% %postalcode%",
+            "intent": "address"
+          },
+          {
+            "domain": "default",
+            "utterance": "%street% %number%, %city%, %postalcode%",
+            "intent": "address"
+          }
+        ],
+        "domains": {
+          "master_domain": {
+            "settings": {
+              "locale": "en",
+              "tag": "nlu-en",
+              "keepStopwords": true,
+              "nonefeatureValue": 1,
+              "nonedeltaMultiplier": 1.2,
+              "spellCheck": false,
+              "spellCheckDistance": 1,
+              "filterZeros": true,
+              "log": true
+            },
+            "features": {
+              "street": 1,
+              "%number%": 1,
+              "%street%": 1,
+              "address": 1,
+              "contact": 1,
+              "info": 1,
+              "%city%": 1,
+              "%postalcode%": 1
+            },
+            "intents": {
+              "address": 1
+            },
+            "intentFeatures": {
+              "address": {
+                "street": 1,
+                "%number%": 1,
+                "%street%": 1,
+                "address": 1,
+                "contact": 1,
+                "info": 1,
+                "%city%": 1,
+                "%postalcode%": 1
+              }
+            },
+            "featuresToIntent": {
+              "street": [
+                "address"
+              ],
+              "%number%": [
+                "address"
+              ],
+              "%street%": [
+                "address"
+              ],
+              "address": [
+                "address"
+              ],
+              "contact": [
+                "address"
+              ],
+              "info": [
+                "address"
+              ],
+              "%city%": [
+                "address"
+              ],
+              "%postalcode%": [
+                "address"
+              ]
+            },
+            "neuralNetwork": {
+              "settings": {
+                "useNoneFeature": false,
+                "locale": "en",
+                "tag": "nlu-en",
+                "keepStopwords": true,
+                "nonefeatureValue": 1,
+                "nonedeltaMultiplier": 1.2,
+                "spellCheck": false,
+                "spellCheckDistance": 1,
+                "filterZeros": true,
+                "log": true
+              },
+              "features": [
+                "street",
+                "%number%",
+                "%street%",
+                "address",
+                "contact",
+                "info",
+                "%city%",
+                "%postalcode%"
+              ],
+              "intents": [
+                "address"
+              ],
+              "perceptrons": [
+                [
+                  0.22876819968223572,
+                  5.679220676422119,
+                  5.679220676422119,
+                  0.14370575547218323,
+                  -0.06948551535606384,
+                  -0.06948551535606384,
+                  0.020602678880095482,
+                  0.020602678880095482,
+                  2.8400968825275417
+                ]
+              ]
+            }
+          }
+        }
+      },
+      "de": {
+        "settings": {
+          "locale": "de",
+          "useNoneFeature": false,
+          "trainByDomain": false,
+          "tag": "domain-manager-de",
+          "nluByDomain": {
+            "default": {
+              "className": "NeuralNlu",
+              "settings": {}
+            }
+          },
+          "useStemDict": true
+        },
+        "stemDict": {
+          "%number%,%street%,strass": {
+            "intent": "address",
+            "domain": "default"
+          },
+          "%number%,%street%,adress": {
+            "intent": "address",
+            "domain": "default"
+          },
+          "%number%,%street%": {
+            "intent": "address",
+            "domain": "default"
+          },
+          "%city%,%number%,%postalcode%,%street%,adress,info,kontakt": {
+            "intent": "address",
+            "domain": "default"
+          },
+          "%city%,%number%,%postalcode%,%street%,adress": {
+            "intent": "address",
+            "domain": "default"
+          },
+          "%city%,%number%,%postalcode%,%street%": {
+            "intent": "address",
+            "domain": "default"
+          }
+        },
+        "intentDict": {
+          "address": "default"
+        },
+        "sentences": [
+          {
+            "domain": "default",
+            "utterance": "Straße: %street% %number%",
+            "intent": "address"
+          },
+          {
+            "domain": "default",
+            "utterance": "Adresse: %number% %street%",
+            "intent": "address"
+          },
+          {
+            "domain": "default",
+            "utterance": "%street% %number%",
+            "intent": "address"
+          },
+          {
+            "domain": "default",
+            "utterance": "%number% %street%",
+            "intent": "address"
+          },
+          {
+            "domain": "default",
+            "utterance": "Kontakt Info Adresse: %number% %street% %city% %postalcode%",
+            "intent": "address"
+          },
+          {
+            "domain": "default",
+            "utterance": "Adresse: %number% %street% %city% %postalcode%",
+            "intent": "address"
+          },
+          {
+            "domain": "default",
+            "utterance": "%street% %number%, %city%, %postalcode%",
+            "intent": "address"
+          }
+        ],
+        "domains": {
+          "master_domain": {
+            "settings": {
+              "locale": "de",
+              "tag": "nlu-de",
+              "keepStopwords": true,
+              "nonefeatureValue": 1,
+              "nonedeltaMultiplier": 1.2,
+              "spellCheck": false,
+              "spellCheckDistance": 1,
+              "filterZeros": true,
+              "log": true
+            },
+            "features": {
+              "strass": 1,
+              "%street%": 1,
+              "%number%": 1,
+              "adress": 1,
+              "kontakt": 1,
+              "info": 1,
+              "%city%": 1,
+              "%postalcode%": 1
+            },
+            "intents": {
+              "address": 1
+            },
+            "intentFeatures": {
+              "address": {
+                "strass": 1,
+                "%street%": 1,
+                "%number%": 1,
+                "adress": 1,
+                "kontakt": 1,
+                "info": 1,
+                "%city%": 1,
+                "%postalcode%": 1
+              }
+            },
+            "featuresToIntent": {
+              "strass": [
+                "address"
+              ],
+              "%street%": [
+                "address"
+              ],
+              "%number%": [
+                "address"
+              ],
+              "adress": [
+                "address"
+              ],
+              "kontakt": [
+                "address"
+              ],
+              "info": [
+                "address"
+              ],
+              "%city%": [
+                "address"
+              ],
+              "%postalcode%": [
+                "address"
+              ]
+            },
+            "neuralNetwork": {
+              "settings": {
+                "useNoneFeature": false,
+                "locale": "de",
+                "tag": "nlu-de",
+                "keepStopwords": true,
+                "nonefeatureValue": 1,
+                "nonedeltaMultiplier": 1.2,
+                "spellCheck": false,
+                "spellCheckDistance": 1,
+                "filterZeros": true,
+                "log": true
+              },
+              "features": [
+                "strass",
+                "%street%",
+                "%number%",
+                "adress",
+                "kontakt",
+                "info",
+                "%city%",
+                "%postalcode%"
+              ],
+              "intents": [
+                "address"
+              ],
+              "perceptrons": [
+                [
+                  0.22876819968223572,
+                  5.679220676422119,
+                  5.679220676422119,
+                  0.14370575547218323,
+                  -0.06948551535606384,
+                  -0.06948551535606384,
+                  0.020602678880095482,
+                  0.020602678880095482,
+                  2.8400968825275417
+                ]
+              ]
+            }
+          }
+        }
+      },
+      "fr": {
+        "settings": {
+          "locale": "fr",
+          "useNoneFeature": false,
+          "trainByDomain": false,
+          "tag": "domain-manager-fr",
+          "nluByDomain": {
+            "default": {
+              "className": "NeuralNlu",
+              "settings": {}
+            }
+          },
+          "useStemDict": true
+        },
+        "stemDict": {
+          "%number%,%street%,ru": {
+            "intent": "address",
+            "domain": "default"
+          },
+          "%number%,%street%,adress": {
+            "intent": "address",
+            "domain": "default"
+          },
+          "%number%,%street%": {
+            "intent": "address",
+            "domain": "default"
+          },
+          "%city%,%number%,%postalcode%,%street%,adress,contact,info": {
+            "intent": "address",
+            "domain": "default"
+          },
+          "%city%,%number%,%postalcode%,%street%,adress": {
+            "intent": "address",
+            "domain": "default"
+          },
+          "%city%,%number%,%postalcode%,%street%": {
+            "intent": "address",
+            "domain": "default"
+          }
+        },
+        "intentDict": {
+          "address": "default"
+        },
+        "sentences": [
+          {
+            "domain": "default",
+            "utterance": "Rue: %number% %street%",
+            "intent": "address"
+          },
+          {
+            "domain": "default",
+            "utterance": "Adresse: %number% %street%",
+            "intent": "address"
+          },
+          {
+            "domain": "default",
+            "utterance": "%street% %number%",
+            "intent": "address"
+          },
+          {
+            "domain": "default",
+            "utterance": "%number% %street%",
+            "intent": "address"
+          },
+          {
+            "domain": "default",
+            "utterance": "Contact Info Adresse: %number% %street% %city% %postalcode%",
+            "intent": "address"
+          },
+          {
+            "domain": "default",
+            "utterance": "Adresse: %number% %street% %city% %postalcode%",
+            "intent": "address"
+          },
+          {
+            "domain": "default",
+            "utterance": "%street% %number%, %city%, %postalcode%",
+            "intent": "address"
+          }
+        ],
+        "domains": {
+          "master_domain": {
+            "settings": {
+              "locale": "fr",
+              "tag": "nlu-fr",
+              "keepStopwords": true,
+              "nonefeatureValue": 1,
+              "nonedeltaMultiplier": 1.2,
+              "spellCheck": false,
+              "spellCheckDistance": 1,
+              "filterZeros": true,
+              "log": true
+            },
+            "features": {
+              "ru": 1,
+              "%number%": 1,
+              "%street%": 1,
+              "adress": 1,
+              "contact": 1,
+              "info": 1,
+              "%city%": 1,
+              "%postalcode%": 1
+            },
+            "intents": {
+              "address": 1
+            },
+            "intentFeatures": {
+              "address": {
+                "ru": 1,
+                "%number%": 1,
+                "%street%": 1,
+                "adress": 1,
+                "contact": 1,
+                "info": 1,
+                "%city%": 1,
+                "%postalcode%": 1
+              }
+            },
+            "featuresToIntent": {
+              "ru": [
+                "address"
+              ],
+              "%number%": [
+                "address"
+              ],
+              "%street%": [
+                "address"
+              ],
+              "adress": [
+                "address"
+              ],
+              "contact": [
+                "address"
+              ],
+              "info": [
+                "address"
+              ],
+              "%city%": [
+                "address"
+              ],
+              "%postalcode%": [
+                "address"
+              ]
+            },
+            "neuralNetwork": {
+              "settings": {
+                "useNoneFeature": false,
+                "locale": "fr",
+                "tag": "nlu-fr",
+                "keepStopwords": true,
+                "nonefeatureValue": 1,
+                "nonedeltaMultiplier": 1.2,
+                "spellCheck": false,
+                "spellCheckDistance": 1,
+                "filterZeros": true,
+                "log": true
+              },
+              "features": [
+                "ru",
+                "%number%",
+                "%street%",
+                "adress",
+                "contact",
+                "info",
+                "%city%",
+                "%postalcode%"
+              ],
+              "intents": [
+                "address"
+              ],
+              "perceptrons": [
+                [
+                  0.22876819968223572,
+                  5.679220676422119,
+                  5.679220676422119,
+                  0.14370575547218323,
+                  -0.06948551535606384,
+                  -0.06948551535606384,
+                  0.020602678880095482,
+                  0.020602678880095482,
+                  2.8400968825275417
+                ]
+              ]
+            }
+          }
+        }
+      },
+      "es": {
+        "settings": {
+          "locale": "es",
+          "useNoneFeature": false,
+          "trainByDomain": false,
+          "tag": "domain-manager-es",
+          "nluByDomain": {
+            "default": {
+              "className": "NeuralNlu",
+              "settings": {}
+            }
+          },
+          "useStemDict": true
+        },
+        "stemDict": {
+          "%number%,%street%,call": {
+            "intent": "address",
+            "domain": "default"
+          },
+          "%number%,%street%,direccion": {
+            "intent": "address",
+            "domain": "default"
+          },
+          "%number%,%street%": {
+            "intent": "address",
+            "domain": "default"
+          },
+          "%city%,%number%,%postalcode%,%street%,contact,de,direccion,inform": {
+            "intent": "address",
+            "domain": "default"
+          },
+          "%city%,%number%,%postalcode%,%street%,direccion": {
+            "intent": "address",
+            "domain": "default"
+          },
+          "%city%,%number%,%postalcode%,%street%": {
+            "intent": "address",
+            "domain": "default"
+          }
+        },
+        "intentDict": {
+          "address": "default"
+        },
+        "sentences": [
+          {
+            "domain": "default",
+            "utterance": "Calle: %number% %street%",
+            "intent": "address"
+          },
+          {
+            "domain": "default",
+            "utterance": "Dirección: %number% %street%",
+            "intent": "address"
+          },
+          {
+            "domain": "default",
+            "utterance": "%street% %number%",
+            "intent": "address"
+          },
+          {
+            "domain": "default",
+            "utterance": "%number% %street%",
+            "intent": "address"
+          },
+          {
+            "domain": "default",
+            "utterance": "Información de contacto Dirección: %number% %street% %city% %postalcode%",
+            "intent": "address"
+          },
+          {
+            "domain": "default",
+            "utterance": "Dirección: %number% %street% %city% %postalcode%",
+            "intent": "address"
+          },
+          {
+            "domain": "default",
+            "utterance": "%street% %number%, %city%, %postalcode%",
+            "intent": "address"
+          }
+        ],
+        "domains": {
+          "master_domain": {
+            "settings": {
+              "locale": "es",
+              "tag": "nlu-es",
+              "keepStopwords": true,
+              "nonefeatureValue": 1,
+              "nonedeltaMultiplier": 1.2,
+              "spellCheck": false,
+              "spellCheckDistance": 1,
+              "filterZeros": true,
+              "log": true
+            },
+            "features": {
+              "call": 1,
+              "%number%": 1,
+              "%street%": 1,
+              "direccion": 1,
+              "inform": 1,
+              "de": 1,
+              "contact": 1,
+              "%city%": 1,
+              "%postalcode%": 1
+            },
+            "intents": {
+              "address": 1
+            },
+            "intentFeatures": {
+              "address": {
+                "call": 1,
+                "%number%": 1,
+                "%street%": 1,
+                "direccion": 1,
+                "inform": 1,
+                "de": 1,
+                "contact": 1,
+                "%city%": 1,
+                "%postalcode%": 1
+              }
+            },
+            "featuresToIntent": {
+              "call": [
+                "address"
+              ],
+              "%number%": [
+                "address"
+              ],
+              "%street%": [
+                "address"
+              ],
+              "direccion": [
+                "address"
+              ],
+              "inform": [
+                "address"
+              ],
+              "de": [
+                "address"
+              ],
+              "contact": [
+                "address"
+              ],
+              "%city%": [
+                "address"
+              ],
+              "%postalcode%": [
+                "address"
+              ]
+            },
+            "neuralNetwork": {
+              "settings": {
+                "useNoneFeature": false,
+                "locale": "es",
+                "tag": "nlu-es",
+                "keepStopwords": true,
+                "nonefeatureValue": 1,
+                "nonedeltaMultiplier": 1.2,
+                "spellCheck": false,
+                "spellCheckDistance": 1,
+                "filterZeros": true,
+                "log": true
+              },
+              "features": [
+                "call",
+                "%number%",
+                "%street%",
+                "direccion",
+                "inform",
+                "de",
+                "contact",
+                "%city%",
+                "%postalcode%"
+              ],
+              "intents": [
+                "address"
+              ],
+              "perceptrons": [
+                [
+                  0.2313375174999237,
+                  5.679253101348877,
+                  5.679253101348877,
+                  0.13922755420207977,
+                  -0.0363541916012764,
+                  -0.0363541916012764,
+                  -0.0363541916012764,
+                  0.017417609691619873,
+                  0.017417609691619873,
+                  2.840314618047209
+                ]
+              ]
+            }
+          }
+        }
+      }
+    },
+    "intentDomains": {},
+    "extraSentences": [
+      [
+        "en",
+        "Street: %number% %street%"
+      ],
+      [
+        "en",
+        "Address: %number% %street%"
+      ],
+      [
+        "en",
+        "%number% %street%"
+      ],
+      [
+        "en",
+        "%street% %number%"
+      ],
+      [
+        "en",
+        "Contact Info Address: %number% %street% %city% %postalcode%"
+      ],
+      [
+        "en",
+        "Address: %number% %street% %city% %postalcode%"
+      ],
+      [
+        "en",
+        "%street% %number%, %city%, %postalcode%"
+      ],
+      [
+        "de",
+        "Straße: %street% %number%"
+      ],
+      [
+        "de",
+        "Adresse: %number% %street%"
+      ],
+      [
+        "de",
+        "%street% %number%"
+      ],
+      [
+        "de",
+        "%number% %street%"
+      ],
+      [
+        "de",
+        "Kontakt Info Adresse: %number% %street% %city% %postalcode%"
+      ],
+      [
+        "de",
+        "Adresse: %number% %street% %city% %postalcode%"
+      ],
+      [
+        "de",
+        "%street% %number%, %city%, %postalcode%"
+      ],
+      [
+        "fr",
+        "Rue: %number% %street%"
+      ],
+      [
+        "fr",
+        "Adresse: %number% %street%"
+      ],
+      [
+        "fr",
+        "%street% %number%"
+      ],
+      [
+        "fr",
+        "%number% %street%"
+      ],
+      [
+        "fr",
+        "Contact Info Adresse: %number% %street% %city% %postalcode%"
+      ],
+      [
+        "fr",
+        "Adresse: %number% %street% %city% %postalcode%"
+      ],
+      [
+        "fr",
+        "%street% %number%, %city%, %postalcode%"
+      ],
+      [
+        "es",
+        "Calle: %number% %street%"
+      ],
+      [
+        "es",
+        "Dirección: %number% %street%"
+      ],
+      [
+        "es",
+        "%street% %number%"
+      ],
+      [
+        "es",
+        "%number% %street%"
+      ],
+      [
+        "es",
+        "Información de contacto Dirección: %number% %street% %city% %postalcode%"
+      ],
+      [
+        "es",
+        "Dirección: %number% %street% %city% %postalcode%"
+      ],
+      [
+        "es",
+        "%street% %number%, %city%, %postalcode%"
+      ]
+    ]
+  },
+  "ner": {
+    "settings": {
+      "tag": "ner",
+      "entityPreffix": "%",
+      "entitySuffix": "%"
+    },
+    "rules": {
+      "en": {
+        "number": {
+          "name": "number",
+          "type": "enum",
+          "rules": [
+            {
+              "option": "number",
+              "texts": [
+                "\\d{1,5}"
+              ]
+            }
+          ]
+        },
+        "postalcode": {
+          "name": "postalcode",
+          "type": "enum",
+          "rules": [
+            {
+              "option": "postalcode",
+              "texts": [
+                "\\d{4,5}",
+                "\\d{5}-\\d{4}",
+                "\\d{3}-\\d{3}"
+              ]
+            }
+          ]
+        },
+        "street": {
+          "name": "street",
+          "type": "enum",
+          "rules": [
+            {
+              "option": "street",
+              "texts": [
+                "Main Street",
+                "First Avenue",
+                "Second Street",
+                "Third Avenue",
+                "Fourth Street",
+                "Fifth Avenue",
+                "Elm Street",
+                "Oak Street",
+                "Maple Avenue",
+                "Pine Street",
+                "Rheder Str.",
+                "Baker Street",
+                "Rd",
+                "Road",
+                "Street",
+                "St",
+                "Str",
+                "Drive",
+                "Way",
+                "Blvd",
+                "Boulevard",
+                "Ave",
+                "Avenue",
+                "Lane",
+                "Court",
+                "Pl",
+                "Place",
+                "Terrace",
+                "Crescent",
+                "Park",
+                "Parkway",
+                "Circle"
+              ]
+            }
+          ]
+        }
+      },
+      "de": {
+        "number": {
+          "name": "number",
+          "type": "enum",
+          "rules": [
+            {
+              "option": "number",
+              "texts": [
+                "\\d{1,5}"
+              ]
+            }
+          ]
+        },
+        "postalcode": {
+          "name": "postalcode",
+          "type": "enum",
+          "rules": [
+            {
+              "option": "postalcode",
+              "texts": [
+                "\\d{4,5}",
+                "\\d{5}-\\d{4}",
+                "\\d{3}-\\d{3}"
+              ]
+            }
+          ]
+        },
+        "street": {
+          "name": "street",
+          "type": "enum",
+          "rules": [
+            {
+              "option": "street",
+              "texts": [
+                "Rheder Str.",
+                "Hauptstraße",
+                "Bahnhofstraße",
+                "Schulstraße",
+                "Gartenstraße",
+                "Ringstraße",
+                "Bahnhofsplatz",
+                "Kirchstraße",
+                "Lindenstraße",
+                "Münchner Str.",
+                "Str.",
+                "Straße",
+                "Weg",
+                "Allee",
+                "Gasse",
+                "Platz",
+                "Ring",
+                "Chaussee",
+                "Damm",
+                "Ufer",
+                "Steig",
+                "Pfad",
+                "Promenade",
+                "Schleife",
+                "Gartenweg",
+                "Ringstraße",
+                "Bahnhofstraße",
+                "Lindenstraße",
+                "Brücke",
+                "Bogen"
+              ]
+            }
+          ]
+        }
+      },
+      "fr": {
+        "number": {
+          "name": "number",
+          "type": "enum",
+          "rules": [
+            {
+              "option": "number",
+              "texts": [
+                "\\d{1,5}"
+              ]
+            }
+          ]
+        },
+        "postalcode": {
+          "name": "postalcode",
+          "type": "enum",
+          "rules": [
+            {
+              "option": "postalcode",
+              "texts": [
+                "\\d{4,5}",
+                "\\d{5}-\\d{4}",
+                "\\d{3}-\\d{3}"
+              ]
+            }
+          ]
+        },
+        "street": {
+          "name": "street",
+          "type": "enum",
+          "rules": [
+            {
+              "option": "street",
+              "texts": [
+                "Rue de Rivoli",
+                "Avenue des Champs-Élysées",
+                "Boulevard Saint-Germain",
+                "Rue Saint-Honoré",
+                "Avenue de la Grande Armée",
+                "Rue de la Paix",
+                "Rue",
+                "Avenue",
+                "Boulevard",
+                "Chemin",
+                "Allée",
+                "Impasse",
+                "Place",
+                "Voie",
+                "Passage",
+                "Route",
+                "Quai",
+                "Cour",
+                "Cité",
+                "Esplanade",
+                "Promenade",
+                "Traverse",
+                "Sentier",
+                "Rond-point",
+                "Carrefour",
+                "Square"
+              ]
+            }
+          ]
+        }
+      },
+      "es": {
+        "number": {
+          "name": "number",
+          "type": "enum",
+          "rules": [
+            {
+              "option": "number",
+              "texts": [
+                "\\d{1,5}"
+              ]
+            }
+          ]
+        },
+        "postalcode": {
+          "name": "postalcode",
+          "type": "enum",
+          "rules": [
+            {
+              "option": "postalcode",
+              "texts": [
+                "\\d{4,5}",
+                "\\d{5}-\\d{4}",
+                "\\d{3}-\\d{3}"
+              ]
+            }
+          ]
+        },
+        "street": {
+          "name": "street",
+          "type": "enum",
+          "rules": [
+            {
+              "option": "street",
+              "texts": [
+                "Calle Mayor",
+                "Avenida de la Constitución",
+                "Calle de Alcalá",
+                "Gran Vía",
+                "Paseo de la Castellana",
+                "Calle de Serrano",
+                "Calle",
+                "Avenida",
+                "Carretera",
+                "Camino",
+                "Paseo",
+                "Plaza",
+                "Vía",
+                "Ronda",
+                "Bulevar",
+                "Travesía",
+                "Sendero",
+                "Autopista",
+                "Calzada",
+                "Vereda",
+                "Puente",
+                "Glorieta",
+                "Alameda",
+                "Parque",
+                "Plazuela",
+                "Callejón"
+              ]
+            }
+          ]
+        }
+      }
+    }
+  },
+  "nlgManager": {
+    "settings": {
+      "tag": "nlg-manager"
+    },
+    "responses": {}
+  },
+  "actionManager": {
+    "settings": {
+      "tag": "action-manager"
+    },
+    "actions": {}
+  },
+  "slotManager": {
+    "address": {
+      "number": {
+        "intent": "address",
+        "entity": "number",
+        "mandatory": false,
+        "locales": {}
+      },
+      "street": {
+        "intent": "address",
+        "entity": "street",
+        "mandatory": false,
+        "locales": {}
+      },
+      "city": {
+        "intent": "address",
+        "entity": "city",
+        "mandatory": false,
+        "locales": {}
+      },
+      "postalcode": {
+        "intent": "address",
+        "entity": "postalcode",
+        "mandatory": false,
+        "locales": {}
+      }
+    }
+  }
+}

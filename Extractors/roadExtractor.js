@@ -14,6 +14,7 @@ function findRoad(htmlContent, $) {
     // const regex = /(\b\w+\b)\s+\d+[A-Z]*$/;
     const body = $('body');
     body.find('script, style, link, meta, path, symbol, noscript').remove();
+    // console.log(body.text())
     // console.log(body)
     for (const selector of addressSelectors) {
         const elements = body.find(selector);
@@ -21,10 +22,10 @@ function findRoad(htmlContent, $) {
             let text = $(element).text().trim();
             text = text.replace(/\n|\t/g, "");  
         
-            console.log('Looking for match');
-            console.log(text);
-            console.log('Num begin:', text.match(streetRegexNumBegin));
-            console.log('Num end:', text.match(streetRegexNumEnd));
+            // console.log('Looking for match');
+            // console.log(text);
+            // console.log('Num begin:', text.match(streetRegexNumBegin));
+            // console.log('Num end:', text.match(streetRegexNumEnd));
             // take road
             if(text.match(streetNameRegex)){
                 let matches = text.match(streetNameRegex);
@@ -48,7 +49,9 @@ function findRoad(htmlContent, $) {
             //     roadNumber = splitMatches[splitMatches.length - 1].trim();
             //     roadMatches.add([roadNumber, road]);
             // }
-            console.log('done looking for match');
+
+            // console.log('done looking for match');
+
             // pass trough geocoding API
                 // if valid road
                     // if same postcode with api postcode
@@ -59,7 +62,10 @@ function findRoad(htmlContent, $) {
                     // continue search
         });
 
-        if (road) {
+        // algorithm loops trough each element but stops the moment a match is found, which can be from the first element
+            // if a match is found, store in a set with unique elements
+            // conitnue looping till all elements are checked
+        if (road) { 
             break;
         }
     }
