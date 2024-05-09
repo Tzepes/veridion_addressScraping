@@ -16,6 +16,7 @@
     "axios-request-throttle": "^1.0.0",
     "cheerio": "^1.0.0-rc.12",
     "csv-writer": "^1.6.0",
+    "node-nlp": "^4.27.0",
     "parquetjs": "^0.11.2",
     "url": "^0.11.3"
   }

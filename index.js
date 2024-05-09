@@ -11,6 +11,8 @@ const {loopForPostcodeIfCountry} = require('./Extractors/postcodeExtractor.js');
 const findRoad = require('./Extractors/roadExtractor.js');
 const getPostalCodeFormat = require('./postalcodeRegex.js');
 
+const { getLanguage } = require('./MLM/languageNLP.js');
+
 // Declare links array:
 let firstPageLinks = [];
 
@@ -128,6 +130,9 @@ async function retrieveLocationData(htmlContent, url) {
     if(!postcode && !country){
         country = findCountry(text, countries);
     }
+    if (country) {
+        country = country.charAt(0).toUpperCase() + country.slice(1); // Capitalize first letter
+    }
 
     // Extract road
     roadObject = findRoad(text, $);
@@ -140,6 +145,8 @@ async function retrieveLocationData(htmlContent, url) {
     console.log('City:', city);
     console.log('Postcode:', postcode);
     console.log('Road:', road);
+    console.log('Road number:', roadNumber);
+    // console.log('language:', getLanguage(text));
 
     return {country, region, city, postcode, road, roadNumber}; // Return extracted data
 }
