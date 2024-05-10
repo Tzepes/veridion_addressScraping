@@ -1,5 +1,5 @@
 const addressSelectors = [
-    'p', 'br', 'span', 'div'
+    'address', 'p', 'br', 'span', 'div'
 ];
 
 const roadMatches = new Set();
@@ -20,10 +20,10 @@ function findRoad(htmlContent, $) {
         const elements = body.find(selector);
         elements.each((index, element) => {
             let text = $(element).text().trim();
-            text = text.replace(/\n|\t/g, "");  
-        
+            text = text.replace(/\n|\t/g, " ");  
+            console.log(text);
             // console.log('Looking for match');
-            // console.log(text);
+            console.log(text);
             // console.log('Num begin:', text.match(streetRegexNumBegin));
             // console.log('Num end:', text.match(streetRegexNumEnd));
             // take road

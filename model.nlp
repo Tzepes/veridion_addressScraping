@@ -68,6 +68,238 @@
           "%city%,%number%,%postalcode%,%street%": {
             "intent": "address",
             "domain": "default"
+          },
+          "1739,jade,s,street,way": {
+            "intent": "address",
+            "domain": "default"
+          },
+          "1739,address,jade,s,way": {
+            "intent": "address",
+            "domain": "default"
+          },
+          "1739,jade,s,way": {
+            "intent": "address",
+            "domain": "default"
+          },
+          "613,franklin,street": {
+            "intent": "address",
+            "domain": "default"
+          },
+          "613,address,franklin,street": {
+            "intent": "address",
+            "domain": "default"
+          },
+          "325,fulton,street": {
+            "intent": "address",
+            "domain": "default"
+          },
+          "325,address,fulton": {
+            "intent": "address",
+            "domain": "default"
+          },
+          "325,fulton": {
+            "intent": "address",
+            "domain": "default"
+          },
+          "224,4343,highway,street": {
+            "intent": "address",
+            "domain": "default"
+          },
+          "224,4343,address,highway": {
+            "intent": "address",
+            "domain": "default"
+          },
+          "224,4343,highway": {
+            "intent": "address",
+            "domain": "default"
+          },
+          "117,drive,riviera,street": {
+            "intent": "address",
+            "domain": "default"
+          },
+          "117,address,drive,riviera": {
+            "intent": "address",
+            "domain": "default"
+          },
+          "117,drive,riviera": {
+            "intent": "address",
+            "domain": "default"
+          },
+          "499,east,street,tioga": {
+            "intent": "address",
+            "domain": "default"
+          },
+          "499,address,east,street,tioga": {
+            "intent": "address",
+            "domain": "default"
+          },
+          "9168,avenu,hermosa,street": {
+            "intent": "address",
+            "domain": "default"
+          },
+          "9168,address,avenu,hermosa": {
+            "intent": "address",
+            "domain": "default"
+          },
+          "9168,avenu,hermosa": {
+            "intent": "address",
+            "domain": "default"
+          },
+          "45th,900,street,west": {
+            "intent": "address",
+            "domain": "default"
+          },
+          "45th,900,address,street,west": {
+            "intent": "address",
+            "domain": "default"
+          },
+          "2018,brevard,road,street": {
+            "intent": "address",
+            "domain": "default"
+          },
+          "2018,address,brevard,road": {
+            "intent": "address",
+            "domain": "default"
+          },
+          "2018,brevard,road": {
+            "intent": "address",
+            "domain": "default"
+          },
+          "604,avenu,railroad,street": {
+            "intent": "address",
+            "domain": "default"
+          },
+          "604,address,avenu,railroad": {
+            "intent": "address",
+            "domain": "default"
+          },
+          "604,avenu,railroad": {
+            "intent": "address",
+            "domain": "default"
+          },
+          "8904,lane,soni,street": {
+            "intent": "address",
+            "domain": "default"
+          },
+          "8904,address,lane,soni": {
+            "intent": "address",
+            "domain": "default"
+          },
+          "8904,lane,soni": {
+            "intent": "address",
+            "domain": "default"
+          },
+          "221b,baker,street": {
+            "intent": "address",
+            "domain": "default"
+          },
+          "221b,address,baker,street": {
+            "intent": "address",
+            "domain": "default"
+          },
+          "10,down,street": {
+            "intent": "address",
+            "domain": "default"
+          },
+          "10,address,down,street": {
+            "intent": "address",
+            "domain": "default"
+          },
+          "1600,avenu,pennsylvania,street": {
+            "intent": "address",
+            "domain": "default"
+          },
+          "1600,address,avenu,pennsylvania": {
+            "intent": "address",
+            "domain": "default"
+          },
+          "1600,avenu,pennsylvania": {
+            "intent": "address",
+            "domain": "default"
+          },
+          "1,high,street": {
+            "intent": "address",
+            "domain": "default"
+          },
+          "1,address,high,street": {
+            "intent": "address",
+            "domain": "default"
+          },
+          "25,king’,road,street": {
+            "intent": "address",
+            "domain": "default"
+          },
+          "25,address,king’,road": {
+            "intent": "address",
+            "domain": "default"
+          },
+          "25,king’,road": {
+            "intent": "address",
+            "domain": "default"
+          },
+          "50,queen,street": {
+            "intent": "address",
+            "domain": "default"
+          },
+          "50,address,queen,street": {
+            "intent": "address",
+            "domain": "default"
+          },
+          "75,church,lane,street": {
+            "intent": "address",
+            "domain": "default"
+          },
+          "75,address,church,lane": {
+            "intent": "address",
+            "domain": "default"
+          },
+          "75,church,lane": {
+            "intent": "address",
+            "domain": "default"
+          },
+          "200,street,victoria": {
+            "intent": "address",
+            "domain": "default"
+          },
+          "200,address,street,victoria": {
+            "intent": "address",
+            "domain": "default"
+          },
+          "300,oxford,road,street": {
+            "intent": "address",
+            "domain": "default"
+          },
+          "300,address,oxford,road": {
+            "intent": "address",
+            "domain": "default"
+          },
+          "300,oxford,road": {
+            "intent": "address",
+            "domain": "default"
+          },
+          "400,park,queen’,street": {
+            "intent": "address",
+            "domain": "default"
+          },
+          "400,address,park,queen’": {
+            "intent": "address",
+            "domain": "default"
+          },
+          "400,park,queen’": {
+            "intent": "address",
+            "domain": "default"
+          },
+          "9800,blvd,cienega,la,s,street": {
+            "intent": "address",
+            "domain": "default"
+          },
+          "9800,address,blvd,cienega,la,s": {
+            "intent": "address",
+            "domain": "default"
+          },
+          "9800,blvd,cienega,la,s": {
+            "intent": "address",
+            "domain": "default"
           }
         },
         "intentDict": {
@@ -108,6 +340,556 @@
             "domain": "default",
             "utterance": "%street% %number%, %city%, %postalcode%",
             "intent": "address"
+          },
+          {
+            "domain": "default",
+            "utterance": "Street: 1739 S. Jade Way",
+            "intent": "address"
+          },
+          {
+            "domain": "default",
+            "utterance": "Address: 1739 S. Jade Way",
+            "intent": "address"
+          },
+          {
+            "domain": "default",
+            "utterance": "1739 S. Jade Way",
+            "intent": "address"
+          },
+          {
+            "domain": "default",
+            "utterance": "1739 S. Jade Way",
+            "intent": "address"
+          },
+          {
+            "domain": "default",
+            "utterance": "1739 S. Jade Way",
+            "intent": "address"
+          },
+          {
+            "domain": "default",
+            "utterance": "Street: 613 Franklin Street",
+            "intent": "address"
+          },
+          {
+            "domain": "default",
+            "utterance": "Address: 613 Franklin Street",
+            "intent": "address"
+          },
+          {
+            "domain": "default",
+            "utterance": "613 Franklin Street",
+            "intent": "address"
+          },
+          {
+            "domain": "default",
+            "utterance": "613 Franklin Street",
+            "intent": "address"
+          },
+          {
+            "domain": "default",
+            "utterance": "613 Franklin Street",
+            "intent": "address"
+          },
+          {
+            "domain": "default",
+            "utterance": "Street: 325 Fulton",
+            "intent": "address"
+          },
+          {
+            "domain": "default",
+            "utterance": "Address: 325 Fulton",
+            "intent": "address"
+          },
+          {
+            "domain": "default",
+            "utterance": "325 Fulton",
+            "intent": "address"
+          },
+          {
+            "domain": "default",
+            "utterance": "325 Fulton",
+            "intent": "address"
+          },
+          {
+            "domain": "default",
+            "utterance": "325 Fulton",
+            "intent": "address"
+          },
+          {
+            "domain": "default",
+            "utterance": "Street: 4343 Highway 224",
+            "intent": "address"
+          },
+          {
+            "domain": "default",
+            "utterance": "Address: 4343 Highway 224",
+            "intent": "address"
+          },
+          {
+            "domain": "default",
+            "utterance": "4343 Highway 224",
+            "intent": "address"
+          },
+          {
+            "domain": "default",
+            "utterance": "4343 Highway 224",
+            "intent": "address"
+          },
+          {
+            "domain": "default",
+            "utterance": "4343 Highway 224",
+            "intent": "address"
+          },
+          {
+            "domain": "default",
+            "utterance": "Street: 117 Riviera Drive",
+            "intent": "address"
+          },
+          {
+            "domain": "default",
+            "utterance": "Address: 117 Riviera Drive",
+            "intent": "address"
+          },
+          {
+            "domain": "default",
+            "utterance": "117 Riviera Drive",
+            "intent": "address"
+          },
+          {
+            "domain": "default",
+            "utterance": "117 Riviera Drive",
+            "intent": "address"
+          },
+          {
+            "domain": "default",
+            "utterance": "117 Riviera Drive",
+            "intent": "address"
+          },
+          {
+            "domain": "default",
+            "utterance": "Street: 499 East Tioga Street",
+            "intent": "address"
+          },
+          {
+            "domain": "default",
+            "utterance": "Address: 499 East Tioga Street",
+            "intent": "address"
+          },
+          {
+            "domain": "default",
+            "utterance": "499 East Tioga Street",
+            "intent": "address"
+          },
+          {
+            "domain": "default",
+            "utterance": "499 East Tioga Street",
+            "intent": "address"
+          },
+          {
+            "domain": "default",
+            "utterance": "499 East Tioga Street",
+            "intent": "address"
+          },
+          {
+            "domain": "default",
+            "utterance": "Street: 9168 Hermosa Avenue",
+            "intent": "address"
+          },
+          {
+            "domain": "default",
+            "utterance": "Address: 9168 Hermosa Avenue",
+            "intent": "address"
+          },
+          {
+            "domain": "default",
+            "utterance": "9168 Hermosa Avenue",
+            "intent": "address"
+          },
+          {
+            "domain": "default",
+            "utterance": "9168 Hermosa Avenue",
+            "intent": "address"
+          },
+          {
+            "domain": "default",
+            "utterance": "9168 Hermosa Avenue",
+            "intent": "address"
+          },
+          {
+            "domain": "default",
+            "utterance": "Street: 900 West 45th Street",
+            "intent": "address"
+          },
+          {
+            "domain": "default",
+            "utterance": "Address: 900 West 45th Street",
+            "intent": "address"
+          },
+          {
+            "domain": "default",
+            "utterance": "900 West 45th Street",
+            "intent": "address"
+          },
+          {
+            "domain": "default",
+            "utterance": "900 West 45th Street",
+            "intent": "address"
+          },
+          {
+            "domain": "default",
+            "utterance": "900 West 45th Street",
+            "intent": "address"
+          },
+          {
+            "domain": "default",
+            "utterance": "Street: 2018 Brevard Road",
+            "intent": "address"
+          },
+          {
+            "domain": "default",
+            "utterance": "Address: 2018 Brevard Road",
+            "intent": "address"
+          },
+          {
+            "domain": "default",
+            "utterance": "2018 Brevard Road",
+            "intent": "address"
+          },
+          {
+            "domain": "default",
+            "utterance": "2018 Brevard Road",
+            "intent": "address"
+          },
+          {
+            "domain": "default",
+            "utterance": "2018 Brevard Road",
+            "intent": "address"
+          },
+          {
+            "domain": "default",
+            "utterance": "Street: 604 Railroad Avenue",
+            "intent": "address"
+          },
+          {
+            "domain": "default",
+            "utterance": "Address: 604 Railroad Avenue",
+            "intent": "address"
+          },
+          {
+            "domain": "default",
+            "utterance": "604 Railroad Avenue",
+            "intent": "address"
+          },
+          {
+            "domain": "default",
+            "utterance": "604 Railroad Avenue",
+            "intent": "address"
+          },
+          {
+            "domain": "default",
+            "utterance": "604 Railroad Avenue",
+            "intent": "address"
+          },
+          {
+            "domain": "default",
+            "utterance": "Street: 8904 Sony Lane",
+            "intent": "address"
+          },
+          {
+            "domain": "default",
+            "utterance": "Address: 8904 Sony Lane",
+            "intent": "address"
+          },
+          {
+            "domain": "default",
+            "utterance": "8904 Sony Lane",
+            "intent": "address"
+          },
+          {
+            "domain": "default",
+            "utterance": "8904 Sony Lane",
+            "intent": "address"
+          },
+          {
+            "domain": "default",
+            "utterance": "8904 Sony Lane",
+            "intent": "address"
+          },
+          {
+            "domain": "default",
+            "utterance": "Street: 221B Baker Street",
+            "intent": "address"
+          },
+          {
+            "domain": "default",
+            "utterance": "Address: 221B Baker Street",
+            "intent": "address"
+          },
+          {
+            "domain": "default",
+            "utterance": "221B Baker Street",
+            "intent": "address"
+          },
+          {
+            "domain": "default",
+            "utterance": "221B Baker Street",
+            "intent": "address"
+          },
+          {
+            "domain": "default",
+            "utterance": "221B Baker Street",
+            "intent": "address"
+          },
+          {
+            "domain": "default",
+            "utterance": "Street: 10 Downing Street",
+            "intent": "address"
+          },
+          {
+            "domain": "default",
+            "utterance": "Address: 10 Downing Street",
+            "intent": "address"
+          },
+          {
+            "domain": "default",
+            "utterance": "10 Downing Street",
+            "intent": "address"
+          },
+          {
+            "domain": "default",
+            "utterance": "10 Downing Street",
+            "intent": "address"
+          },
+          {
+            "domain": "default",
+            "utterance": "10 Downing Street",
+            "intent": "address"
+          },
+          {
+            "domain": "default",
+            "utterance": "Street: 1600 Pennsylvania Avenue",
+            "intent": "address"
+          },
+          {
+            "domain": "default",
+            "utterance": "Address: 1600 Pennsylvania Avenue",
+            "intent": "address"
+          },
+          {
+            "domain": "default",
+            "utterance": "1600 Pennsylvania Avenue",
+            "intent": "address"
+          },
+          {
+            "domain": "default",
+            "utterance": "1600 Pennsylvania Avenue",
+            "intent": "address"
+          },
+          {
+            "domain": "default",
+            "utterance": "1600 Pennsylvania Avenue",
+            "intent": "address"
+          },
+          {
+            "domain": "default",
+            "utterance": "Street: 1 High Street",
+            "intent": "address"
+          },
+          {
+            "domain": "default",
+            "utterance": "Address: 1 High Street",
+            "intent": "address"
+          },
+          {
+            "domain": "default",
+            "utterance": "1 High Street",
+            "intent": "address"
+          },
+          {
+            "domain": "default",
+            "utterance": "1 High Street",
+            "intent": "address"
+          },
+          {
+            "domain": "default",
+            "utterance": "1 High Street",
+            "intent": "address"
+          },
+          {
+            "domain": "default",
+            "utterance": "Street: 25 King’s Road",
+            "intent": "address"
+          },
+          {
+            "domain": "default",
+            "utterance": "Address: 25 King’s Road",
+            "intent": "address"
+          },
+          {
+            "domain": "default",
+            "utterance": "25 King’s Road",
+            "intent": "address"
+          },
+          {
+            "domain": "default",
+            "utterance": "25 King’s Road",
+            "intent": "address"
+          },
+          {
+            "domain": "default",
+            "utterance": "25 King’s Road",
+            "intent": "address"
+          },
+          {
+            "domain": "default",
+            "utterance": "Street: 50 Queen Street",
+            "intent": "address"
+          },
+          {
+            "domain": "default",
+            "utterance": "Address: 50 Queen Street",
+            "intent": "address"
+          },
+          {
+            "domain": "default",
+            "utterance": "50 Queen Street",
+            "intent": "address"
+          },
+          {
+            "domain": "default",
+            "utterance": "50 Queen Street",
+            "intent": "address"
+          },
+          {
+            "domain": "default",
+            "utterance": "50 Queen Street",
+            "intent": "address"
+          },
+          {
+            "domain": "default",
+            "utterance": "Street: 75 Church Lane",
+            "intent": "address"
+          },
+          {
+            "domain": "default",
+            "utterance": "Address: 75 Church Lane",
+            "intent": "address"
+          },
+          {
+            "domain": "default",
+            "utterance": "75 Church Lane",
+            "intent": "address"
+          },
+          {
+            "domain": "default",
+            "utterance": "75 Church Lane",
+            "intent": "address"
+          },
+          {
+            "domain": "default",
+            "utterance": "75 Church Lane",
+            "intent": "address"
+          },
+          {
+            "domain": "default",
+            "utterance": "Street: 200 Victoria Street",
+            "intent": "address"
+          },
+          {
+            "domain": "default",
+            "utterance": "Address: 200 Victoria Street",
+            "intent": "address"
+          },
+          {
+            "domain": "default",
+            "utterance": "200 Victoria Street",
+            "intent": "address"
+          },
+          {
+            "domain": "default",
+            "utterance": "200 Victoria Street",
+            "intent": "address"
+          },
+          {
+            "domain": "default",
+            "utterance": "200 Victoria Street",
+            "intent": "address"
+          },
+          {
+            "domain": "default",
+            "utterance": "Street: 300 Oxford Road",
+            "intent": "address"
+          },
+          {
+            "domain": "default",
+            "utterance": "Address: 300 Oxford Road",
+            "intent": "address"
+          },
+          {
+            "domain": "default",
+            "utterance": "300 Oxford Road",
+            "intent": "address"
+          },
+          {
+            "domain": "default",
+            "utterance": "300 Oxford Road",
+            "intent": "address"
+          },
+          {
+            "domain": "default",
+            "utterance": "300 Oxford Road",
+            "intent": "address"
+          },
+          {
+            "domain": "default",
+            "utterance": "Street: 400 Queen’s Park",
+            "intent": "address"
+          },
+          {
+            "domain": "default",
+            "utterance": "Address: 400 Queen’s Park",
+            "intent": "address"
+          },
+          {
+            "domain": "default",
+            "utterance": "400 Queen’s Park",
+            "intent": "address"
+          },
+          {
+            "domain": "default",
+            "utterance": "400 Queen’s Park",
+            "intent": "address"
+          },
+          {
+            "domain": "default",
+            "utterance": "400 Queen’s Park",
+            "intent": "address"
+          },
+          {
+            "domain": "default",
+            "utterance": "Street: 9800 S. La Cienega Blvd.",
+            "intent": "address"
+          },
+          {
+            "domain": "default",
+            "utterance": "Address: 9800 S. La Cienega Blvd.",
+            "intent": "address"
+          },
+          {
+            "domain": "default",
+            "utterance": "9800 S. La Cienega Blvd.",
+            "intent": "address"
+          },
+          {
+            "domain": "default",
+            "utterance": "9800 S. La Cienega Blvd.",
+            "intent": "address"
+          },
+          {
+            "domain": "default",
+            "utterance": "9800 S. La Cienega Blvd.",
+            "intent": "address"
           }
         ],
         "domains": {
@@ -124,6 +906,28 @@
               "log": true
             },
             "features": {
+              "1": 1,
+              "10": 1,
+              "25": 1,
+              "50": 1,
+              "75": 1,
+              "117": 1,
+              "200": 1,
+              "224": 1,
+              "300": 1,
+              "325": 1,
+              "400": 1,
+              "499": 1,
+              "604": 1,
+              "613": 1,
+              "900": 1,
+              "1600": 1,
+              "1739": 1,
+              "2018": 1,
+              "4343": 1,
+              "8904": 1,
+              "9168": 1,
+              "9800": 1,
               "street": 1,
               "%number%": 1,
               "%street%": 1,
@@ -131,13 +935,69 @@
               "contact": 1,
               "info": 1,
               "%city%": 1,
-              "%postalcode%": 1
+              "%postalcode%": 1,
+              "s": 1,
+              "jade": 1,
+              "way": 1,
+              "franklin": 1,
+              "fulton": 1,
+              "highway": 1,
+              "riviera": 1,
+              "drive": 1,
+              "east": 1,
+              "tioga": 1,
+              "hermosa": 1,
+              "avenu": 1,
+              "west": 1,
+              "45th": 1,
+              "brevard": 1,
+              "road": 1,
+              "railroad": 1,
+              "soni": 1,
+              "lane": 1,
+              "221b": 1,
+              "baker": 1,
+              "down": 1,
+              "pennsylvania": 1,
+              "high": 1,
+              "king’": 1,
+              "queen": 1,
+              "church": 1,
+              "victoria": 1,
+              "oxford": 1,
+              "queen’": 1,
+              "park": 1,
+              "la": 1,
+              "cienega": 1,
+              "blvd": 1
             },
             "intents": {
               "address": 1
             },
             "intentFeatures": {
               "address": {
+                "1": 1,
+                "10": 1,
+                "25": 1,
+                "50": 1,
+                "75": 1,
+                "117": 1,
+                "200": 1,
+                "224": 1,
+                "300": 1,
+                "325": 1,
+                "400": 1,
+                "499": 1,
+                "604": 1,
+                "613": 1,
+                "900": 1,
+                "1600": 1,
+                "1739": 1,
+                "2018": 1,
+                "4343": 1,
+                "8904": 1,
+                "9168": 1,
+                "9800": 1,
                 "street": 1,
                 "%number%": 1,
                 "%street%": 1,
@@ -145,10 +1005,110 @@
                 "contact": 1,
                 "info": 1,
                 "%city%": 1,
-                "%postalcode%": 1
+                "%postalcode%": 1,
+                "s": 1,
+                "jade": 1,
+                "way": 1,
+                "franklin": 1,
+                "fulton": 1,
+                "highway": 1,
+                "riviera": 1,
+                "drive": 1,
+                "east": 1,
+                "tioga": 1,
+                "hermosa": 1,
+                "avenu": 1,
+                "west": 1,
+                "45th": 1,
+                "brevard": 1,
+                "road": 1,
+                "railroad": 1,
+                "soni": 1,
+                "lane": 1,
+                "221b": 1,
+                "baker": 1,
+                "down": 1,
+                "pennsylvania": 1,
+                "high": 1,
+                "king’": 1,
+                "queen": 1,
+                "church": 1,
+                "victoria": 1,
+                "oxford": 1,
+                "queen’": 1,
+                "park": 1,
+                "la": 1,
+                "cienega": 1,
+                "blvd": 1
               }
             },
             "featuresToIntent": {
+              "1": [
+                "address"
+              ],
+              "10": [
+                "address"
+              ],
+              "25": [
+                "address"
+              ],
+              "50": [
+                "address"
+              ],
+              "75": [
+                "address"
+              ],
+              "117": [
+                "address"
+              ],
+              "200": [
+                "address"
+              ],
+              "224": [
+                "address"
+              ],
+              "300": [
+                "address"
+              ],
+              "325": [
+                "address"
+              ],
+              "400": [
+                "address"
+              ],
+              "499": [
+                "address"
+              ],
+              "604": [
+                "address"
+              ],
+              "613": [
+                "address"
+              ],
+              "900": [
+                "address"
+              ],
+              "1600": [
+                "address"
+              ],
+              "1739": [
+                "address"
+              ],
+              "2018": [
+                "address"
+              ],
+              "4343": [
+                "address"
+              ],
+              "8904": [
+                "address"
+              ],
+              "9168": [
+                "address"
+              ],
+              "9800": [
+                "address"
+              ],
               "street": [
                 "address"
               ],
@@ -171,6 +1131,108 @@
                 "address"
               ],
               "%postalcode%": [
+                "address"
+              ],
+              "s": [
+                "address"
+              ],
+              "jade": [
+                "address"
+              ],
+              "way": [
+                "address"
+              ],
+              "franklin": [
+                "address"
+              ],
+              "fulton": [
+                "address"
+              ],
+              "highway": [
+                "address"
+              ],
+              "riviera": [
+                "address"
+              ],
+              "drive": [
+                "address"
+              ],
+              "east": [
+                "address"
+              ],
+              "tioga": [
+                "address"
+              ],
+              "hermosa": [
+                "address"
+              ],
+              "avenu": [
+                "address"
+              ],
+              "west": [
+                "address"
+              ],
+              "45th": [
+                "address"
+              ],
+              "brevard": [
+                "address"
+              ],
+              "road": [
+                "address"
+              ],
+              "railroad": [
+                "address"
+              ],
+              "soni": [
+                "address"
+              ],
+              "lane": [
+                "address"
+              ],
+              "221b": [
+                "address"
+              ],
+              "baker": [
+                "address"
+              ],
+              "down": [
+                "address"
+              ],
+              "pennsylvania": [
+                "address"
+              ],
+              "high": [
+                "address"
+              ],
+              "king’": [
+                "address"
+              ],
+              "queen": [
+                "address"
+              ],
+              "church": [
+                "address"
+              ],
+              "victoria": [
+                "address"
+              ],
+              "oxford": [
+                "address"
+              ],
+              "queen’": [
+                "address"
+              ],
+              "park": [
+                "address"
+              ],
+              "la": [
+                "address"
+              ],
+              "cienega": [
+                "address"
+              ],
+              "blvd": [
                 "address"
               ]
             },
@@ -195,22 +1257,134 @@
                 "contact",
                 "info",
                 "%city%",
-                "%postalcode%"
+                "%postalcode%",
+                "1739",
+                "s",
+                "jade",
+                "way",
+                "613",
+                "franklin",
+                "325",
+                "fulton",
+                "224",
+                "4343",
+                "highway",
+                "117",
+                "riviera",
+                "drive",
+                "499",
+                "east",
+                "tioga",
+                "9168",
+                "hermosa",
+                "avenu",
+                "900",
+                "west",
+                "45th",
+                "2018",
+                "brevard",
+                "road",
+                "604",
+                "railroad",
+                "8904",
+                "soni",
+                "lane",
+                "221b",
+                "baker",
+                "10",
+                "down",
+                "1600",
+                "pennsylvania",
+                "1",
+                "high",
+                "25",
+                "king’",
+                "50",
+                "queen",
+                "75",
+                "church",
+                "200",
+                "victoria",
+                "300",
+                "oxford",
+                "400",
+                "queen’",
+                "park",
+                "9800",
+                "la",
+                "cienega",
+                "blvd"
               ],
               "intents": [
                 "address"
               ],
               "perceptrons": [
                 [
-                  0.22876819968223572,
-                  5.679220676422119,
-                  5.679220676422119,
-                  0.14370575547218323,
-                  -0.06948551535606384,
-                  -0.06948551535606384,
-                  0.020602678880095482,
-                  0.020602678880095482,
-                  2.8400968825275417
+                  0.08910229802131653,
+                  1.4719123840332031,
+                  1.4719123840332031,
+                  0.0240121278911829,
+                  -0.11716631799936295,
+                  -0.11716631799936295,
+                  0.07765945047140121,
+                  0.07765945047140121,
+                  0.6347562074661255,
+                  1.1133620738983154,
+                  0.6347562074661255,
+                  0.6347562074661255,
+                  1.3648027181625366,
+                  1.3648027181625366,
+                  1.47672438621521,
+                  1.47672438621521,
+                  0.9876380562782288,
+                  0.9876380562782288,
+                  0.9876380562782288,
+                  0.9877544641494751,
+                  0.9877544641494751,
+                  0.9877544641494751,
+                  0.9133838415145874,
+                  0.9133838415145874,
+                  0.9133838415145874,
+                  0.5637426972389221,
+                  0.5637426972389221,
+                  1.7616713047027588,
+                  0.8984926342964172,
+                  0.8984926342964172,
+                  0.8984926342964172,
+                  0.5537980198860168,
+                  0.5537980198860168,
+                  1.7885804176330566,
+                  0.567632257938385,
+                  0.567632257938385,
+                  0.7181540727615356,
+                  0.7181540727615356,
+                  1.4922701120376587,
+                  1.4010727405548096,
+                  1.4010727405548096,
+                  1.4310513734817505,
+                  1.4310513734817505,
+                  0.6204069256782532,
+                  0.6204069256782532,
+                  1.4661004543304443,
+                  1.4661004543304443,
+                  0.6252679824829102,
+                  0.6252679824829102,
+                  1.4775502681732178,
+                  1.4775502681732178,
+                  0.772107720375061,
+                  0.772107720375061,
+                  1.4516819715499878,
+                  1.4516819715499878,
+                  0.607481062412262,
+                  0.607481062412262,
+                  1.004199504852295,
+                  1.004199504852295,
+                  1.004199504852295,
+                  0.4757557213306427,
+                  0.4757557213306427,
+                  0.4757557213306427,
+                  0.4757557213306427,
+                  11.259215063969238
                 ]
               ]
             }
@@ -255,6 +1429,238 @@
           "%city%,%number%,%postalcode%,%street%": {
             "intent": "address",
             "domain": "default"
+          },
+          "1739,jad,s,strass,weg": {
+            "intent": "address",
+            "domain": "default"
+          },
+          "1739,adress,jad,s,weg": {
+            "intent": "address",
+            "domain": "default"
+          },
+          "1739,jad,s,weg": {
+            "intent": "address",
+            "domain": "default"
+          },
+          "613,franklin,strass": {
+            "intent": "address",
+            "domain": "default"
+          },
+          "613,adress,franklin,strass": {
+            "intent": "address",
+            "domain": "default"
+          },
+          "325,fulton,strass": {
+            "intent": "address",
+            "domain": "default"
+          },
+          "325,adress,fulton": {
+            "intent": "address",
+            "domain": "default"
+          },
+          "325,fulton": {
+            "intent": "address",
+            "domain": "default"
+          },
+          "224,4343,autobahn,strass": {
+            "intent": "address",
+            "domain": "default"
+          },
+          "224,4343,adress,autobahn": {
+            "intent": "address",
+            "domain": "default"
+          },
+          "224,4343,autobahn": {
+            "intent": "address",
+            "domain": "default"
+          },
+          "117,riviera,strass": {
+            "intent": "address",
+            "domain": "default"
+          },
+          "117,adress,riviera,strass": {
+            "intent": "address",
+            "domain": "default"
+          },
+          "499,ost,strass,tioga": {
+            "intent": "address",
+            "domain": "default"
+          },
+          "499,adress,ost,strass,tioga": {
+            "intent": "address",
+            "domain": "default"
+          },
+          "9168,alle,hermosa,strass": {
+            "intent": "address",
+            "domain": "default"
+          },
+          "9168,adress,alle,hermosa": {
+            "intent": "address",
+            "domain": "default"
+          },
+          "9168,alle,hermosa": {
+            "intent": "address",
+            "domain": "default"
+          },
+          "45th,900,strass,west": {
+            "intent": "address",
+            "domain": "default"
+          },
+          "45th,900,adress,strass,west": {
+            "intent": "address",
+            "domain": "default"
+          },
+          "2018,brevard,strass,weg": {
+            "intent": "address",
+            "domain": "default"
+          },
+          "2018,adress,brevard,weg": {
+            "intent": "address",
+            "domain": "default"
+          },
+          "2018,brevard,weg": {
+            "intent": "address",
+            "domain": "default"
+          },
+          "604,alle,eisenbahn,strass": {
+            "intent": "address",
+            "domain": "default"
+          },
+          "604,adress,alle,eisenbahn": {
+            "intent": "address",
+            "domain": "default"
+          },
+          "604,alle,eisenbahn": {
+            "intent": "address",
+            "domain": "default"
+          },
+          "8904,sony,strass": {
+            "intent": "address",
+            "domain": "default"
+          },
+          "8904,adress,sony,strass": {
+            "intent": "address",
+            "domain": "default"
+          },
+          "17,den,lind,strass,unt": {
+            "intent": "address",
+            "domain": "default"
+          },
+          "17,adress,den,lind,unt": {
+            "intent": "address",
+            "domain": "default"
+          },
+          "17,den,lind,unt": {
+            "intent": "address",
+            "domain": "default"
+          },
+          "1,marienplatz,strass": {
+            "intent": "address",
+            "domain": "default"
+          },
+          "1,adress,marienplatz": {
+            "intent": "address",
+            "domain": "default"
+          },
+          "1,marienplatz": {
+            "intent": "address",
+            "domain": "default"
+          },
+          "1,konigsalle,strass": {
+            "intent": "address",
+            "domain": "default"
+          },
+          "1,adress,konigsalle": {
+            "intent": "address",
+            "domain": "default"
+          },
+          "1,konigsalle": {
+            "intent": "address",
+            "domain": "default"
+          },
+          "1,bahnhofstrass,strass": {
+            "intent": "address",
+            "domain": "default"
+          },
+          "1,adress,bahnhofstrass": {
+            "intent": "address",
+            "domain": "default"
+          },
+          "1,bahnhofstrass": {
+            "intent": "address",
+            "domain": "default"
+          },
+          "43,friedrichstrass,strass": {
+            "intent": "address",
+            "domain": "default"
+          },
+          "43,adress,friedrichstrass": {
+            "intent": "address",
+            "domain": "default"
+          },
+          "43,friedrichstrass": {
+            "intent": "address",
+            "domain": "default"
+          },
+          "21,ludwigstrass,strass": {
+            "intent": "address",
+            "domain": "default"
+          },
+          "21,adress,ludwigstrass": {
+            "intent": "address",
+            "domain": "default"
+          },
+          "21,ludwigstrass": {
+            "intent": "address",
+            "domain": "default"
+          },
+          "20,schlossstrass,strass": {
+            "intent": "address",
+            "domain": "default"
+          },
+          "20,adress,schlossstrass": {
+            "intent": "address",
+            "domain": "default"
+          },
+          "20,schlossstrass": {
+            "intent": "address",
+            "domain": "default"
+          },
+          "106,strass,zeil": {
+            "intent": "address",
+            "domain": "default"
+          },
+          "106,adress,zeil": {
+            "intent": "address",
+            "domain": "default"
+          },
+          "106,zeil": {
+            "intent": "address",
+            "domain": "default"
+          },
+          "22,kaiserstrass,strass": {
+            "intent": "address",
+            "domain": "default"
+          },
+          "22,adress,kaiserstrass": {
+            "intent": "address",
+            "domain": "default"
+          },
+          "22,kaiserstrass": {
+            "intent": "address",
+            "domain": "default"
+          },
+          "2,marktplatz,strass": {
+            "intent": "address",
+            "domain": "default"
+          },
+          "2,adress,marktplatz": {
+            "intent": "address",
+            "domain": "default"
+          },
+          "2,marktplatz": {
+            "intent": "address",
+            "domain": "default"
           }
         },
         "intentDict": {
@@ -295,6 +1701,531 @@
             "domain": "default",
             "utterance": "%street% %number%, %city%, %postalcode%",
             "intent": "address"
+          },
+          {
+            "domain": "default",
+            "utterance": "Straße: 1739 S. Jade Weg",
+            "intent": "address"
+          },
+          {
+            "domain": "default",
+            "utterance": "Adresse: 1739 S. Jade Weg",
+            "intent": "address"
+          },
+          {
+            "domain": "default",
+            "utterance": "1739 S. Jade Weg",
+            "intent": "address"
+          },
+          {
+            "domain": "default",
+            "utterance": "1739 S. Jade Weg",
+            "intent": "address"
+          },
+          {
+            "domain": "default",
+            "utterance": "1739 S. Jade Weg",
+            "intent": "address"
+          },
+          {
+            "domain": "default",
+            "utterance": "Straße: 613 Franklin Straße",
+            "intent": "address"
+          },
+          {
+            "domain": "default",
+            "utterance": "Adresse: 613 Franklin Straße",
+            "intent": "address"
+          },
+          {
+            "domain": "default",
+            "utterance": "613 Franklin Straße",
+            "intent": "address"
+          },
+          {
+            "domain": "default",
+            "utterance": "613 Franklin Straße",
+            "intent": "address"
+          },
+          {
+            "domain": "default",
+            "utterance": "613 Franklin Straße",
+            "intent": "address"
+          },
+          {
+            "domain": "default",
+            "utterance": "Straße: 325 Fulton",
+            "intent": "address"
+          },
+          {
+            "domain": "default",
+            "utterance": "Adresse: 325 Fulton",
+            "intent": "address"
+          },
+          {
+            "domain": "default",
+            "utterance": "325 Fulton",
+            "intent": "address"
+          },
+          {
+            "domain": "default",
+            "utterance": "325 Fulton",
+            "intent": "address"
+          },
+          {
+            "domain": "default",
+            "utterance": "325 Fulton",
+            "intent": "address"
+          },
+          {
+            "domain": "default",
+            "utterance": "Straße: 4343 Autobahn 224",
+            "intent": "address"
+          },
+          {
+            "domain": "default",
+            "utterance": "Adresse: 4343 Autobahn 224",
+            "intent": "address"
+          },
+          {
+            "domain": "default",
+            "utterance": "4343 Autobahn 224",
+            "intent": "address"
+          },
+          {
+            "domain": "default",
+            "utterance": "4343 Autobahn 224",
+            "intent": "address"
+          },
+          {
+            "domain": "default",
+            "utterance": "4343 Autobahn 224",
+            "intent": "address"
+          },
+          {
+            "domain": "default",
+            "utterance": "Straße: 117 Riviera Straße",
+            "intent": "address"
+          },
+          {
+            "domain": "default",
+            "utterance": "Adresse: 117 Riviera Straße",
+            "intent": "address"
+          },
+          {
+            "domain": "default",
+            "utterance": "117 Riviera Straße",
+            "intent": "address"
+          },
+          {
+            "domain": "default",
+            "utterance": "117 Riviera Straße",
+            "intent": "address"
+          },
+          {
+            "domain": "default",
+            "utterance": "117 Riviera Straße",
+            "intent": "address"
+          },
+          {
+            "domain": "default",
+            "utterance": "Straße: 499 Ost Tioga Straße",
+            "intent": "address"
+          },
+          {
+            "domain": "default",
+            "utterance": "Adresse: 499 Ost Tioga Straße",
+            "intent": "address"
+          },
+          {
+            "domain": "default",
+            "utterance": "499 Ost Tioga Straße",
+            "intent": "address"
+          },
+          {
+            "domain": "default",
+            "utterance": "499 Ost Tioga Straße",
+            "intent": "address"
+          },
+          {
+            "domain": "default",
+            "utterance": "499 Ost Tioga Straße",
+            "intent": "address"
+          },
+          {
+            "domain": "default",
+            "utterance": "Straße: 9168 Hermosa Allee",
+            "intent": "address"
+          },
+          {
+            "domain": "default",
+            "utterance": "Adresse: 9168 Hermosa Allee",
+            "intent": "address"
+          },
+          {
+            "domain": "default",
+            "utterance": "9168 Hermosa Allee",
+            "intent": "address"
+          },
+          {
+            "domain": "default",
+            "utterance": "9168 Hermosa Allee",
+            "intent": "address"
+          },
+          {
+            "domain": "default",
+            "utterance": "9168 Hermosa Allee",
+            "intent": "address"
+          },
+          {
+            "domain": "default",
+            "utterance": "Straße: 900 West 45th Straße",
+            "intent": "address"
+          },
+          {
+            "domain": "default",
+            "utterance": "Adresse: 900 West 45th Straße",
+            "intent": "address"
+          },
+          {
+            "domain": "default",
+            "utterance": "900 West 45th Straße",
+            "intent": "address"
+          },
+          {
+            "domain": "default",
+            "utterance": "900 West 45th Straße",
+            "intent": "address"
+          },
+          {
+            "domain": "default",
+            "utterance": "900 West 45th Straße",
+            "intent": "address"
+          },
+          {
+            "domain": "default",
+            "utterance": "Straße: 2018 Brevard Weg",
+            "intent": "address"
+          },
+          {
+            "domain": "default",
+            "utterance": "Adresse: 2018 Brevard Weg",
+            "intent": "address"
+          },
+          {
+            "domain": "default",
+            "utterance": "2018 Brevard Weg",
+            "intent": "address"
+          },
+          {
+            "domain": "default",
+            "utterance": "2018 Brevard Weg",
+            "intent": "address"
+          },
+          {
+            "domain": "default",
+            "utterance": "2018 Brevard Weg",
+            "intent": "address"
+          },
+          {
+            "domain": "default",
+            "utterance": "Straße: 604 Eisenbahn Allee",
+            "intent": "address"
+          },
+          {
+            "domain": "default",
+            "utterance": "Adresse: 604 Eisenbahn Allee",
+            "intent": "address"
+          },
+          {
+            "domain": "default",
+            "utterance": "604 Eisenbahn Allee",
+            "intent": "address"
+          },
+          {
+            "domain": "default",
+            "utterance": "604 Eisenbahn Allee",
+            "intent": "address"
+          },
+          {
+            "domain": "default",
+            "utterance": "604 Eisenbahn Allee",
+            "intent": "address"
+          },
+          {
+            "domain": "default",
+            "utterance": "Straße: 8904 Sony Straße",
+            "intent": "address"
+          },
+          {
+            "domain": "default",
+            "utterance": "Adresse: 8904 Sony Straße",
+            "intent": "address"
+          },
+          {
+            "domain": "default",
+            "utterance": "8904 Sony Straße",
+            "intent": "address"
+          },
+          {
+            "domain": "default",
+            "utterance": "8904 Sony Straße",
+            "intent": "address"
+          },
+          {
+            "domain": "default",
+            "utterance": "8904 Sony Straße",
+            "intent": "address"
+          },
+          {
+            "domain": "default",
+            "utterance": "Straße: Unter den Linden 17",
+            "intent": "address"
+          },
+          {
+            "domain": "default",
+            "utterance": "Adresse: Unter den Linden 17",
+            "intent": "address"
+          },
+          {
+            "domain": "default",
+            "utterance": "Unter den Linden 17",
+            "intent": "address"
+          },
+          {
+            "domain": "default",
+            "utterance": "Unter den Linden 17",
+            "intent": "address"
+          },
+          {
+            "domain": "default",
+            "utterance": "Unter den Linden 17",
+            "intent": "address"
+          },
+          {
+            "domain": "default",
+            "utterance": "Straße: Marienplatz 1",
+            "intent": "address"
+          },
+          {
+            "domain": "default",
+            "utterance": "Adresse: Marienplatz 1",
+            "intent": "address"
+          },
+          {
+            "domain": "default",
+            "utterance": "Marienplatz 1",
+            "intent": "address"
+          },
+          {
+            "domain": "default",
+            "utterance": "Marienplatz 1",
+            "intent": "address"
+          },
+          {
+            "domain": "default",
+            "utterance": "Marienplatz 1",
+            "intent": "address"
+          },
+          {
+            "domain": "default",
+            "utterance": "Straße: Königsallee 1",
+            "intent": "address"
+          },
+          {
+            "domain": "default",
+            "utterance": "Adresse: Königsallee 1",
+            "intent": "address"
+          },
+          {
+            "domain": "default",
+            "utterance": "Königsallee 1",
+            "intent": "address"
+          },
+          {
+            "domain": "default",
+            "utterance": "Königsallee 1",
+            "intent": "address"
+          },
+          {
+            "domain": "default",
+            "utterance": "Königsallee 1",
+            "intent": "address"
+          },
+          {
+            "domain": "default",
+            "utterance": "Straße: Bahnhofstraße 1",
+            "intent": "address"
+          },
+          {
+            "domain": "default",
+            "utterance": "Adresse: Bahnhofstraße 1",
+            "intent": "address"
+          },
+          {
+            "domain": "default",
+            "utterance": "Bahnhofstraße 1",
+            "intent": "address"
+          },
+          {
+            "domain": "default",
+            "utterance": "Bahnhofstraße 1",
+            "intent": "address"
+          },
+          {
+            "domain": "default",
+            "utterance": "Bahnhofstraße 1",
+            "intent": "address"
+          },
+          {
+            "domain": "default",
+            "utterance": "Straße: Friedrichstraße 43",
+            "intent": "address"
+          },
+          {
+            "domain": "default",
+            "utterance": "Adresse: Friedrichstraße 43",
+            "intent": "address"
+          },
+          {
+            "domain": "default",
+            "utterance": "Friedrichstraße 43",
+            "intent": "address"
+          },
+          {
+            "domain": "default",
+            "utterance": "Friedrichstraße 43",
+            "intent": "address"
+          },
+          {
+            "domain": "default",
+            "utterance": "Friedrichstraße 43",
+            "intent": "address"
+          },
+          {
+            "domain": "default",
+            "utterance": "Straße: Ludwigstraße 21",
+            "intent": "address"
+          },
+          {
+            "domain": "default",
+            "utterance": "Adresse: Ludwigstraße 21",
+            "intent": "address"
+          },
+          {
+            "domain": "default",
+            "utterance": "Ludwigstraße 21",
+            "intent": "address"
+          },
+          {
+            "domain": "default",
+            "utterance": "Ludwigstraße 21",
+            "intent": "address"
+          },
+          {
+            "domain": "default",
+            "utterance": "Ludwigstraße 21",
+            "intent": "address"
+          },
+          {
+            "domain": "default",
+            "utterance": "Straße: Schlossstraße 20",
+            "intent": "address"
+          },
+          {
+            "domain": "default",
+            "utterance": "Adresse: Schlossstraße 20",
+            "intent": "address"
+          },
+          {
+            "domain": "default",
+            "utterance": "Schlossstraße 20",
+            "intent": "address"
+          },
+          {
+            "domain": "default",
+            "utterance": "Schlossstraße 20",
+            "intent": "address"
+          },
+          {
+            "domain": "default",
+            "utterance": "Schlossstraße 20",
+            "intent": "address"
+          },
+          {
+            "domain": "default",
+            "utterance": "Straße: Zeil 106",
+            "intent": "address"
+          },
+          {
+            "domain": "default",
+            "utterance": "Adresse: Zeil 106",
+            "intent": "address"
+          },
+          {
+            "domain": "default",
+            "utterance": "Zeil 106",
+            "intent": "address"
+          },
+          {
+            "domain": "default",
+            "utterance": "Zeil 106",
+            "intent": "address"
+          },
+          {
+            "domain": "default",
+            "utterance": "Zeil 106",
+            "intent": "address"
+          },
+          {
+            "domain": "default",
+            "utterance": "Straße: Kaiserstraße 22",
+            "intent": "address"
+          },
+          {
+            "domain": "default",
+            "utterance": "Adresse: Kaiserstraße 22",
+            "intent": "address"
+          },
+          {
+            "domain": "default",
+            "utterance": "Kaiserstraße 22",
+            "intent": "address"
+          },
+          {
+            "domain": "default",
+            "utterance": "Kaiserstraße 22",
+            "intent": "address"
+          },
+          {
+            "domain": "default",
+            "utterance": "Kaiserstraße 22",
+            "intent": "address"
+          },
+          {
+            "domain": "default",
+            "utterance": "Straße: Marktplatz 2",
+            "intent": "address"
+          },
+          {
+            "domain": "default",
+            "utterance": "Adresse: Marktplatz 2",
+            "intent": "address"
+          },
+          {
+            "domain": "default",
+            "utterance": "Marktplatz 2",
+            "intent": "address"
+          },
+          {
+            "domain": "default",
+            "utterance": "Marktplatz 2",
+            "intent": "address"
+          },
+          {
+            "domain": "default",
+            "utterance": "Marktplatz 2",
+            "intent": "address"
           }
         ],
         "domains": {
@@ -311,6 +2242,26 @@
               "log": true
             },
             "features": {
+              "1": 1,
+              "2": 1,
+              "17": 1,
+              "20": 1,
+              "21": 1,
+              "22": 1,
+              "43": 1,
+              "106": 1,
+              "117": 1,
+              "224": 1,
+              "325": 1,
+              "499": 1,
+              "604": 1,
+              "613": 1,
+              "900": 1,
+              "1739": 1,
+              "2018": 1,
+              "4343": 1,
+              "8904": 1,
+              "9168": 1,
               "strass": 1,
               "%street%": 1,
               "%number%": 1,
@@ -318,13 +2269,61 @@
               "kontakt": 1,
               "info": 1,
               "%city%": 1,
-              "%postalcode%": 1
+              "%postalcode%": 1,
+              "s": 1,
+              "jad": 1,
+              "weg": 1,
+              "franklin": 1,
+              "fulton": 1,
+              "autobahn": 1,
+              "riviera": 1,
+              "ost": 1,
+              "tioga": 1,
+              "hermosa": 1,
+              "alle": 1,
+              "west": 1,
+              "45th": 1,
+              "brevard": 1,
+              "eisenbahn": 1,
+              "sony": 1,
+              "unt": 1,
+              "den": 1,
+              "lind": 1,
+              "marienplatz": 1,
+              "konigsalle": 1,
+              "bahnhofstrass": 1,
+              "friedrichstrass": 1,
+              "ludwigstrass": 1,
+              "schlossstrass": 1,
+              "zeil": 1,
+              "kaiserstrass": 1,
+              "marktplatz": 1
             },
             "intents": {
               "address": 1
             },
             "intentFeatures": {
               "address": {
+                "1": 1,
+                "2": 1,
+                "17": 1,
+                "20": 1,
+                "21": 1,
+                "22": 1,
+                "43": 1,
+                "106": 1,
+                "117": 1,
+                "224": 1,
+                "325": 1,
+                "499": 1,
+                "604": 1,
+                "613": 1,
+                "900": 1,
+                "1739": 1,
+                "2018": 1,
+                "4343": 1,
+                "8904": 1,
+                "9168": 1,
                 "strass": 1,
                 "%street%": 1,
                 "%number%": 1,
@@ -332,10 +2331,98 @@
                 "kontakt": 1,
                 "info": 1,
                 "%city%": 1,
-                "%postalcode%": 1
+                "%postalcode%": 1,
+                "s": 1,
+                "jad": 1,
+                "weg": 1,
+                "franklin": 1,
+                "fulton": 1,
+                "autobahn": 1,
+                "riviera": 1,
+                "ost": 1,
+                "tioga": 1,
+                "hermosa": 1,
+                "alle": 1,
+                "west": 1,
+                "45th": 1,
+                "brevard": 1,
+                "eisenbahn": 1,
+                "sony": 1,
+                "unt": 1,
+                "den": 1,
+                "lind": 1,
+                "marienplatz": 1,
+                "konigsalle": 1,
+                "bahnhofstrass": 1,
+                "friedrichstrass": 1,
+                "ludwigstrass": 1,
+                "schlossstrass": 1,
+                "zeil": 1,
+                "kaiserstrass": 1,
+                "marktplatz": 1
               }
             },
             "featuresToIntent": {
+              "1": [
+                "address"
+              ],
+              "2": [
+                "address"
+              ],
+              "17": [
+                "address"
+              ],
+              "20": [
+                "address"
+              ],
+              "21": [
+                "address"
+              ],
+              "22": [
+                "address"
+              ],
+              "43": [
+                "address"
+              ],
+              "106": [
+                "address"
+              ],
+              "117": [
+                "address"
+              ],
+              "224": [
+                "address"
+              ],
+              "325": [
+                "address"
+              ],
+              "499": [
+                "address"
+              ],
+              "604": [
+                "address"
+              ],
+              "613": [
+                "address"
+              ],
+              "900": [
+                "address"
+              ],
+              "1739": [
+                "address"
+              ],
+              "2018": [
+                "address"
+              ],
+              "4343": [
+                "address"
+              ],
+              "8904": [
+                "address"
+              ],
+              "9168": [
+                "address"
+              ],
               "strass": [
                 "address"
               ],
@@ -358,6 +2445,90 @@
                 "address"
               ],
               "%postalcode%": [
+                "address"
+              ],
+              "s": [
+                "address"
+              ],
+              "jad": [
+                "address"
+              ],
+              "weg": [
+                "address"
+              ],
+              "franklin": [
+                "address"
+              ],
+              "fulton": [
+                "address"
+              ],
+              "autobahn": [
+                "address"
+              ],
+              "riviera": [
+                "address"
+              ],
+              "ost": [
+                "address"
+              ],
+              "tioga": [
+                "address"
+              ],
+              "hermosa": [
+                "address"
+              ],
+              "alle": [
+                "address"
+              ],
+              "west": [
+                "address"
+              ],
+              "45th": [
+                "address"
+              ],
+              "brevard": [
+                "address"
+              ],
+              "eisenbahn": [
+                "address"
+              ],
+              "sony": [
+                "address"
+              ],
+              "unt": [
+                "address"
+              ],
+              "den": [
+                "address"
+              ],
+              "lind": [
+                "address"
+              ],
+              "marienplatz": [
+                "address"
+              ],
+              "konigsalle": [
+                "address"
+              ],
+              "bahnhofstrass": [
+                "address"
+              ],
+              "friedrichstrass": [
+                "address"
+              ],
+              "ludwigstrass": [
+                "address"
+              ],
+              "schlossstrass": [
+                "address"
+              ],
+              "zeil": [
+                "address"
+              ],
+              "kaiserstrass": [
+                "address"
+              ],
+              "marktplatz": [
                 "address"
               ]
             },
@@ -382,22 +2553,118 @@
                 "kontakt",
                 "info",
                 "%city%",
-                "%postalcode%"
+                "%postalcode%",
+                "1739",
+                "s",
+                "jad",
+                "weg",
+                "613",
+                "franklin",
+                "325",
+                "fulton",
+                "224",
+                "4343",
+                "autobahn",
+                "117",
+                "riviera",
+                "499",
+                "ost",
+                "tioga",
+                "9168",
+                "hermosa",
+                "alle",
+                "900",
+                "west",
+                "45th",
+                "2018",
+                "brevard",
+                "604",
+                "eisenbahn",
+                "8904",
+                "sony",
+                "17",
+                "unt",
+                "den",
+                "lind",
+                "1",
+                "marienplatz",
+                "konigsalle",
+                "bahnhofstrass",
+                "43",
+                "friedrichstrass",
+                "21",
+                "ludwigstrass",
+                "20",
+                "schlossstrass",
+                "106",
+                "zeil",
+                "22",
+                "kaiserstrass",
+                "2",
+                "marktplatz"
               ],
               "intents": [
                 "address"
               ],
               "perceptrons": [
                 [
-                  0.22876819968223572,
-                  5.679220676422119,
-                  5.679220676422119,
-                  0.14370575547218323,
-                  -0.06948551535606384,
-                  -0.06948551535606384,
-                  0.020602678880095482,
-                  0.020602678880095482,
-                  2.8400968825275417
+                  0.045568060129880905,
+                  1.3932530879974365,
+                  1.3932530879974365,
+                  0.007920983247458935,
+                  -0.12222342193126678,
+                  -0.12222342193126678,
+                  0.08063311129808426,
+                  0.08063311129808426,
+                  0.5308778285980225,
+                  0.5308778285980225,
+                  0.5308778285980225,
+                  1.2465364933013916,
+                  1.3350011110305786,
+                  1.3350011110305786,
+                  1.3702640533447266,
+                  1.3702640533447266,
+                  0.9180837869644165,
+                  0.9180837869644165,
+                  0.9180837869644165,
+                  1.2705621719360352,
+                  1.2705621719360352,
+                  0.8386434316635132,
+                  0.8386434316635132,
+                  0.8386434316635132,
+                  0.6631020903587341,
+                  0.6631020903587341,
+                  1.3417843580245972,
+                  0.8272003531455994,
+                  0.8272003531455994,
+                  0.8272003531455994,
+                  0.7144767642021179,
+                  0.7144767642021179,
+                  0.6725947856903076,
+                  0.6725947856903076,
+                  1.27288818359375,
+                  1.27288818359375,
+                  0.6750799417495728,
+                  0.6750799417495728,
+                  0.6750799417495728,
+                  0.6750799417495728,
+                  2.0296146869659424,
+                  0.6517580151557922,
+                  0.6857950091362,
+                  0.6899021863937378,
+                  1.3782004117965698,
+                  1.3782004117965698,
+                  1.3880605697631836,
+                  1.3880605697631836,
+                  1.3971550464630127,
+                  1.3971550464630127,
+                  1.4047298431396484,
+                  1.4047298431396484,
+                  1.4101237058639526,
+                  1.4101237058639526,
+                  1.4127765893936157,
+                  1.4127765893936157,
+                  11.467695802382588
                 ]
               ]
             }
@@ -442,6 +2709,298 @@
           "%city%,%number%,%postalcode%,%street%": {
             "intent": "address",
             "domain": "default"
+          },
+          "1739,chemin,jad,ru,s": {
+            "intent": "address",
+            "domain": "default"
+          },
+          "1739,adress,chemin,jad,s": {
+            "intent": "address",
+            "domain": "default"
+          },
+          "1739,chemin,jad,s": {
+            "intent": "address",
+            "domain": "default"
+          },
+          "613,franklin,ru": {
+            "intent": "address",
+            "domain": "default"
+          },
+          "613,adress,franklin,ru": {
+            "intent": "address",
+            "domain": "default"
+          },
+          "325,fulton,ru": {
+            "intent": "address",
+            "domain": "default"
+          },
+          "325,adress,fulton": {
+            "intent": "address",
+            "domain": "default"
+          },
+          "325,fulton": {
+            "intent": "address",
+            "domain": "default"
+          },
+          "224,4343,autorout,ru": {
+            "intent": "address",
+            "domain": "default"
+          },
+          "224,4343,adress,autorout": {
+            "intent": "address",
+            "domain": "default"
+          },
+          "224,4343,autorout": {
+            "intent": "address",
+            "domain": "default"
+          },
+          "117,rivi,ru": {
+            "intent": "address",
+            "domain": "default"
+          },
+          "117,adress,rivi,ru": {
+            "intent": "address",
+            "domain": "default"
+          },
+          "499,est,ru,tiog": {
+            "intent": "address",
+            "domain": "default"
+          },
+          "499,adress,est,ru,tiog": {
+            "intent": "address",
+            "domain": "default"
+          },
+          "9168,avenu,hermos,ru": {
+            "intent": "address",
+            "domain": "default"
+          },
+          "9168,adress,avenu,hermos": {
+            "intent": "address",
+            "domain": "default"
+          },
+          "9168,avenu,hermos": {
+            "intent": "address",
+            "domain": "default"
+          },
+          "45th,900,ouest,ru": {
+            "intent": "address",
+            "domain": "default"
+          },
+          "45th,900,adress,ouest,ru": {
+            "intent": "address",
+            "domain": "default"
+          },
+          "2018,brevard,chemin,ru": {
+            "intent": "address",
+            "domain": "default"
+          },
+          "2018,adress,brevard,chemin": {
+            "intent": "address",
+            "domain": "default"
+          },
+          "2018,brevard,chemin": {
+            "intent": "address",
+            "domain": "default"
+          },
+          "604,avenu,chemin,de,fer,ru": {
+            "intent": "address",
+            "domain": "default"
+          },
+          "604,adress,avenu,chemin,de,fer": {
+            "intent": "address",
+            "domain": "default"
+          },
+          "604,avenu,chemin,de,fer": {
+            "intent": "address",
+            "domain": "default"
+          },
+          "8904,ru,sony": {
+            "intent": "address",
+            "domain": "default"
+          },
+          "8904,adress,ru,sony": {
+            "intent": "address",
+            "domain": "default"
+          },
+          "10,avenu,champs-elyse,de,ru": {
+            "intent": "address",
+            "domain": "default"
+          },
+          "10,adress,avenu,champs-elyse,de": {
+            "intent": "address",
+            "domain": "default"
+          },
+          "10,avenu,champs-elyse,de": {
+            "intent": "address",
+            "domain": "default"
+          },
+          "5,de,la,paix,ru": {
+            "intent": "address",
+            "domain": "default"
+          },
+          "5,adress,de,la,paix,ru": {
+            "intent": "address",
+            "domain": "default"
+          },
+          "20,boulevard,ru,saint-germain": {
+            "intent": "address",
+            "domain": "default"
+          },
+          "20,adress,boulevard,saint-germain": {
+            "intent": "address",
+            "domain": "default"
+          },
+          "20,boulevard,saint-germain": {
+            "intent": "address",
+            "domain": "default"
+          },
+          "15,de,rivol,ru": {
+            "intent": "address",
+            "domain": "default"
+          },
+          "15,adress,de,rivol,ru": {
+            "intent": "address",
+            "domain": "default"
+          },
+          "30,avenu,de,l,ru": {
+            "intent": "address",
+            "domain": "default"
+          },
+          "30,adress,avenu,de,l": {
+            "intent": "address",
+            "domain": "default"
+          },
+          "30,avenu,de,l": {
+            "intent": "address",
+            "domain": "default"
+          },
+          "40,de,la,ru,victoir": {
+            "intent": "address",
+            "domain": "default"
+          },
+          "40,adress,de,la,ru,victoir": {
+            "intent": "address",
+            "domain": "default"
+          },
+          "50,lafayet,ru": {
+            "intent": "address",
+            "domain": "default"
+          },
+          "50,adress,lafayet,ru": {
+            "intent": "address",
+            "domain": "default"
+          },
+          "60,boulevard,haussmann,ru": {
+            "intent": "address",
+            "domain": "default"
+          },
+          "60,adress,boulevard,haussmann": {
+            "intent": "address",
+            "domain": "default"
+          },
+          "60,boulevard,haussmann": {
+            "intent": "address",
+            "domain": "default"
+          },
+          "70,ru,saint-honor": {
+            "intent": "address",
+            "domain": "default"
+          },
+          "70,adress,ru,saint-honor": {
+            "intent": "address",
+            "domain": "default"
+          },
+          "80,avenu,de,ru,tern": {
+            "intent": "address",
+            "domain": "default"
+          },
+          "80,adress,avenu,de,tern": {
+            "intent": "address",
+            "domain": "default"
+          },
+          "80,avenu,de,tern": {
+            "intent": "address",
+            "domain": "default"
+          },
+          "1739,camino,jad,s": {
+            "intent": "address",
+            "domain": "default"
+          },
+          "613,call,franklin": {
+            "intent": "address",
+            "domain": "default"
+          },
+          "224,4343,carret": {
+            "intent": "address",
+            "domain": "default"
+          },
+          "117,call,rivi": {
+            "intent": "address",
+            "domain": "default"
+          },
+          "499,call,este,tiog": {
+            "intent": "address",
+            "domain": "default"
+          },
+          "9168,avenid,hermos": {
+            "intent": "address",
+            "domain": "default"
+          },
+          "45th,900,call,oest": {
+            "intent": "address",
+            "domain": "default"
+          },
+          "2018,brevard,camino": {
+            "intent": "address",
+            "domain": "default"
+          },
+          "604,avenid,del,ferrocarril": {
+            "intent": "address",
+            "domain": "default"
+          },
+          "8904,call,sony": {
+            "intent": "address",
+            "domain": "default"
+          },
+          "341,call,mayor": {
+            "intent": "address",
+            "domain": "default"
+          },
+          "721,avenid,constitucion,de,la": {
+            "intent": "address",
+            "domain": "default"
+          },
+          "934,alcal,call,de": {
+            "intent": "address",
+            "domain": "default"
+          },
+          "123,gran,vi": {
+            "intent": "address",
+            "domain": "default"
+          },
+          "872,castellan,de,la,paseo": {
+            "intent": "address",
+            "domain": "default"
+          },
+          "4786,call,de,serrano": {
+            "intent": "address",
+            "domain": "default"
+          },
+          "9812,call,de,goi": {
+            "intent": "address",
+            "domain": "default"
+          },
+          "413,avenid,diagonal": {
+            "intent": "address",
+            "domain": "default"
+          },
+          "889,cataluni,de,rambl": {
+            "intent": "address",
+            "domain": "default"
+          },
+          "1421,de,graci,paseo": {
+            "intent": "address",
+            "domain": "default"
           }
         },
         "intentDict": {
@@ -482,6 +3041,741 @@
             "domain": "default",
             "utterance": "%street% %number%, %city%, %postalcode%",
             "intent": "address"
+          },
+          {
+            "domain": "default",
+            "utterance": "Rue: 1739 S. Jade Chemin",
+            "intent": "address"
+          },
+          {
+            "domain": "default",
+            "utterance": "Adresse: 1739 S. Jade Chemin",
+            "intent": "address"
+          },
+          {
+            "domain": "default",
+            "utterance": "1739 S. Jade Chemin",
+            "intent": "address"
+          },
+          {
+            "domain": "default",
+            "utterance": "1739 S. Jade Chemin",
+            "intent": "address"
+          },
+          {
+            "domain": "default",
+            "utterance": "1739 S. Jade Chemin",
+            "intent": "address"
+          },
+          {
+            "domain": "default",
+            "utterance": "Rue: 613 Franklin Rue",
+            "intent": "address"
+          },
+          {
+            "domain": "default",
+            "utterance": "Adresse: 613 Franklin Rue",
+            "intent": "address"
+          },
+          {
+            "domain": "default",
+            "utterance": "613 Franklin Rue",
+            "intent": "address"
+          },
+          {
+            "domain": "default",
+            "utterance": "613 Franklin Rue",
+            "intent": "address"
+          },
+          {
+            "domain": "default",
+            "utterance": "613 Franklin Rue",
+            "intent": "address"
+          },
+          {
+            "domain": "default",
+            "utterance": "Rue: 325 Fulton",
+            "intent": "address"
+          },
+          {
+            "domain": "default",
+            "utterance": "Adresse: 325 Fulton",
+            "intent": "address"
+          },
+          {
+            "domain": "default",
+            "utterance": "325 Fulton",
+            "intent": "address"
+          },
+          {
+            "domain": "default",
+            "utterance": "325 Fulton",
+            "intent": "address"
+          },
+          {
+            "domain": "default",
+            "utterance": "325 Fulton",
+            "intent": "address"
+          },
+          {
+            "domain": "default",
+            "utterance": "Rue: 4343 Autoroute 224",
+            "intent": "address"
+          },
+          {
+            "domain": "default",
+            "utterance": "Adresse: 4343 Autoroute 224",
+            "intent": "address"
+          },
+          {
+            "domain": "default",
+            "utterance": "4343 Autoroute 224",
+            "intent": "address"
+          },
+          {
+            "domain": "default",
+            "utterance": "4343 Autoroute 224",
+            "intent": "address"
+          },
+          {
+            "domain": "default",
+            "utterance": "4343 Autoroute 224",
+            "intent": "address"
+          },
+          {
+            "domain": "default",
+            "utterance": "Rue: 117 Riviera Rue",
+            "intent": "address"
+          },
+          {
+            "domain": "default",
+            "utterance": "Adresse: 117 Riviera Rue",
+            "intent": "address"
+          },
+          {
+            "domain": "default",
+            "utterance": "117 Riviera Rue",
+            "intent": "address"
+          },
+          {
+            "domain": "default",
+            "utterance": "117 Riviera Rue",
+            "intent": "address"
+          },
+          {
+            "domain": "default",
+            "utterance": "117 Riviera Rue",
+            "intent": "address"
+          },
+          {
+            "domain": "default",
+            "utterance": "Rue: 499 Est Tioga Rue",
+            "intent": "address"
+          },
+          {
+            "domain": "default",
+            "utterance": "Adresse: 499 Est Tioga Rue",
+            "intent": "address"
+          },
+          {
+            "domain": "default",
+            "utterance": "499 Est Tioga Rue",
+            "intent": "address"
+          },
+          {
+            "domain": "default",
+            "utterance": "499 Est Tioga Rue",
+            "intent": "address"
+          },
+          {
+            "domain": "default",
+            "utterance": "499 Est Tioga Rue",
+            "intent": "address"
+          },
+          {
+            "domain": "default",
+            "utterance": "Rue: 9168 Hermosa Avenue",
+            "intent": "address"
+          },
+          {
+            "domain": "default",
+            "utterance": "Adresse: 9168 Hermosa Avenue",
+            "intent": "address"
+          },
+          {
+            "domain": "default",
+            "utterance": "9168 Hermosa Avenue",
+            "intent": "address"
+          },
+          {
+            "domain": "default",
+            "utterance": "9168 Hermosa Avenue",
+            "intent": "address"
+          },
+          {
+            "domain": "default",
+            "utterance": "9168 Hermosa Avenue",
+            "intent": "address"
+          },
+          {
+            "domain": "default",
+            "utterance": "Rue: 900 Ouest 45th Rue",
+            "intent": "address"
+          },
+          {
+            "domain": "default",
+            "utterance": "Adresse: 900 Ouest 45th Rue",
+            "intent": "address"
+          },
+          {
+            "domain": "default",
+            "utterance": "900 Ouest 45th Rue",
+            "intent": "address"
+          },
+          {
+            "domain": "default",
+            "utterance": "900 Ouest 45th Rue",
+            "intent": "address"
+          },
+          {
+            "domain": "default",
+            "utterance": "900 Ouest 45th Rue",
+            "intent": "address"
+          },
+          {
+            "domain": "default",
+            "utterance": "Rue: 2018 Brevard Chemin",
+            "intent": "address"
+          },
+          {
+            "domain": "default",
+            "utterance": "Adresse: 2018 Brevard Chemin",
+            "intent": "address"
+          },
+          {
+            "domain": "default",
+            "utterance": "2018 Brevard Chemin",
+            "intent": "address"
+          },
+          {
+            "domain": "default",
+            "utterance": "2018 Brevard Chemin",
+            "intent": "address"
+          },
+          {
+            "domain": "default",
+            "utterance": "2018 Brevard Chemin",
+            "intent": "address"
+          },
+          {
+            "domain": "default",
+            "utterance": "Rue: 604 Chemin de Fer Avenue",
+            "intent": "address"
+          },
+          {
+            "domain": "default",
+            "utterance": "Adresse: 604 Chemin de Fer Avenue",
+            "intent": "address"
+          },
+          {
+            "domain": "default",
+            "utterance": "604 Chemin de Fer Avenue",
+            "intent": "address"
+          },
+          {
+            "domain": "default",
+            "utterance": "604 Chemin de Fer Avenue",
+            "intent": "address"
+          },
+          {
+            "domain": "default",
+            "utterance": "604 Chemin de Fer Avenue",
+            "intent": "address"
+          },
+          {
+            "domain": "default",
+            "utterance": "Rue: 8904 Sony Rue",
+            "intent": "address"
+          },
+          {
+            "domain": "default",
+            "utterance": "Adresse: 8904 Sony Rue",
+            "intent": "address"
+          },
+          {
+            "domain": "default",
+            "utterance": "8904 Sony Rue",
+            "intent": "address"
+          },
+          {
+            "domain": "default",
+            "utterance": "8904 Sony Rue",
+            "intent": "address"
+          },
+          {
+            "domain": "default",
+            "utterance": "8904 Sony Rue",
+            "intent": "address"
+          },
+          {
+            "domain": "default",
+            "utterance": "Rue: 10 Avenue des Champs-Élysées",
+            "intent": "address"
+          },
+          {
+            "domain": "default",
+            "utterance": "Adresse: 10 Avenue des Champs-Élysées",
+            "intent": "address"
+          },
+          {
+            "domain": "default",
+            "utterance": "10 Avenue des Champs-Élysées",
+            "intent": "address"
+          },
+          {
+            "domain": "default",
+            "utterance": "10 Avenue des Champs-Élysées",
+            "intent": "address"
+          },
+          {
+            "domain": "default",
+            "utterance": "10 Avenue des Champs-Élysées",
+            "intent": "address"
+          },
+          {
+            "domain": "default",
+            "utterance": "Rue: 5 Rue de la Paix",
+            "intent": "address"
+          },
+          {
+            "domain": "default",
+            "utterance": "Adresse: 5 Rue de la Paix",
+            "intent": "address"
+          },
+          {
+            "domain": "default",
+            "utterance": "5 Rue de la Paix",
+            "intent": "address"
+          },
+          {
+            "domain": "default",
+            "utterance": "5 Rue de la Paix",
+            "intent": "address"
+          },
+          {
+            "domain": "default",
+            "utterance": "5 Rue de la Paix",
+            "intent": "address"
+          },
+          {
+            "domain": "default",
+            "utterance": "Rue: 20 Boulevard Saint-Germain",
+            "intent": "address"
+          },
+          {
+            "domain": "default",
+            "utterance": "Adresse: 20 Boulevard Saint-Germain",
+            "intent": "address"
+          },
+          {
+            "domain": "default",
+            "utterance": "20 Boulevard Saint-Germain",
+            "intent": "address"
+          },
+          {
+            "domain": "default",
+            "utterance": "20 Boulevard Saint-Germain",
+            "intent": "address"
+          },
+          {
+            "domain": "default",
+            "utterance": "20 Boulevard Saint-Germain",
+            "intent": "address"
+          },
+          {
+            "domain": "default",
+            "utterance": "Rue: 15 Rue de Rivoli",
+            "intent": "address"
+          },
+          {
+            "domain": "default",
+            "utterance": "Adresse: 15 Rue de Rivoli",
+            "intent": "address"
+          },
+          {
+            "domain": "default",
+            "utterance": "15 Rue de Rivoli",
+            "intent": "address"
+          },
+          {
+            "domain": "default",
+            "utterance": "15 Rue de Rivoli",
+            "intent": "address"
+          },
+          {
+            "domain": "default",
+            "utterance": "15 Rue de Rivoli",
+            "intent": "address"
+          },
+          {
+            "domain": "default",
+            "utterance": "Rue: 30 Avenue de l",
+            "intent": "address"
+          },
+          {
+            "domain": "default",
+            "utterance": "Adresse: 30 Avenue de l",
+            "intent": "address"
+          },
+          {
+            "domain": "default",
+            "utterance": "30 Avenue de l",
+            "intent": "address"
+          },
+          {
+            "domain": "default",
+            "utterance": "30 Avenue de l",
+            "intent": "address"
+          },
+          {
+            "domain": "default",
+            "utterance": "30 Avenue de l",
+            "intent": "address"
+          },
+          {
+            "domain": "default",
+            "utterance": "Rue: 40 Rue de la Victoire",
+            "intent": "address"
+          },
+          {
+            "domain": "default",
+            "utterance": "Adresse: 40 Rue de la Victoire",
+            "intent": "address"
+          },
+          {
+            "domain": "default",
+            "utterance": "40 Rue de la Victoire",
+            "intent": "address"
+          },
+          {
+            "domain": "default",
+            "utterance": "40 Rue de la Victoire",
+            "intent": "address"
+          },
+          {
+            "domain": "default",
+            "utterance": "40 Rue de la Victoire",
+            "intent": "address"
+          },
+          {
+            "domain": "default",
+            "utterance": "Rue: 50 Rue Lafayette",
+            "intent": "address"
+          },
+          {
+            "domain": "default",
+            "utterance": "Adresse: 50 Rue Lafayette",
+            "intent": "address"
+          },
+          {
+            "domain": "default",
+            "utterance": "50 Rue Lafayette",
+            "intent": "address"
+          },
+          {
+            "domain": "default",
+            "utterance": "50 Rue Lafayette",
+            "intent": "address"
+          },
+          {
+            "domain": "default",
+            "utterance": "50 Rue Lafayette",
+            "intent": "address"
+          },
+          {
+            "domain": "default",
+            "utterance": "Rue: 60 Boulevard Haussmann",
+            "intent": "address"
+          },
+          {
+            "domain": "default",
+            "utterance": "Adresse: 60 Boulevard Haussmann",
+            "intent": "address"
+          },
+          {
+            "domain": "default",
+            "utterance": "60 Boulevard Haussmann",
+            "intent": "address"
+          },
+          {
+            "domain": "default",
+            "utterance": "60 Boulevard Haussmann",
+            "intent": "address"
+          },
+          {
+            "domain": "default",
+            "utterance": "60 Boulevard Haussmann",
+            "intent": "address"
+          },
+          {
+            "domain": "default",
+            "utterance": "Rue: 70 Rue Saint-Honoré",
+            "intent": "address"
+          },
+          {
+            "domain": "default",
+            "utterance": "Adresse: 70 Rue Saint-Honoré",
+            "intent": "address"
+          },
+          {
+            "domain": "default",
+            "utterance": "70 Rue Saint-Honoré",
+            "intent": "address"
+          },
+          {
+            "domain": "default",
+            "utterance": "70 Rue Saint-Honoré",
+            "intent": "address"
+          },
+          {
+            "domain": "default",
+            "utterance": "70 Rue Saint-Honoré",
+            "intent": "address"
+          },
+          {
+            "domain": "default",
+            "utterance": "Rue: 80 Avenue des Ternes",
+            "intent": "address"
+          },
+          {
+            "domain": "default",
+            "utterance": "Adresse: 80 Avenue des Ternes",
+            "intent": "address"
+          },
+          {
+            "domain": "default",
+            "utterance": "80 Avenue des Ternes",
+            "intent": "address"
+          },
+          {
+            "domain": "default",
+            "utterance": "80 Avenue des Ternes",
+            "intent": "address"
+          },
+          {
+            "domain": "default",
+            "utterance": "80 Avenue des Ternes",
+            "intent": "address"
+          },
+          {
+            "domain": "default",
+            "utterance": "1739 S. Jade Camino",
+            "intent": "address"
+          },
+          {
+            "domain": "default",
+            "utterance": "1739 S. Jade Camino",
+            "intent": "address"
+          },
+          {
+            "domain": "default",
+            "utterance": "613 Franklin Calle",
+            "intent": "address"
+          },
+          {
+            "domain": "default",
+            "utterance": "613 Franklin Calle",
+            "intent": "address"
+          },
+          {
+            "domain": "default",
+            "utterance": "325 Fulton",
+            "intent": "address"
+          },
+          {
+            "domain": "default",
+            "utterance": "325 Fulton",
+            "intent": "address"
+          },
+          {
+            "domain": "default",
+            "utterance": "4343 Carretera 224",
+            "intent": "address"
+          },
+          {
+            "domain": "default",
+            "utterance": "4343 Carretera 224",
+            "intent": "address"
+          },
+          {
+            "domain": "default",
+            "utterance": "117 Riviera Calle",
+            "intent": "address"
+          },
+          {
+            "domain": "default",
+            "utterance": "117 Riviera Calle",
+            "intent": "address"
+          },
+          {
+            "domain": "default",
+            "utterance": "499 Este Tioga Calle",
+            "intent": "address"
+          },
+          {
+            "domain": "default",
+            "utterance": "499 Este Tioga Calle",
+            "intent": "address"
+          },
+          {
+            "domain": "default",
+            "utterance": "9168 Hermosa Avenida",
+            "intent": "address"
+          },
+          {
+            "domain": "default",
+            "utterance": "9168 Hermosa Avenida",
+            "intent": "address"
+          },
+          {
+            "domain": "default",
+            "utterance": "900 Oeste 45th Calle",
+            "intent": "address"
+          },
+          {
+            "domain": "default",
+            "utterance": "900 Oeste 45th Calle",
+            "intent": "address"
+          },
+          {
+            "domain": "default",
+            "utterance": "2018 Brevard Camino",
+            "intent": "address"
+          },
+          {
+            "domain": "default",
+            "utterance": "2018 Brevard Camino",
+            "intent": "address"
+          },
+          {
+            "domain": "default",
+            "utterance": "604 Avenida del Ferrocarril",
+            "intent": "address"
+          },
+          {
+            "domain": "default",
+            "utterance": "604 Avenida del Ferrocarril",
+            "intent": "address"
+          },
+          {
+            "domain": "default",
+            "utterance": "8904 Sony Calle",
+            "intent": "address"
+          },
+          {
+            "domain": "default",
+            "utterance": "8904 Sony Calle",
+            "intent": "address"
+          },
+          {
+            "domain": "default",
+            "utterance": "341 Calle Mayor",
+            "intent": "address"
+          },
+          {
+            "domain": "default",
+            "utterance": "341 Calle Mayor",
+            "intent": "address"
+          },
+          {
+            "domain": "default",
+            "utterance": "721 Avenida de la Constitución",
+            "intent": "address"
+          },
+          {
+            "domain": "default",
+            "utterance": "721 Avenida de la Constitución",
+            "intent": "address"
+          },
+          {
+            "domain": "default",
+            "utterance": "934 Calle de Alcalá",
+            "intent": "address"
+          },
+          {
+            "domain": "default",
+            "utterance": "934 Calle de Alcalá",
+            "intent": "address"
+          },
+          {
+            "domain": "default",
+            "utterance": "123 Gran Vía",
+            "intent": "address"
+          },
+          {
+            "domain": "default",
+            "utterance": "123 Gran Vía",
+            "intent": "address"
+          },
+          {
+            "domain": "default",
+            "utterance": "872 Paseo de la Castellana",
+            "intent": "address"
+          },
+          {
+            "domain": "default",
+            "utterance": "872 Paseo de la Castellana",
+            "intent": "address"
+          },
+          {
+            "domain": "default",
+            "utterance": "4786 Calle de Serrano",
+            "intent": "address"
+          },
+          {
+            "domain": "default",
+            "utterance": "4786 Calle de Serrano",
+            "intent": "address"
+          },
+          {
+            "domain": "default",
+            "utterance": "9812 Calle de Goya",
+            "intent": "address"
+          },
+          {
+            "domain": "default",
+            "utterance": "9812 Calle de Goya",
+            "intent": "address"
+          },
+          {
+            "domain": "default",
+            "utterance": "413 Avenida Diagonal",
+            "intent": "address"
+          },
+          {
+            "domain": "default",
+            "utterance": "413 Avenida Diagonal",
+            "intent": "address"
+          },
+          {
+            "domain": "default",
+            "utterance": "889 Rambla de Catalunya",
+            "intent": "address"
+          },
+          {
+            "domain": "default",
+            "utterance": "889 Rambla de Catalunya",
+            "intent": "address"
+          },
+          {
+            "domain": "default",
+            "utterance": "1421 Paseo de Gracia",
+            "intent": "address"
+          },
+          {
+            "domain": "default",
+            "utterance": "1421 Paseo de Gracia",
+            "intent": "address"
           }
         ],
         "domains": {
@@ -498,6 +3792,38 @@
               "log": true
             },
             "features": {
+              "5": 1,
+              "10": 1,
+              "15": 1,
+              "20": 1,
+              "30": 1,
+              "40": 1,
+              "50": 1,
+              "60": 1,
+              "70": 1,
+              "80": 1,
+              "117": 1,
+              "123": 1,
+              "224": 1,
+              "325": 1,
+              "341": 1,
+              "413": 1,
+              "499": 1,
+              "604": 1,
+              "613": 1,
+              "721": 1,
+              "872": 1,
+              "889": 1,
+              "900": 1,
+              "934": 1,
+              "1421": 1,
+              "1739": 1,
+              "2018": 1,
+              "4343": 1,
+              "4786": 1,
+              "8904": 1,
+              "9168": 1,
+              "9812": 1,
               "ru": 1,
               "%number%": 1,
               "%street%": 1,
@@ -505,13 +3831,95 @@
               "contact": 1,
               "info": 1,
               "%city%": 1,
-              "%postalcode%": 1
+              "%postalcode%": 1,
+              "s": 1,
+              "jad": 1,
+              "chemin": 1,
+              "franklin": 1,
+              "fulton": 1,
+              "autorout": 1,
+              "rivi": 1,
+              "est": 1,
+              "tiog": 1,
+              "hermos": 1,
+              "avenu": 1,
+              "ouest": 1,
+              "45th": 1,
+              "brevard": 1,
+              "de": 1,
+              "fer": 1,
+              "sony": 1,
+              "champs-elyse": 1,
+              "la": 1,
+              "paix": 1,
+              "boulevard": 1,
+              "saint-germain": 1,
+              "rivol": 1,
+              "l": 1,
+              "victoir": 1,
+              "lafayet": 1,
+              "haussmann": 1,
+              "saint-honor": 1,
+              "tern": 1,
+              "camino": 1,
+              "call": 1,
+              "carret": 1,
+              "este": 1,
+              "avenid": 1,
+              "oest": 1,
+              "del": 1,
+              "ferrocarril": 1,
+              "mayor": 1,
+              "constitucion": 1,
+              "alcal": 1,
+              "gran": 1,
+              "vi": 1,
+              "paseo": 1,
+              "castellan": 1,
+              "serrano": 1,
+              "goi": 1,
+              "diagonal": 1,
+              "rambl": 1,
+              "cataluni": 1,
+              "graci": 1
             },
             "intents": {
               "address": 1
             },
             "intentFeatures": {
               "address": {
+                "5": 1,
+                "10": 1,
+                "15": 1,
+                "20": 1,
+                "30": 1,
+                "40": 1,
+                "50": 1,
+                "60": 1,
+                "70": 1,
+                "80": 1,
+                "117": 1,
+                "123": 1,
+                "224": 1,
+                "325": 1,
+                "341": 1,
+                "413": 1,
+                "499": 1,
+                "604": 1,
+                "613": 1,
+                "721": 1,
+                "872": 1,
+                "889": 1,
+                "900": 1,
+                "934": 1,
+                "1421": 1,
+                "1739": 1,
+                "2018": 1,
+                "4343": 1,
+                "4786": 1,
+                "8904": 1,
+                "9168": 1,
+                "9812": 1,
                 "ru": 1,
                 "%number%": 1,
                 "%street%": 1,
@@ -519,10 +3927,156 @@
                 "contact": 1,
                 "info": 1,
                 "%city%": 1,
-                "%postalcode%": 1
+                "%postalcode%": 1,
+                "s": 1,
+                "jad": 1,
+                "chemin": 1,
+                "franklin": 1,
+                "fulton": 1,
+                "autorout": 1,
+                "rivi": 1,
+                "est": 1,
+                "tiog": 1,
+                "hermos": 1,
+                "avenu": 1,
+                "ouest": 1,
+                "45th": 1,
+                "brevard": 1,
+                "de": 1,
+                "fer": 1,
+                "sony": 1,
+                "champs-elyse": 1,
+                "la": 1,
+                "paix": 1,
+                "boulevard": 1,
+                "saint-germain": 1,
+                "rivol": 1,
+                "l": 1,
+                "victoir": 1,
+                "lafayet": 1,
+                "haussmann": 1,
+                "saint-honor": 1,
+                "tern": 1,
+                "camino": 1,
+                "call": 1,
+                "carret": 1,
+                "este": 1,
+                "avenid": 1,
+                "oest": 1,
+                "del": 1,
+                "ferrocarril": 1,
+                "mayor": 1,
+                "constitucion": 1,
+                "alcal": 1,
+                "gran": 1,
+                "vi": 1,
+                "paseo": 1,
+                "castellan": 1,
+                "serrano": 1,
+                "goi": 1,
+                "diagonal": 1,
+                "rambl": 1,
+                "cataluni": 1,
+                "graci": 1
               }
             },
             "featuresToIntent": {
+              "5": [
+                "address"
+              ],
+              "10": [
+                "address"
+              ],
+              "15": [
+                "address"
+              ],
+              "20": [
+                "address"
+              ],
+              "30": [
+                "address"
+              ],
+              "40": [
+                "address"
+              ],
+              "50": [
+                "address"
+              ],
+              "60": [
+                "address"
+              ],
+              "70": [
+                "address"
+              ],
+              "80": [
+                "address"
+              ],
+              "117": [
+                "address"
+              ],
+              "123": [
+                "address"
+              ],
+              "224": [
+                "address"
+              ],
+              "325": [
+                "address"
+              ],
+              "341": [
+                "address"
+              ],
+              "413": [
+                "address"
+              ],
+              "499": [
+                "address"
+              ],
+              "604": [
+                "address"
+              ],
+              "613": [
+                "address"
+              ],
+              "721": [
+                "address"
+              ],
+              "872": [
+                "address"
+              ],
+              "889": [
+                "address"
+              ],
+              "900": [
+                "address"
+              ],
+              "934": [
+                "address"
+              ],
+              "1421": [
+                "address"
+              ],
+              "1739": [
+                "address"
+              ],
+              "2018": [
+                "address"
+              ],
+              "4343": [
+                "address"
+              ],
+              "4786": [
+                "address"
+              ],
+              "8904": [
+                "address"
+              ],
+              "9168": [
+                "address"
+              ],
+              "9812": [
+                "address"
+              ],
               "ru": [
                 "address"
               ],
@@ -545,6 +4099,156 @@
                 "address"
               ],
               "%postalcode%": [
+                "address"
+              ],
+              "s": [
+                "address"
+              ],
+              "jad": [
+                "address"
+              ],
+              "chemin": [
+                "address"
+              ],
+              "franklin": [
+                "address"
+              ],
+              "fulton": [
+                "address"
+              ],
+              "autorout": [
+                "address"
+              ],
+              "rivi": [
+                "address"
+              ],
+              "est": [
+                "address"
+              ],
+              "tiog": [
+                "address"
+              ],
+              "hermos": [
+                "address"
+              ],
+              "avenu": [
+                "address"
+              ],
+              "ouest": [
+                "address"
+              ],
+              "45th": [
+                "address"
+              ],
+              "brevard": [
+                "address"
+              ],
+              "de": [
+                "address"
+              ],
+              "fer": [
+                "address"
+              ],
+              "sony": [
+                "address"
+              ],
+              "champs-elyse": [
+                "address"
+              ],
+              "la": [
+                "address"
+              ],
+              "paix": [
+                "address"
+              ],
+              "boulevard": [
+                "address"
+              ],
+              "saint-germain": [
+                "address"
+              ],
+              "rivol": [
+                "address"
+              ],
+              "l": [
+                "address"
+              ],
+              "victoir": [
+                "address"
+              ],
+              "lafayet": [
+                "address"
+              ],
+              "haussmann": [
+                "address"
+              ],
+              "saint-honor": [
+                "address"
+              ],
+              "tern": [
+                "address"
+              ],
+              "camino": [
+                "address"
+              ],
+              "call": [
+                "address"
+              ],
+              "carret": [
+                "address"
+              ],
+              "este": [
+                "address"
+              ],
+              "avenid": [
+                "address"
+              ],
+              "oest": [
+                "address"
+              ],
+              "del": [
+                "address"
+              ],
+              "ferrocarril": [
+                "address"
+              ],
+              "mayor": [
+                "address"
+              ],
+              "constitucion": [
+                "address"
+              ],
+              "alcal": [
+                "address"
+              ],
+              "gran": [
+                "address"
+              ],
+              "vi": [
+                "address"
+              ],
+              "paseo": [
+                "address"
+              ],
+              "castellan": [
+                "address"
+              ],
+              "serrano": [
+                "address"
+              ],
+              "goi": [
+                "address"
+              ],
+              "diagonal": [
+                "address"
+              ],
+              "rambl": [
+                "address"
+              ],
+              "cataluni": [
+                "address"
+              ],
+              "graci": [
                 "address"
               ]
             },
@@ -569,22 +4273,186 @@
                 "contact",
                 "info",
                 "%city%",
-                "%postalcode%"
+                "%postalcode%",
+                "1739",
+                "s",
+                "jad",
+                "chemin",
+                "613",
+                "franklin",
+                "325",
+                "fulton",
+                "224",
+                "4343",
+                "autorout",
+                "117",
+                "rivi",
+                "499",
+                "est",
+                "tiog",
+                "9168",
+                "hermos",
+                "avenu",
+                "900",
+                "ouest",
+                "45th",
+                "2018",
+                "brevard",
+                "604",
+                "de",
+                "fer",
+                "8904",
+                "sony",
+                "10",
+                "champs-elyse",
+                "5",
+                "la",
+                "paix",
+                "20",
+                "boulevard",
+                "saint-germain",
+                "15",
+                "rivol",
+                "30",
+                "l",
+                "40",
+                "victoir",
+                "50",
+                "lafayet",
+                "60",
+                "haussmann",
+                "70",
+                "saint-honor",
+                "80",
+                "tern",
+                "camino",
+                "call",
+                "carret",
+                "este",
+                "avenid",
+                "oest",
+                "del",
+                "ferrocarril",
+                "341",
+                "mayor",
+                "721",
+                "constitucion",
+                "934",
+                "alcal",
+                "123",
+                "gran",
+                "vi",
+                "872",
+                "paseo",
+                "castellan",
+                "4786",
+                "serrano",
+                "9812",
+                "goi",
+                "413",
+                "diagonal",
+                "889",
+                "rambl",
+                "cataluni",
+                "1421",
+                "graci"
               ],
               "intents": [
                 "address"
               ],
               "perceptrons": [
                 [
-                  0.22876819968223572,
-                  5.679220676422119,
-                  5.679220676422119,
-                  0.14370575547218323,
-                  -0.06948551535606384,
-                  -0.06948551535606384,
-                  0.020602678880095482,
-                  0.020602678880095482,
-                  2.8400968825275417
+                  0.17445431649684906,
+                  1.459787130355835,
+                  1.459787130355835,
+                  0.04465913772583008,
+                  -0.062115367501974106,
+                  -0.062115367501974106,
+                  0.03156368061900139,
+                  0.03156368061900139,
+                  0.7640951871871948,
+                  0.7640951871871948,
+                  0.7640951871871948,
+                  0.6094974875450134,
+                  1.3000668287277222,
+                  1.3000668287277222,
+                  1.4568637609481812,
+                  1.4568637609481812,
+                  1.16929292678833,
+                  1.16929292678833,
+                  0.5670590996742249,
+                  1.294325351715088,
+                  1.294325351715088,
+                  1.01133394241333,
+                  0.6805257797241211,
+                  1.01133394241333,
+                  0.9603970050811768,
+                  0.9603970050811768,
+                  0.8760650157928467,
+                  1.0147260427474976,
+                  0.6689818501472473,
+                  1.0147260427474976,
+                  1.13491690158844,
+                  1.13491690158844,
+                  0.17450648546218872,
+                  1.8614882230758667,
+                  -0.6285832524299622,
+                  1.2976658344268799,
+                  1.2976658344268799,
+                  0.07032306492328644,
+                  0.07032306492328644,
+                  0.22266441583633423,
+                  0.38182103633880615,
+                  0.22266441583633423,
+                  0.712923526763916,
+                  1.4302257299423218,
+                  0.712923526763916,
+                  0.41287949681282043,
+                  0.41287949681282043,
+                  0.06629591435194016,
+                  0.06629591435194016,
+                  0.2259412258863449,
+                  0.2259412258863449,
+                  1.341030240058899,
+                  1.341030240058899,
+                  0.7138513326644897,
+                  0.7138513326644897,
+                  1.3465579748153687,
+                  1.3465579748153687,
+                  0.0745709016919136,
+                  0.0745709016919136,
+                  0.6591024994850159,
+                  0.550908088684082,
+                  0.6000955700874329,
+                  0.3293505609035492,
+                  1.1497431993484497,
+                  0.3442012071609497,
+                  0.800455629825592,
+                  0.800455629825592,
+                  1.187729835510254,
+                  1.187729835510254,
+                  -0.2079772651195526,
+                  -0.2079772651195526,
+                  0.27048465609550476,
+                  0.27048465609550476,
+                  0.9913566708564758,
+                  0.9913566708564758,
+                  0.9913566708564758,
+                  0.14054158329963684,
+                  0.458310067653656,
+                  0.14054158329963684,
+                  0.25945940613746643,
+                  0.25945940613746643,
+                  0.24033308029174805,
+                  0.24033308029174805,
+                  0.8882389068603516,
+                  0.8882389068603516,
+                  0.36803358793258667,
+                  0.36803358793258667,
+                  0.36803358793258667,
+                  0.3212229907512665,
+                  0.3212229907512665,
+                  11.33938671626318
                 ]
               ]
             }
@@ -629,6 +4497,222 @@
           "%city%,%number%,%postalcode%,%street%": {
             "intent": "address",
             "domain": "default"
+          },
+          "1739,call,camin,jad,s": {
+            "intent": "address",
+            "domain": "default"
+          },
+          "1739,camin,direccion,jad,s": {
+            "intent": "address",
+            "domain": "default"
+          },
+          "1739,camin,jad,s": {
+            "intent": "address",
+            "domain": "default"
+          },
+          "613,call,franklin": {
+            "intent": "address",
+            "domain": "default"
+          },
+          "613,call,direccion,franklin": {
+            "intent": "address",
+            "domain": "default"
+          },
+          "325,call,fulton": {
+            "intent": "address",
+            "domain": "default"
+          },
+          "325,direccion,fulton": {
+            "intent": "address",
+            "domain": "default"
+          },
+          "325,fulton": {
+            "intent": "address",
+            "domain": "default"
+          },
+          "224,4343,call,carret": {
+            "intent": "address",
+            "domain": "default"
+          },
+          "224,4343,carret,direccion": {
+            "intent": "address",
+            "domain": "default"
+          },
+          "224,4343,carret": {
+            "intent": "address",
+            "domain": "default"
+          },
+          "117,call,riv": {
+            "intent": "address",
+            "domain": "default"
+          },
+          "117,call,direccion,riv": {
+            "intent": "address",
+            "domain": "default"
+          },
+          "499,call,este,tiog": {
+            "intent": "address",
+            "domain": "default"
+          },
+          "499,call,direccion,este,tiog": {
+            "intent": "address",
+            "domain": "default"
+          },
+          "9168,aven,call,hermos": {
+            "intent": "address",
+            "domain": "default"
+          },
+          "9168,aven,direccion,hermos": {
+            "intent": "address",
+            "domain": "default"
+          },
+          "9168,aven,hermos": {
+            "intent": "address",
+            "domain": "default"
+          },
+          "45th,900,call,oest": {
+            "intent": "address",
+            "domain": "default"
+          },
+          "45th,900,call,direccion,oest": {
+            "intent": "address",
+            "domain": "default"
+          },
+          "2018,brevard,call,camin": {
+            "intent": "address",
+            "domain": "default"
+          },
+          "2018,brevard,camin,direccion": {
+            "intent": "address",
+            "domain": "default"
+          },
+          "2018,brevard,camin": {
+            "intent": "address",
+            "domain": "default"
+          },
+          "604,aven,call,del,ferrocarril": {
+            "intent": "address",
+            "domain": "default"
+          },
+          "604,aven,del,direccion,ferrocarril": {
+            "intent": "address",
+            "domain": "default"
+          },
+          "604,aven,del,ferrocarril": {
+            "intent": "address",
+            "domain": "default"
+          },
+          "8904,call,sony": {
+            "intent": "address",
+            "domain": "default"
+          },
+          "8904,call,direccion,sony": {
+            "intent": "address",
+            "domain": "default"
+          },
+          "341,call,mayor": {
+            "intent": "address",
+            "domain": "default"
+          },
+          "341,call,direccion,mayor": {
+            "intent": "address",
+            "domain": "default"
+          },
+          "721,aven,call,constitu,de,el": {
+            "intent": "address",
+            "domain": "default"
+          },
+          "721,aven,constitu,de,direccion,el": {
+            "intent": "address",
+            "domain": "default"
+          },
+          "721,aven,constitu,de,el": {
+            "intent": "address",
+            "domain": "default"
+          },
+          "934,alcal,call,de": {
+            "intent": "address",
+            "domain": "default"
+          },
+          "934,alcal,call,de,direccion": {
+            "intent": "address",
+            "domain": "default"
+          },
+          "123,call,gran,via": {
+            "intent": "address",
+            "domain": "default"
+          },
+          "123,direccion,gran,via": {
+            "intent": "address",
+            "domain": "default"
+          },
+          "123,gran,via": {
+            "intent": "address",
+            "domain": "default"
+          },
+          "872,call,castellan,de,el,pas": {
+            "intent": "address",
+            "domain": "default"
+          },
+          "872,castellan,de,direccion,el,pas": {
+            "intent": "address",
+            "domain": "default"
+          },
+          "872,castellan,de,el,pas": {
+            "intent": "address",
+            "domain": "default"
+          },
+          "4786,call,de,serran": {
+            "intent": "address",
+            "domain": "default"
+          },
+          "4786,call,de,direccion,serran": {
+            "intent": "address",
+            "domain": "default"
+          },
+          "9812,call,de,goy": {
+            "intent": "address",
+            "domain": "default"
+          },
+          "9812,call,de,direccion,goy": {
+            "intent": "address",
+            "domain": "default"
+          },
+          "413,aven,call,diagonal": {
+            "intent": "address",
+            "domain": "default"
+          },
+          "413,aven,diagonal,direccion": {
+            "intent": "address",
+            "domain": "default"
+          },
+          "413,aven,diagonal": {
+            "intent": "address",
+            "domain": "default"
+          },
+          "889,call,cataluny,de,rambl": {
+            "intent": "address",
+            "domain": "default"
+          },
+          "889,cataluny,de,direccion,rambl": {
+            "intent": "address",
+            "domain": "default"
+          },
+          "889,cataluny,de,rambl": {
+            "intent": "address",
+            "domain": "default"
+          },
+          "1421,call,de,grac,pas": {
+            "intent": "address",
+            "domain": "default"
+          },
+          "1421,de,direccion,grac,pas": {
+            "intent": "address",
+            "domain": "default"
+          },
+          "1421,de,grac,pas": {
+            "intent": "address",
+            "domain": "default"
           }
         },
         "intentDict": {
@@ -669,6 +4753,321 @@
             "domain": "default",
             "utterance": "%street% %number%, %city%, %postalcode%",
             "intent": "address"
+          },
+          {
+            "domain": "default",
+            "utterance": "Calle: 1739 S. Jade Camino",
+            "intent": "address"
+          },
+          {
+            "domain": "default",
+            "utterance": "Dirección: 1739 S. Jade Camino",
+            "intent": "address"
+          },
+          {
+            "domain": "default",
+            "utterance": "1739 S. Jade Camino",
+            "intent": "address"
+          },
+          {
+            "domain": "default",
+            "utterance": "Calle: 613 Franklin Calle",
+            "intent": "address"
+          },
+          {
+            "domain": "default",
+            "utterance": "Dirección: 613 Franklin Calle",
+            "intent": "address"
+          },
+          {
+            "domain": "default",
+            "utterance": "613 Franklin Calle",
+            "intent": "address"
+          },
+          {
+            "domain": "default",
+            "utterance": "Calle: 325 Fulton",
+            "intent": "address"
+          },
+          {
+            "domain": "default",
+            "utterance": "Dirección: 325 Fulton",
+            "intent": "address"
+          },
+          {
+            "domain": "default",
+            "utterance": "325 Fulton",
+            "intent": "address"
+          },
+          {
+            "domain": "default",
+            "utterance": "Calle: 4343 Carretera 224",
+            "intent": "address"
+          },
+          {
+            "domain": "default",
+            "utterance": "Dirección: 4343 Carretera 224",
+            "intent": "address"
+          },
+          {
+            "domain": "default",
+            "utterance": "4343 Carretera 224",
+            "intent": "address"
+          },
+          {
+            "domain": "default",
+            "utterance": "Calle: 117 Riviera Calle",
+            "intent": "address"
+          },
+          {
+            "domain": "default",
+            "utterance": "Dirección: 117 Riviera Calle",
+            "intent": "address"
+          },
+          {
+            "domain": "default",
+            "utterance": "117 Riviera Calle",
+            "intent": "address"
+          },
+          {
+            "domain": "default",
+            "utterance": "Calle: 499 Este Tioga Calle",
+            "intent": "address"
+          },
+          {
+            "domain": "default",
+            "utterance": "Dirección: 499 Este Tioga Calle",
+            "intent": "address"
+          },
+          {
+            "domain": "default",
+            "utterance": "499 Este Tioga Calle",
+            "intent": "address"
+          },
+          {
+            "domain": "default",
+            "utterance": "Calle: 9168 Hermosa Avenida",
+            "intent": "address"
+          },
+          {
+            "domain": "default",
+            "utterance": "Dirección: 9168 Hermosa Avenida",
+            "intent": "address"
+          },
+          {
+            "domain": "default",
+            "utterance": "9168 Hermosa Avenida",
+            "intent": "address"
+          },
+          {
+            "domain": "default",
+            "utterance": "Calle: 900 Oeste 45th Calle",
+            "intent": "address"
+          },
+          {
+            "domain": "default",
+            "utterance": "Dirección: 900 Oeste 45th Calle",
+            "intent": "address"
+          },
+          {
+            "domain": "default",
+            "utterance": "900 Oeste 45th Calle",
+            "intent": "address"
+          },
+          {
+            "domain": "default",
+            "utterance": "Calle: 2018 Brevard Camino",
+            "intent": "address"
+          },
+          {
+            "domain": "default",
+            "utterance": "Dirección: 2018 Brevard Camino",
+            "intent": "address"
+          },
+          {
+            "domain": "default",
+            "utterance": "2018 Brevard Camino",
+            "intent": "address"
+          },
+          {
+            "domain": "default",
+            "utterance": "Calle: 604 Avenida del Ferrocarril",
+            "intent": "address"
+          },
+          {
+            "domain": "default",
+            "utterance": "Dirección: 604 Avenida del Ferrocarril",
+            "intent": "address"
+          },
+          {
+            "domain": "default",
+            "utterance": "604 Avenida del Ferrocarril",
+            "intent": "address"
+          },
+          {
+            "domain": "default",
+            "utterance": "Calle: 8904 Sony Calle",
+            "intent": "address"
+          },
+          {
+            "domain": "default",
+            "utterance": "Dirección: 8904 Sony Calle",
+            "intent": "address"
+          },
+          {
+            "domain": "default",
+            "utterance": "8904 Sony Calle",
+            "intent": "address"
+          },
+          {
+            "domain": "default",
+            "utterance": "Calle: 341 Calle Mayor",
+            "intent": "address"
+          },
+          {
+            "domain": "default",
+            "utterance": "Dirección: 341 Calle Mayor",
+            "intent": "address"
+          },
+          {
+            "domain": "default",
+            "utterance": "341 Calle Mayor",
+            "intent": "address"
+          },
+          {
+            "domain": "default",
+            "utterance": "Calle: 721 Avenida de la Constitución",
+            "intent": "address"
+          },
+          {
+            "domain": "default",
+            "utterance": "Dirección: 721 Avenida de la Constitución",
+            "intent": "address"
+          },
+          {
+            "domain": "default",
+            "utterance": "721 Avenida de la Constitución",
+            "intent": "address"
+          },
+          {
+            "domain": "default",
+            "utterance": "Calle: 934 Calle de Alcalá",
+            "intent": "address"
+          },
+          {
+            "domain": "default",
+            "utterance": "Dirección: 934 Calle de Alcalá",
+            "intent": "address"
+          },
+          {
+            "domain": "default",
+            "utterance": "934 Calle de Alcalá",
+            "intent": "address"
+          },
+          {
+            "domain": "default",
+            "utterance": "Calle: 123 Gran Vía",
+            "intent": "address"
+          },
+          {
+            "domain": "default",
+            "utterance": "Dirección: 123 Gran Vía",
+            "intent": "address"
+          },
+          {
+            "domain": "default",
+            "utterance": "123 Gran Vía",
+            "intent": "address"
+          },
+          {
+            "domain": "default",
+            "utterance": "Calle: 872 Paseo de la Castellana",
+            "intent": "address"
+          },
+          {
+            "domain": "default",
+            "utterance": "Dirección: 872 Paseo de la Castellana",
+            "intent": "address"
+          },
+          {
+            "domain": "default",
+            "utterance": "872 Paseo de la Castellana",
+            "intent": "address"
+          },
+          {
+            "domain": "default",
+            "utterance": "Calle: 4786 Calle de Serrano",
+            "intent": "address"
+          },
+          {
+            "domain": "default",
+            "utterance": "Dirección: 4786 Calle de Serrano",
+            "intent": "address"
+          },
+          {
+            "domain": "default",
+            "utterance": "4786 Calle de Serrano",
+            "intent": "address"
+          },
+          {
+            "domain": "default",
+            "utterance": "Calle: 9812 Calle de Goya",
+            "intent": "address"
+          },
+          {
+            "domain": "default",
+            "utterance": "Dirección: 9812 Calle de Goya",
+            "intent": "address"
+          },
+          {
+            "domain": "default",
+            "utterance": "9812 Calle de Goya",
+            "intent": "address"
+          },
+          {
+            "domain": "default",
+            "utterance": "Calle: 413 Avenida Diagonal",
+            "intent": "address"
+          },
+          {
+            "domain": "default",
+            "utterance": "Dirección: 413 Avenida Diagonal",
+            "intent": "address"
+          },
+          {
+            "domain": "default",
+            "utterance": "413 Avenida Diagonal",
+            "intent": "address"
+          },
+          {
+            "domain": "default",
+            "utterance": "Calle: 889 Rambla de Catalunya",
+            "intent": "address"
+          },
+          {
+            "domain": "default",
+            "utterance": "Dirección: 889 Rambla de Catalunya",
+            "intent": "address"
+          },
+          {
+            "domain": "default",
+            "utterance": "889 Rambla de Catalunya",
+            "intent": "address"
+          },
+          {
+            "domain": "default",
+            "utterance": "Calle: 1421 Paseo de Gracia",
+            "intent": "address"
+          },
+          {
+            "domain": "default",
+            "utterance": "Dirección: 1421 Paseo de Gracia",
+            "intent": "address"
+          },
+          {
+            "domain": "default",
+            "utterance": "1421 Paseo de Gracia",
+            "intent": "address"
           }
         ],
         "domains": {
@@ -685,6 +5084,28 @@
               "log": true
             },
             "features": {
+              "117": 1,
+              "123": 1,
+              "224": 1,
+              "325": 1,
+              "341": 1,
+              "413": 1,
+              "499": 1,
+              "604": 1,
+              "613": 1,
+              "721": 1,
+              "872": 1,
+              "889": 1,
+              "900": 1,
+              "934": 1,
+              "1421": 1,
+              "1739": 1,
+              "2018": 1,
+              "4343": 1,
+              "4786": 1,
+              "8904": 1,
+              "9168": 1,
+              "9812": 1,
               "call": 1,
               "%number%": 1,
               "%street%": 1,
@@ -693,13 +5114,66 @@
               "de": 1,
               "contact": 1,
               "%city%": 1,
-              "%postalcode%": 1
+              "%postalcode%": 1,
+              "s": 1,
+              "jad": 1,
+              "camin": 1,
+              "franklin": 1,
+              "fulton": 1,
+              "carret": 1,
+              "riv": 1,
+              "este": 1,
+              "tiog": 1,
+              "hermos": 1,
+              "aven": 1,
+              "oest": 1,
+              "45th": 1,
+              "brevard": 1,
+              "del": 1,
+              "ferrocarril": 1,
+              "sony": 1,
+              "mayor": 1,
+              "el": 1,
+              "constitu": 1,
+              "alcal": 1,
+              "gran": 1,
+              "via": 1,
+              "pas": 1,
+              "castellan": 1,
+              "serran": 1,
+              "goy": 1,
+              "diagonal": 1,
+              "rambl": 1,
+              "cataluny": 1,
+              "grac": 1
             },
             "intents": {
               "address": 1
             },
             "intentFeatures": {
               "address": {
+                "117": 1,
+                "123": 1,
+                "224": 1,
+                "325": 1,
+                "341": 1,
+                "413": 1,
+                "499": 1,
+                "604": 1,
+                "613": 1,
+                "721": 1,
+                "872": 1,
+                "889": 1,
+                "900": 1,
+                "934": 1,
+                "1421": 1,
+                "1739": 1,
+                "2018": 1,
+                "4343": 1,
+                "4786": 1,
+                "8904": 1,
+                "9168": 1,
+                "9812": 1,
                 "call": 1,
                 "%number%": 1,
                 "%street%": 1,
@@ -708,10 +5182,107 @@
                 "de": 1,
                 "contact": 1,
                 "%city%": 1,
-                "%postalcode%": 1
+                "%postalcode%": 1,
+                "s": 1,
+                "jad": 1,
+                "camin": 1,
+                "franklin": 1,
+                "fulton": 1,
+                "carret": 1,
+                "riv": 1,
+                "este": 1,
+                "tiog": 1,
+                "hermos": 1,
+                "aven": 1,
+                "oest": 1,
+                "45th": 1,
+                "brevard": 1,
+                "del": 1,
+                "ferrocarril": 1,
+                "sony": 1,
+                "mayor": 1,
+                "el": 1,
+                "constitu": 1,
+                "alcal": 1,
+                "gran": 1,
+                "via": 1,
+                "pas": 1,
+                "castellan": 1,
+                "serran": 1,
+                "goy": 1,
+                "diagonal": 1,
+                "rambl": 1,
+                "cataluny": 1,
+                "grac": 1
               }
             },
             "featuresToIntent": {
+              "117": [
+                "address"
+              ],
+              "123": [
+                "address"
+              ],
+              "224": [
+                "address"
+              ],
+              "325": [
+                "address"
+              ],
+              "341": [
+                "address"
+              ],
+              "413": [
+                "address"
+              ],
+              "499": [
+                "address"
+              ],
+              "604": [
+                "address"
+              ],
+              "613": [
+                "address"
+              ],
+              "721": [
+                "address"
+              ],
+              "872": [
+                "address"
+              ],
+              "889": [
+                "address"
+              ],
+              "900": [
+                "address"
+              ],
+              "934": [
+                "address"
+              ],
+              "1421": [
+                "address"
+              ],
+              "1739": [
+                "address"
+              ],
+              "2018": [
+                "address"
+              ],
+              "4343": [
+                "address"
+              ],
+              "4786": [
+                "address"
+              ],
+              "8904": [
+                "address"
+              ],
+              "9168": [
+                "address"
+              ],
+              "9812": [
+                "address"
+              ],
               "call": [
                 "address"
               ],
@@ -738,6 +5309,99 @@
               ],
               "%postalcode%": [
                 "address"
+              ],
+              "s": [
+                "address"
+              ],
+              "jad": [
+                "address"
+              ],
+              "camin": [
+                "address"
+              ],
+              "franklin": [
+                "address"
+              ],
+              "fulton": [
+                "address"
+              ],
+              "carret": [
+                "address"
+              ],
+              "riv": [
+                "address"
+              ],
+              "este": [
+                "address"
+              ],
+              "tiog": [
+                "address"
+              ],
+              "hermos": [
+                "address"
+              ],
+              "aven": [
+                "address"
+              ],
+              "oest": [
+                "address"
+              ],
+              "45th": [
+                "address"
+              ],
+              "brevard": [
+                "address"
+              ],
+              "del": [
+                "address"
+              ],
+              "ferrocarril": [
+                "address"
+              ],
+              "sony": [
+                "address"
+              ],
+              "mayor": [
+                "address"
+              ],
+              "el": [
+                "address"
+              ],
+              "constitu": [
+                "address"
+              ],
+              "alcal": [
+                "address"
+              ],
+              "gran": [
+                "address"
+              ],
+              "via": [
+                "address"
+              ],
+              "pas": [
+                "address"
+              ],
+              "castellan": [
+                "address"
+              ],
+              "serran": [
+                "address"
+              ],
+              "goy": [
+                "address"
+              ],
+              "diagonal": [
+                "address"
+              ],
+              "rambl": [
+                "address"
+              ],
+              "cataluny": [
+                "address"
+              ],
+              "grac": [
+                "address"
               ]
             },
             "neuralNetwork": {
@@ -762,23 +5426,129 @@
                 "de",
                 "contact",
                 "%city%",
-                "%postalcode%"
+                "%postalcode%",
+                "1739",
+                "s",
+                "jad",
+                "camin",
+                "613",
+                "franklin",
+                "325",
+                "fulton",
+                "224",
+                "4343",
+                "carret",
+                "117",
+                "riv",
+                "499",
+                "este",
+                "tiog",
+                "9168",
+                "hermos",
+                "aven",
+                "900",
+                "oest",
+                "45th",
+                "2018",
+                "brevard",
+                "604",
+                "del",
+                "ferrocarril",
+                "8904",
+                "sony",
+                "341",
+                "mayor",
+                "721",
+                "el",
+                "constitu",
+                "934",
+                "alcal",
+                "123",
+                "gran",
+                "via",
+                "872",
+                "pas",
+                "castellan",
+                "4786",
+                "serran",
+                "9812",
+                "goy",
+                "413",
+                "diagonal",
+                "889",
+                "rambl",
+                "cataluny",
+                "1421",
+                "grac"
               ],
               "intents": [
                 "address"
               ],
               "perceptrons": [
                 [
-                  0.2313375174999237,
-                  5.679253101348877,
-                  5.679253101348877,
-                  0.13922755420207977,
-                  -0.0363541916012764,
-                  -0.0363541916012764,
-                  -0.0363541916012764,
-                  0.017417609691619873,
-                  0.017417609691619873,
-                  2.840314618047209
+                  0.18938781321048737,
+                  1.7751024961471558,
+                  1.7751024961471558,
+                  0.08267311006784439,
+                  -0.947045087814331,
+                  1.9939916133880615,
+                  -0.947045087814331,
+                  -0.024983542039990425,
+                  -0.024983542039990425,
+                  0.6392555832862854,
+                  0.6392555832862854,
+                  0.6392555832862854,
+                  1.594452142715454,
+                  1.6594375371932983,
+                  1.6594375371932983,
+                  1.7623597383499146,
+                  1.7623597383499146,
+                  1.174207091331482,
+                  1.174207091331482,
+                  1.174207091331482,
+                  1.665170669555664,
+                  1.665170669555664,
+                  1.112255573272705,
+                  1.112255573272705,
+                  1.112255573272705,
+                  0.801582396030426,
+                  0.801582396030426,
+                  1.8921339511871338,
+                  1.1088216304779053,
+                  1.1088216304779053,
+                  1.1088216304779053,
+                  0.9520030617713928,
+                  0.9520030617713928,
+                  0.5347728133201599,
+                  0.5347728133201599,
+                  0.5347728133201599,
+                  1.6549885272979736,
+                  1.6549885272979736,
+                  1.644191026687622,
+                  1.644191026687622,
+                  -0.245647132396698,
+                  0.09624488651752472,
+                  -0.245647132396698,
+                  0.6545325517654419,
+                  0.6545325517654419,
+                  1.1604307889938354,
+                  1.1604307889938354,
+                  1.1604307889938354,
+                  0.33813175559043884,
+                  0.7246639728546143,
+                  0.33813175559043884,
+                  0.6621221303939819,
+                  0.6621221303939819,
+                  0.6478524208068848,
+                  0.6478524208068848,
+                  0.7904954552650452,
+                  0.7904954552650452,
+                  0.49493569135665894,
+                  0.49493569135665894,
+                  0.49493569135665894,
+                  0.38347572088241577,
+                  0.38347572088241577,
+                  10.724367579273853
                 ]
               ]
             }
@@ -899,6 +5669,1706 @@
       [
         "es",
         "%street% %number%, %city%, %postalcode%"
+      ],
+      [
+        "en",
+        "Street: 1739 S. Jade Way"
+      ],
+      [
+        "en",
+        "Address: 1739 S. Jade Way"
+      ],
+      [
+        "en",
+        "1739 S. Jade Way"
+      ],
+      [
+        "en",
+        "1739 S. Jade Way"
+      ],
+      [
+        "en",
+        "1739 S. Jade Way"
+      ],
+      [
+        "en",
+        "Street: 613 Franklin Street"
+      ],
+      [
+        "en",
+        "Address: 613 Franklin Street"
+      ],
+      [
+        "en",
+        "613 Franklin Street"
+      ],
+      [
+        "en",
+        "613 Franklin Street"
+      ],
+      [
+        "en",
+        "613 Franklin Street"
+      ],
+      [
+        "en",
+        "Street: 325 Fulton"
+      ],
+      [
+        "en",
+        "Address: 325 Fulton"
+      ],
+      [
+        "en",
+        "325 Fulton"
+      ],
+      [
+        "en",
+        "325 Fulton"
+      ],
+      [
+        "en",
+        "325 Fulton"
+      ],
+      [
+        "en",
+        "Street: 4343 Highway 224"
+      ],
+      [
+        "en",
+        "Address: 4343 Highway 224"
+      ],
+      [
+        "en",
+        "4343 Highway 224"
+      ],
+      [
+        "en",
+        "4343 Highway 224"
+      ],
+      [
+        "en",
+        "4343 Highway 224"
+      ],
+      [
+        "en",
+        "Street: 117 Riviera Drive"
+      ],
+      [
+        "en",
+        "Address: 117 Riviera Drive"
+      ],
+      [
+        "en",
+        "117 Riviera Drive"
+      ],
+      [
+        "en",
+        "117 Riviera Drive"
+      ],
+      [
+        "en",
+        "117 Riviera Drive"
+      ],
+      [
+        "en",
+        "Street: 499 East Tioga Street"
+      ],
+      [
+        "en",
+        "Address: 499 East Tioga Street"
+      ],
+      [
+        "en",
+        "499 East Tioga Street"
+      ],
+      [
+        "en",
+        "499 East Tioga Street"
+      ],
+      [
+        "en",
+        "499 East Tioga Street"
+      ],
+      [
+        "en",
+        "Street: 9168 Hermosa Avenue"
+      ],
+      [
+        "en",
+        "Address: 9168 Hermosa Avenue"
+      ],
+      [
+        "en",
+        "9168 Hermosa Avenue"
+      ],
+      [
+        "en",
+        "9168 Hermosa Avenue"
+      ],
+      [
+        "en",
+        "9168 Hermosa Avenue"
+      ],
+      [
+        "en",
+        "Street: 900 West 45th Street"
+      ],
+      [
+        "en",
+        "Address: 900 West 45th Street"
+      ],
+      [
+        "en",
+        "900 West 45th Street"
+      ],
+      [
+        "en",
+        "900 West 45th Street"
+      ],
+      [
+        "en",
+        "900 West 45th Street"
+      ],
+      [
+        "en",
+        "Street: 2018 Brevard Road"
+      ],
+      [
+        "en",
+        "Address: 2018 Brevard Road"
+      ],
+      [
+        "en",
+        "2018 Brevard Road"
+      ],
+      [
+        "en",
+        "2018 Brevard Road"
+      ],
+      [
+        "en",
+        "2018 Brevard Road"
+      ],
+      [
+        "en",
+        "Street: 604 Railroad Avenue"
+      ],
+      [
+        "en",
+        "Address: 604 Railroad Avenue"
+      ],
+      [
+        "en",
+        "604 Railroad Avenue"
+      ],
+      [
+        "en",
+        "604 Railroad Avenue"
+      ],
+      [
+        "en",
+        "604 Railroad Avenue"
+      ],
+      [
+        "en",
+        "Street: 8904 Sony Lane"
+      ],
+      [
+        "en",
+        "Address: 8904 Sony Lane"
+      ],
+      [
+        "en",
+        "8904 Sony Lane"
+      ],
+      [
+        "en",
+        "8904 Sony Lane"
+      ],
+      [
+        "en",
+        "8904 Sony Lane"
+      ],
+      [
+        "en",
+        "Street: 221B Baker Street"
+      ],
+      [
+        "en",
+        "Address: 221B Baker Street"
+      ],
+      [
+        "en",
+        "221B Baker Street"
+      ],
+      [
+        "en",
+        "221B Baker Street"
+      ],
+      [
+        "en",
+        "221B Baker Street"
+      ],
+      [
+        "en",
+        "Street: 10 Downing Street"
+      ],
+      [
+        "en",
+        "Address: 10 Downing Street"
+      ],
+      [
+        "en",
+        "10 Downing Street"
+      ],
+      [
+        "en",
+        "10 Downing Street"
+      ],
+      [
+        "en",
+        "10 Downing Street"
+      ],
+      [
+        "en",
+        "Street: 1600 Pennsylvania Avenue"
+      ],
+      [
+        "en",
+        "Address: 1600 Pennsylvania Avenue"
+      ],
+      [
+        "en",
+        "1600 Pennsylvania Avenue"
+      ],
+      [
+        "en",
+        "1600 Pennsylvania Avenue"
+      ],
+      [
+        "en",
+        "1600 Pennsylvania Avenue"
+      ],
+      [
+        "en",
+        "Street: 1 High Street"
+      ],
+      [
+        "en",
+        "Address: 1 High Street"
+      ],
+      [
+        "en",
+        "1 High Street"
+      ],
+      [
+        "en",
+        "1 High Street"
+      ],
+      [
+        "en",
+        "1 High Street"
+      ],
+      [
+        "en",
+        "Street: 25 King’s Road"
+      ],
+      [
+        "en",
+        "Address: 25 King’s Road"
+      ],
+      [
+        "en",
+        "25 King’s Road"
+      ],
+      [
+        "en",
+        "25 King’s Road"
+      ],
+      [
+        "en",
+        "25 King’s Road"
+      ],
+      [
+        "en",
+        "Street: 50 Queen Street"
+      ],
+      [
+        "en",
+        "Address: 50 Queen Street"
+      ],
+      [
+        "en",
+        "50 Queen Street"
+      ],
+      [
+        "en",
+        "50 Queen Street"
+      ],
+      [
+        "en",
+        "50 Queen Street"
+      ],
+      [
+        "en",
+        "Street: 75 Church Lane"
+      ],
+      [
+        "en",
+        "Address: 75 Church Lane"
+      ],
+      [
+        "en",
+        "75 Church Lane"
+      ],
+      [
+        "en",
+        "75 Church Lane"
+      ],
+      [
+        "en",
+        "75 Church Lane"
+      ],
+      [
+        "en",
+        "Street: 200 Victoria Street"
+      ],
+      [
+        "en",
+        "Address: 200 Victoria Street"
+      ],
+      [
+        "en",
+        "200 Victoria Street"
+      ],
+      [
+        "en",
+        "200 Victoria Street"
+      ],
+      [
+        "en",
+        "200 Victoria Street"
+      ],
+      [
+        "en",
+        "Street: 300 Oxford Road"
+      ],
+      [
+        "en",
+        "Address: 300 Oxford Road"
+      ],
+      [
+        "en",
+        "300 Oxford Road"
+      ],
+      [
+        "en",
+        "300 Oxford Road"
+      ],
+      [
+        "en",
+        "300 Oxford Road"
+      ],
+      [
+        "en",
+        "Street: 400 Queen’s Park"
+      ],
+      [
+        "en",
+        "Address: 400 Queen’s Park"
+      ],
+      [
+        "en",
+        "400 Queen’s Park"
+      ],
+      [
+        "en",
+        "400 Queen’s Park"
+      ],
+      [
+        "en",
+        "400 Queen’s Park"
+      ],
+      [
+        "en",
+        "Street: 9800 S. La Cienega Blvd."
+      ],
+      [
+        "en",
+        "Address: 9800 S. La Cienega Blvd."
+      ],
+      [
+        "en",
+        "9800 S. La Cienega Blvd."
+      ],
+      [
+        "en",
+        "9800 S. La Cienega Blvd."
+      ],
+      [
+        "en",
+        "9800 S. La Cienega Blvd."
+      ],
+      [
+        "de",
+        "Straße: 1739 S. Jade Weg"
+      ],
+      [
+        "de",
+        "Adresse: 1739 S. Jade Weg"
+      ],
+      [
+        "de",
+        "1739 S. Jade Weg"
+      ],
+      [
+        "de",
+        "1739 S. Jade Weg"
+      ],
+      [
+        "de",
+        "1739 S. Jade Weg"
+      ],
+      [
+        "de",
+        "Straße: 613 Franklin Straße"
+      ],
+      [
+        "de",
+        "Adresse: 613 Franklin Straße"
+      ],
+      [
+        "de",
+        "613 Franklin Straße"
+      ],
+      [
+        "de",
+        "613 Franklin Straße"
+      ],
+      [
+        "de",
+        "613 Franklin Straße"
+      ],
+      [
+        "de",
+        "Straße: 325 Fulton"
+      ],
+      [
+        "de",
+        "Adresse: 325 Fulton"
+      ],
+      [
+        "de",
+        "325 Fulton"
+      ],
+      [
+        "de",
+        "325 Fulton"
+      ],
+      [
+        "de",
+        "325 Fulton"
+      ],
+      [
+        "de",
+        "Straße: 4343 Autobahn 224"
+      ],
+      [
+        "de",
+        "Adresse: 4343 Autobahn 224"
+      ],
+      [
+        "de",
+        "4343 Autobahn 224"
+      ],
+      [
+        "de",
+        "4343 Autobahn 224"
+      ],
+      [
+        "de",
+        "4343 Autobahn 224"
+      ],
+      [
+        "de",
+        "Straße: 117 Riviera Straße"
+      ],
+      [
+        "de",
+        "Adresse: 117 Riviera Straße"
+      ],
+      [
+        "de",
+        "117 Riviera Straße"
+      ],
+      [
+        "de",
+        "117 Riviera Straße"
+      ],
+      [
+        "de",
+        "117 Riviera Straße"
+      ],
+      [
+        "de",
+        "Straße: 499 Ost Tioga Straße"
+      ],
+      [
+        "de",
+        "Adresse: 499 Ost Tioga Straße"
+      ],
+      [
+        "de",
+        "499 Ost Tioga Straße"
+      ],
+      [
+        "de",
+        "499 Ost Tioga Straße"
+      ],
+      [
+        "de",
+        "499 Ost Tioga Straße"
+      ],
+      [
+        "de",
+        "Straße: 9168 Hermosa Allee"
+      ],
+      [
+        "de",
+        "Adresse: 9168 Hermosa Allee"
+      ],
+      [
+        "de",
+        "9168 Hermosa Allee"
+      ],
+      [
+        "de",
+        "9168 Hermosa Allee"
+      ],
+      [
+        "de",
+        "9168 Hermosa Allee"
+      ],
+      [
+        "de",
+        "Straße: 900 West 45th Straße"
+      ],
+      [
+        "de",
+        "Adresse: 900 West 45th Straße"
+      ],
+      [
+        "de",
+        "900 West 45th Straße"
+      ],
+      [
+        "de",
+        "900 West 45th Straße"
+      ],
+      [
+        "de",
+        "900 West 45th Straße"
+      ],
+      [
+        "de",
+        "Straße: 2018 Brevard Weg"
+      ],
+      [
+        "de",
+        "Adresse: 2018 Brevard Weg"
+      ],
+      [
+        "de",
+        "2018 Brevard Weg"
+      ],
+      [
+        "de",
+        "2018 Brevard Weg"
+      ],
+      [
+        "de",
+        "2018 Brevard Weg"
+      ],
+      [
+        "de",
+        "Straße: 604 Eisenbahn Allee"
+      ],
+      [
+        "de",
+        "Adresse: 604 Eisenbahn Allee"
+      ],
+      [
+        "de",
+        "604 Eisenbahn Allee"
+      ],
+      [
+        "de",
+        "604 Eisenbahn Allee"
+      ],
+      [
+        "de",
+        "604 Eisenbahn Allee"
+      ],
+      [
+        "de",
+        "Straße: 8904 Sony Straße"
+      ],
+      [
+        "de",
+        "Adresse: 8904 Sony Straße"
+      ],
+      [
+        "de",
+        "8904 Sony Straße"
+      ],
+      [
+        "de",
+        "8904 Sony Straße"
+      ],
+      [
+        "de",
+        "8904 Sony Straße"
+      ],
+      [
+        "de",
+        "Straße: Unter den Linden 17"
+      ],
+      [
+        "de",
+        "Adresse: Unter den Linden 17"
+      ],
+      [
+        "de",
+        "Unter den Linden 17"
+      ],
+      [
+        "de",
+        "Unter den Linden 17"
+      ],
+      [
+        "de",
+        "Unter den Linden 17"
+      ],
+      [
+        "de",
+        "Straße: Marienplatz 1"
+      ],
+      [
+        "de",
+        "Adresse: Marienplatz 1"
+      ],
+      [
+        "de",
+        "Marienplatz 1"
+      ],
+      [
+        "de",
+        "Marienplatz 1"
+      ],
+      [
+        "de",
+        "Marienplatz 1"
+      ],
+      [
+        "de",
+        "Straße: Königsallee 1"
+      ],
+      [
+        "de",
+        "Adresse: Königsallee 1"
+      ],
+      [
+        "de",
+        "Königsallee 1"
+      ],
+      [
+        "de",
+        "Königsallee 1"
+      ],
+      [
+        "de",
+        "Königsallee 1"
+      ],
+      [
+        "de",
+        "Straße: Bahnhofstraße 1"
+      ],
+      [
+        "de",
+        "Adresse: Bahnhofstraße 1"
+      ],
+      [
+        "de",
+        "Bahnhofstraße 1"
+      ],
+      [
+        "de",
+        "Bahnhofstraße 1"
+      ],
+      [
+        "de",
+        "Bahnhofstraße 1"
+      ],
+      [
+        "de",
+        "Straße: Friedrichstraße 43"
+      ],
+      [
+        "de",
+        "Adresse: Friedrichstraße 43"
+      ],
+      [
+        "de",
+        "Friedrichstraße 43"
+      ],
+      [
+        "de",
+        "Friedrichstraße 43"
+      ],
+      [
+        "de",
+        "Friedrichstraße 43"
+      ],
+      [
+        "de",
+        "Straße: Ludwigstraße 21"
+      ],
+      [
+        "de",
+        "Adresse: Ludwigstraße 21"
+      ],
+      [
+        "de",
+        "Ludwigstraße 21"
+      ],
+      [
+        "de",
+        "Ludwigstraße 21"
+      ],
+      [
+        "de",
+        "Ludwigstraße 21"
+      ],
+      [
+        "de",
+        "Straße: Schlossstraße 20"
+      ],
+      [
+        "de",
+        "Adresse: Schlossstraße 20"
+      ],
+      [
+        "de",
+        "Schlossstraße 20"
+      ],
+      [
+        "de",
+        "Schlossstraße 20"
+      ],
+      [
+        "de",
+        "Schlossstraße 20"
+      ],
+      [
+        "de",
+        "Straße: Zeil 106"
+      ],
+      [
+        "de",
+        "Adresse: Zeil 106"
+      ],
+      [
+        "de",
+        "Zeil 106"
+      ],
+      [
+        "de",
+        "Zeil 106"
+      ],
+      [
+        "de",
+        "Zeil 106"
+      ],
+      [
+        "de",
+        "Straße: Kaiserstraße 22"
+      ],
+      [
+        "de",
+        "Adresse: Kaiserstraße 22"
+      ],
+      [
+        "de",
+        "Kaiserstraße 22"
+      ],
+      [
+        "de",
+        "Kaiserstraße 22"
+      ],
+      [
+        "de",
+        "Kaiserstraße 22"
+      ],
+      [
+        "de",
+        "Straße: Marktplatz 2"
+      ],
+      [
+        "de",
+        "Adresse: Marktplatz 2"
+      ],
+      [
+        "de",
+        "Marktplatz 2"
+      ],
+      [
+        "de",
+        "Marktplatz 2"
+      ],
+      [
+        "de",
+        "Marktplatz 2"
+      ],
+      [
+        "fr",
+        "Rue: 1739 S. Jade Chemin"
+      ],
+      [
+        "fr",
+        "Adresse: 1739 S. Jade Chemin"
+      ],
+      [
+        "fr",
+        "1739 S. Jade Chemin"
+      ],
+      [
+        "fr",
+        "1739 S. Jade Chemin"
+      ],
+      [
+        "fr",
+        "1739 S. Jade Chemin"
+      ],
+      [
+        "fr",
+        "Rue: 613 Franklin Rue"
+      ],
+      [
+        "fr",
+        "Adresse: 613 Franklin Rue"
+      ],
+      [
+        "fr",
+        "613 Franklin Rue"
+      ],
+      [
+        "fr",
+        "613 Franklin Rue"
+      ],
+      [
+        "fr",
+        "613 Franklin Rue"
+      ],
+      [
+        "fr",
+        "Rue: 325 Fulton"
+      ],
+      [
+        "fr",
+        "Adresse: 325 Fulton"
+      ],
+      [
+        "fr",
+        "325 Fulton"
+      ],
+      [
+        "fr",
+        "325 Fulton"
+      ],
+      [
+        "fr",
+        "325 Fulton"
+      ],
+      [
+        "fr",
+        "Rue: 4343 Autoroute 224"
+      ],
+      [
+        "fr",
+        "Adresse: 4343 Autoroute 224"
+      ],
+      [
+        "fr",
+        "4343 Autoroute 224"
+      ],
+      [
+        "fr",
+        "4343 Autoroute 224"
+      ],
+      [
+        "fr",
+        "4343 Autoroute 224"
+      ],
+      [
+        "fr",
+        "Rue: 117 Riviera Rue"
+      ],
+      [
+        "fr",
+        "Adresse: 117 Riviera Rue"
+      ],
+      [
+        "fr",
+        "117 Riviera Rue"
+      ],
+      [
+        "fr",
+        "117 Riviera Rue"
+      ],
+      [
+        "fr",
+        "117 Riviera Rue"
+      ],
+      [
+        "fr",
+        "Rue: 499 Est Tioga Rue"
+      ],
+      [
+        "fr",
+        "Adresse: 499 Est Tioga Rue"
+      ],
+      [
+        "fr",
+        "499 Est Tioga Rue"
+      ],
+      [
+        "fr",
+        "499 Est Tioga Rue"
+      ],
+      [
+        "fr",
+        "499 Est Tioga Rue"
+      ],
+      [
+        "fr",
+        "Rue: 9168 Hermosa Avenue"
+      ],
+      [
+        "fr",
+        "Adresse: 9168 Hermosa Avenue"
+      ],
+      [
+        "fr",
+        "9168 Hermosa Avenue"
+      ],
+      [
+        "fr",
+        "9168 Hermosa Avenue"
+      ],
+      [
+        "fr",
+        "9168 Hermosa Avenue"
+      ],
+      [
+        "fr",
+        "Rue: 900 Ouest 45th Rue"
+      ],
+      [
+        "fr",
+        "Adresse: 900 Ouest 45th Rue"
+      ],
+      [
+        "fr",
+        "900 Ouest 45th Rue"
+      ],
+      [
+        "fr",
+        "900 Ouest 45th Rue"
+      ],
+      [
+        "fr",
+        "900 Ouest 45th Rue"
+      ],
+      [
+        "fr",
+        "Rue: 2018 Brevard Chemin"
+      ],
+      [
+        "fr",
+        "Adresse: 2018 Brevard Chemin"
+      ],
+      [
+        "fr",
+        "2018 Brevard Chemin"
+      ],
+      [
+        "fr",
+        "2018 Brevard Chemin"
+      ],
+      [
+        "fr",
+        "2018 Brevard Chemin"
+      ],
+      [
+        "fr",
+        "Rue: 604 Chemin de Fer Avenue"
+      ],
+      [
+        "fr",
+        "Adresse: 604 Chemin de Fer Avenue"
+      ],
+      [
+        "fr",
+        "604 Chemin de Fer Avenue"
+      ],
+      [
+        "fr",
+        "604 Chemin de Fer Avenue"
+      ],
+      [
+        "fr",
+        "604 Chemin de Fer Avenue"
+      ],
+      [
+        "fr",
+        "Rue: 8904 Sony Rue"
+      ],
+      [
+        "fr",
+        "Adresse: 8904 Sony Rue"
+      ],
+      [
+        "fr",
+        "8904 Sony Rue"
+      ],
+      [
+        "fr",
+        "8904 Sony Rue"
+      ],
+      [
+        "fr",
+        "8904 Sony Rue"
+      ],
+      [
+        "fr",
+        "Rue: 10 Avenue des Champs-Élysées"
+      ],
+      [
+        "fr",
+        "Adresse: 10 Avenue des Champs-Élysées"
+      ],
+      [
+        "fr",
+        "10 Avenue des Champs-Élysées"
+      ],
+      [
+        "fr",
+        "10 Avenue des Champs-Élysées"
+      ],
+      [
+        "fr",
+        "10 Avenue des Champs-Élysées"
+      ],
+      [
+        "fr",
+        "Rue: 5 Rue de la Paix"
+      ],
+      [
+        "fr",
+        "Adresse: 5 Rue de la Paix"
+      ],
+      [
+        "fr",
+        "5 Rue de la Paix"
+      ],
+      [
+        "fr",
+        "5 Rue de la Paix"
+      ],
+      [
+        "fr",
+        "5 Rue de la Paix"
+      ],
+      [
+        "fr",
+        "Rue: 20 Boulevard Saint-Germain"
+      ],
+      [
+        "fr",
+        "Adresse: 20 Boulevard Saint-Germain"
+      ],
+      [
+        "fr",
+        "20 Boulevard Saint-Germain"
+      ],
+      [
+        "fr",
+        "20 Boulevard Saint-Germain"
+      ],
+      [
+        "fr",
+        "20 Boulevard Saint-Germain"
+      ],
+      [
+        "fr",
+        "Rue: 15 Rue de Rivoli"
+      ],
+      [
+        "fr",
+        "Adresse: 15 Rue de Rivoli"
+      ],
+      [
+        "fr",
+        "15 Rue de Rivoli"
+      ],
+      [
+        "fr",
+        "15 Rue de Rivoli"
+      ],
+      [
+        "fr",
+        "15 Rue de Rivoli"
+      ],
+      [
+        "fr",
+        "Rue: 30 Avenue de l"
+      ],
+      [
+        "fr",
+        "Adresse: 30 Avenue de l"
+      ],
+      [
+        "fr",
+        "30 Avenue de l"
+      ],
+      [
+        "fr",
+        "30 Avenue de l"
+      ],
+      [
+        "fr",
+        "30 Avenue de l"
+      ],
+      [
+        "fr",
+        "Rue: 40 Rue de la Victoire"
+      ],
+      [
+        "fr",
+        "Adresse: 40 Rue de la Victoire"
+      ],
+      [
+        "fr",
+        "40 Rue de la Victoire"
+      ],
+      [
+        "fr",
+        "40 Rue de la Victoire"
+      ],
+      [
+        "fr",
+        "40 Rue de la Victoire"
+      ],
+      [
+        "fr",
+        "Rue: 50 Rue Lafayette"
+      ],
+      [
+        "fr",
+        "Adresse: 50 Rue Lafayette"
+      ],
+      [
+        "fr",
+        "50 Rue Lafayette"
+      ],
+      [
+        "fr",
+        "50 Rue Lafayette"
+      ],
+      [
+        "fr",
+        "50 Rue Lafayette"
+      ],
+      [
+        "fr",
+        "Rue: 60 Boulevard Haussmann"
+      ],
+      [
+        "fr",
+        "Adresse: 60 Boulevard Haussmann"
+      ],
+      [
+        "fr",
+        "60 Boulevard Haussmann"
+      ],
+      [
+        "fr",
+        "60 Boulevard Haussmann"
+      ],
+      [
+        "fr",
+        "60 Boulevard Haussmann"
+      ],
+      [
+        "fr",
+        "Rue: 70 Rue Saint-Honoré"
+      ],
+      [
+        "fr",
+        "Adresse: 70 Rue Saint-Honoré"
+      ],
+      [
+        "fr",
+        "70 Rue Saint-Honoré"
+      ],
+      [
+        "fr",
+        "70 Rue Saint-Honoré"
+      ],
+      [
+        "fr",
+        "70 Rue Saint-Honoré"
+      ],
+      [
+        "fr",
+        "Rue: 80 Avenue des Ternes"
+      ],
+      [
+        "fr",
+        "Adresse: 80 Avenue des Ternes"
+      ],
+      [
+        "fr",
+        "80 Avenue des Ternes"
+      ],
+      [
+        "fr",
+        "80 Avenue des Ternes"
+      ],
+      [
+        "fr",
+        "80 Avenue des Ternes"
+      ],
+      [
+        "es",
+        "Calle: 1739 S. Jade Camino"
+      ],
+      [
+        "es",
+        "Dirección: 1739 S. Jade Camino"
+      ],
+      [
+        "fr",
+        "1739 S. Jade Camino"
+      ],
+      [
+        "fr",
+        "1739 S. Jade Camino"
+      ],
+      [
+        "es",
+        "1739 S. Jade Camino"
+      ],
+      [
+        "es",
+        "Calle: 613 Franklin Calle"
+      ],
+      [
+        "es",
+        "Dirección: 613 Franklin Calle"
+      ],
+      [
+        "fr",
+        "613 Franklin Calle"
+      ],
+      [
+        "fr",
+        "613 Franklin Calle"
+      ],
+      [
+        "es",
+        "613 Franklin Calle"
+      ],
+      [
+        "es",
+        "Calle: 325 Fulton"
+      ],
+      [
+        "es",
+        "Dirección: 325 Fulton"
+      ],
+      [
+        "fr",
+        "325 Fulton"
+      ],
+      [
+        "fr",
+        "325 Fulton"
+      ],
+      [
+        "es",
+        "325 Fulton"
+      ],
+      [
+        "es",
+        "Calle: 4343 Carretera 224"
+      ],
+      [
+        "es",
+        "Dirección: 4343 Carretera 224"
+      ],
+      [
+        "fr",
+        "4343 Carretera 224"
+      ],
+      [
+        "fr",
+        "4343 Carretera 224"
+      ],
+      [
+        "es",
+        "4343 Carretera 224"
+      ],
+      [
+        "es",
+        "Calle: 117 Riviera Calle"
+      ],
+      [
+        "es",
+        "Dirección: 117 Riviera Calle"
+      ],
+      [
+        "fr",
+        "117 Riviera Calle"
+      ],
+      [
+        "fr",
+        "117 Riviera Calle"
+      ],
+      [
+        "es",
+        "117 Riviera Calle"
+      ],
+      [
+        "es",
+        "Calle: 499 Este Tioga Calle"
+      ],
+      [
+        "es",
+        "Dirección: 499 Este Tioga Calle"
+      ],
+      [
+        "fr",
+        "499 Este Tioga Calle"
+      ],
+      [
+        "fr",
+        "499 Este Tioga Calle"
+      ],
+      [
+        "es",
+        "499 Este Tioga Calle"
+      ],
+      [
+        "es",
+        "Calle: 9168 Hermosa Avenida"
+      ],
+      [
+        "es",
+        "Dirección: 9168 Hermosa Avenida"
+      ],
+      [
+        "fr",
+        "9168 Hermosa Avenida"
+      ],
+      [
+        "fr",
+        "9168 Hermosa Avenida"
+      ],
+      [
+        "es",
+        "9168 Hermosa Avenida"
+      ],
+      [
+        "es",
+        "Calle: 900 Oeste 45th Calle"
+      ],
+      [
+        "es",
+        "Dirección: 900 Oeste 45th Calle"
+      ],
+      [
+        "fr",
+        "900 Oeste 45th Calle"
+      ],
+      [
+        "fr",
+        "900 Oeste 45th Calle"
+      ],
+      [
+        "es",
+        "900 Oeste 45th Calle"
+      ],
+      [
+        "es",
+        "Calle: 2018 Brevard Camino"
+      ],
+      [
+        "es",
+        "Dirección: 2018 Brevard Camino"
+      ],
+      [
+        "fr",
+        "2018 Brevard Camino"
+      ],
+      [
+        "fr",
+        "2018 Brevard Camino"
+      ],
+      [
+        "es",
+        "2018 Brevard Camino"
+      ],
+      [
+        "es",
+        "Calle: 604 Avenida del Ferrocarril"
+      ],
+      [
+        "es",
+        "Dirección: 604 Avenida del Ferrocarril"
+      ],
+      [
+        "fr",
+        "604 Avenida del Ferrocarril"
+      ],
+      [
+        "fr",
+        "604 Avenida del Ferrocarril"
+      ],
+      [
+        "es",
+        "604 Avenida del Ferrocarril"
+      ],
+      [
+        "es",
+        "Calle: 8904 Sony Calle"
+      ],
+      [
+        "es",
+        "Dirección: 8904 Sony Calle"
+      ],
+      [
+        "fr",
+        "8904 Sony Calle"
+      ],
+      [
+        "fr",
+        "8904 Sony Calle"
+      ],
+      [
+        "es",
+        "8904 Sony Calle"
+      ],
+      [
+        "es",
+        "Calle: 341 Calle Mayor"
+      ],
+      [
+        "es",
+        "Dirección: 341 Calle Mayor"
+      ],
+      [
+        "fr",
+        "341 Calle Mayor"
+      ],
+      [
+        "fr",
+        "341 Calle Mayor"
+      ],
+      [
+        "es",
+        "341 Calle Mayor"
+      ],
+      [
+        "es",
+        "Calle: 721 Avenida de la Constitución"
+      ],
+      [
+        "es",
+        "Dirección: 721 Avenida de la Constitución"
+      ],
+      [
+        "fr",
+        "721 Avenida de la Constitución"
+      ],
+      [
+        "fr",
+        "721 Avenida de la Constitución"
+      ],
+      [
+        "es",
+        "721 Avenida de la Constitución"
+      ],
+      [
+        "es",
+        "Calle: 934 Calle de Alcalá"
+      ],
+      [
+        "es",
+        "Dirección: 934 Calle de Alcalá"
+      ],
+      [
+        "fr",
+        "934 Calle de Alcalá"
+      ],
+      [
+        "fr",
+        "934 Calle de Alcalá"
+      ],
+      [
+        "es",
+        "934 Calle de Alcalá"
+      ],
+      [
+        "es",
+        "Calle: 123 Gran Vía"
+      ],
+      [
+        "es",
+        "Dirección: 123 Gran Vía"
+      ],
+      [
+        "fr",
+        "123 Gran Vía"
+      ],
+      [
+        "fr",
+        "123 Gran Vía"
+      ],
+      [
+        "es",
+        "123 Gran Vía"
+      ],
+      [
+        "es",
+        "Calle: 872 Paseo de la Castellana"
+      ],
+      [
+        "es",
+        "Dirección: 872 Paseo de la Castellana"
+      ],
+      [
+        "fr",
+        "872 Paseo de la Castellana"
+      ],
+      [
+        "fr",
+        "872 Paseo de la Castellana"
+      ],
+      [
+        "es",
+        "872 Paseo de la Castellana"
+      ],
+      [
+        "es",
+        "Calle: 4786 Calle de Serrano"
+      ],
+      [
+        "es",
+        "Dirección: 4786 Calle de Serrano"
+      ],
+      [
+        "fr",
+        "4786 Calle de Serrano"
+      ],
+      [
+        "fr",
+        "4786 Calle de Serrano"
+      ],
+      [
+        "es",
+        "4786 Calle de Serrano"
+      ],
+      [
+        "es",
+        "Calle: 9812 Calle de Goya"
+      ],
+      [
+        "es",
+        "Dirección: 9812 Calle de Goya"
+      ],
+      [
+        "fr",
+        "9812 Calle de Goya"
+      ],
+      [
+        "fr",
+        "9812 Calle de Goya"
+      ],
+      [
+        "es",
+        "9812 Calle de Goya"
+      ],
+      [
+        "es",
+        "Calle: 413 Avenida Diagonal"
+      ],
+      [
+        "es",
+        "Dirección: 413 Avenida Diagonal"
+      ],
+      [
+        "fr",
+        "413 Avenida Diagonal"
+      ],
+      [
+        "fr",
+        "413 Avenida Diagonal"
+      ],
+      [
+        "es",
+        "413 Avenida Diagonal"
+      ],
+      [
+        "es",
+        "Calle: 889 Rambla de Catalunya"
+      ],
+      [
+        "es",
+        "Dirección: 889 Rambla de Catalunya"
+      ],
+      [
+        "fr",
+        "889 Rambla de Catalunya"
+      ],
+      [
+        "fr",
+        "889 Rambla de Catalunya"
+      ],
+      [
+        "es",
+        "889 Rambla de Catalunya"
+      ],
+      [
+        "es",
+        "Calle: 1421 Paseo de Gracia"
+      ],
+      [
+        "es",
+        "Dirección: 1421 Paseo de Gracia"
+      ],
+      [
+        "fr",
+        "1421 Paseo de Gracia"
+      ],
+      [
+        "fr",
+        "1421 Paseo de Gracia"
+      ],
+      [
+        "es",
+        "1421 Paseo de Gracia"
       ]
     ]
   },
