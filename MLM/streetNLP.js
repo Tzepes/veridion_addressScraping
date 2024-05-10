@@ -274,4 +274,12 @@ const extractAddress = async (text) => {
 const text = 'Contact Info Address: 503 Maurice Street Monroe, NC 28112';
 const text2 = 'Identität des Verkäufers:GPmoto GmbHInhaber: Dennis HarmStraße: Rheder Str. 7 PLZ, Ort: 46499 HamminkelnTel.: 02852/507620E-Mail: service@gpmoto.deUSt-ID: DE334798152Alle Lieferungen und Leistungen an Verbraucher im Sinne des § 13 BGB und an Unternehmer im Sinne des § 14 BGB erfolgen ausschließlich auf Grundlage dieser AGB.'
 const text3 = "DONATEThe California Black Women's Health Project is the only statewide, non-profit organization that is solely committed to ​improving the health of California's 1.2 million Black women and girls through advocacy, education, outreach and policy. CALIFORNIA BLACK WOMEN'S HEALTH PROJECT​​9800 S. La Cienega Blvd., Suite 905Inglewood, CA 90301​(310) 412-1828wellwoman@cabwhp.org​For media inquiries and marketing requests contact geneses@cabwhp.org​";
-extractAddress(text3).then(console.log).catch(console.error);
+const text4 = "Society for the Blind 1238 S Street Sacramento, CA 95811 United States"
+const text5 = "325 Fulton Street, Woodbridge, NJ 07095"
+const text6 = "1525 Tilco Drive, Unit B-1, Frederick, MD 21704"
+const text7 = "1739 S. Jade Way, Suite 100 Meridian, Idaho 83642"
+const text8 = "8904 Sony Lane, Knoxville, TN 37923"
+const text9 = "11550 Poema Place, Unit 101 Chatsworth, CA 91311"
+const text10 = "© Copyright  Systemadix • All Rights Reserved. • info@systemadix.com  • 240.479.7700 • 122 East Patrick Street, Suite 120, Frederick, MD 21701"
+const text11 = "Grey Hackle Lodge 1441 E Christopher Creek Loop, Payson, Arizona 85541 Phone (928) 235-5883"
+extractAddress(text7).then(console.log).catch(console.error);

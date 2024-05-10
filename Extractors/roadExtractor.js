@@ -20,14 +20,17 @@ function findRoad(htmlContent, $) {
         const elements = body.find(selector);
         elements.each((index, element) => {
             let text = $(element).text().trim();
-            text = text.replace(/\n|\t/g, " ");  
-            console.log(text);
+            text = text.replace(/\n|\t/g, " ");      
+            //TO CONSIDER: if the text is too long, split it by \n or \t into an array and loop through it
+            
+            // console.log(text);
+
             // console.log('Looking for match');
-            console.log(text);
             // console.log('Num begin:', text.match(streetRegexNumBegin));
             // console.log('Num end:', text.match(streetRegexNumEnd));
             // take road
             if(text.match(streetNameRegex)){
+                // console.log(text);
                 let matches = text.match(streetNameRegex);
                 roadNumber = matches[1].trim();
                 road = matches[2].trim();

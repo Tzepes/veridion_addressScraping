@@ -122,16 +122,20 @@ const urlsToTest = [
     'http://unitedairconditioning.com/contact',
     //20
     'http://seedsourceag.com',
-    //22
+    //21
     'http://societyfortheblind.org',
-    //23
+    //22
     'https://aiwoodwork.com',
-    //25
+    //23
     'https://azcrystal.com',
-    //26
+    //24
     'https://www.gpmoto.de/shop/wg/bekleidung/lederkombis/lederkombis-damen/lederkombis-1-teilig/',
+    //25
+    'https://www.lampenwelt.de',
+    //26 -> possibly a javascript rendered page, so no html is returned, pupeteer might fix this issue
+    'https://www.twinpondsnashua.com/',
     //27
-    'https://www.lampenwelt.de'
+    'https://greyhackle.com/contact/'
 ];
 
-retrieveLocationData(urlsToTest[26]);
+retrieveLocationData(urlsToTest[27]);
