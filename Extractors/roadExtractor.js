@@ -20,7 +20,8 @@ function findRoad(htmlContent, $) {
         const elements = body.find(selector);
         elements.each((index, element) => {
             let text = $(element).text().trim();
-            text = text.replace(/\n|\t/g, " ");      
+            
+            text = textCleanUp(text);
             //TO CONSIDER: if the text is too long, split it by \n or \t into an array and loop through it
             
             // console.log(text);
@@ -75,6 +76,12 @@ function findRoad(htmlContent, $) {
     console.log('street array:', roadMatches);
     roadMatches.clear();
     return { roadNumber, road: road || null };
+}
+
+function textCleanUp(text) {
+    text = text.replace(/\n|\t/g, " ");      
+    text = text.replace(/[\uE017©•]/g, '').replace(/\s+/g, ' ');
+    return text;
 }
 
 // get all possible matches for road name
