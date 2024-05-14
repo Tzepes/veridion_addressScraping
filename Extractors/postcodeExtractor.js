@@ -13,7 +13,7 @@ async function loopForPostcodeIfCountry(text = null, countryRegex = null, countr
     let postcode = null;
     let postcodeAPIResponse;
     let matchingPostcodes = new Set();
-    const addressSelectors = ['address', 'p', 'br', 'span', 'div'];
+    const addressSelectors = ['address', 'p', 'font', 'span', 'div'];
     const filteredElements = $('body').find('*').not('script, link, meta, style, path, symbol, noscript, img');
     const reversedElements = $(filteredElements).get().reverse(); // reverse the webpage elements since most postcodes are at the base of the page
 
@@ -27,7 +27,7 @@ async function loopForPostcodeIfCountry(text = null, countryRegex = null, countr
             continue;
         }
 
-        let text = $(element).text();
+        let text = elementTextCleanUp(element, $);
         text = textCleanUp(text);
 
         postcodeMatch = text.match(postcodeDefaultRegex);
@@ -131,6 +131,15 @@ function textCleanUp(text) {
     text = text.replace(/\n|\t/g, " ");      
     text = text.replace(/[\uE017©•"-*|]/g, '').replace(/\s+/g, ' ');
     return text;
+}
+
+function elementTextCleanUp(element, $) {
+    let text = '';
+    $(element).contents().each(function () {
+        if (this.type === 'text') text += this.data + ' ';
+        else if (this.type === 'tag') text += $(this).text() + ' ';
+    });
+    return textCleanUp(text);
 }
 
 module.exports = {loopForPostcodeIfCountry};

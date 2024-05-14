@@ -1,7 +1,7 @@
 const fs = require('fs');
 
 const addressSelectors = [
-    'address', 'p', 'br', 'span', 'div'
+    'address', 'p', 'font', 'span', 'div'
 ];
 
 const roadMatches = new Set();
@@ -14,13 +14,24 @@ function findRoad(htmlContent, $) {
     const streetRegexNumBegin = /^\d+\s(?:[A-Za-zÀ-ÿ-]+\s?)+?\b/g;
     const streetRegexNumEnd = /\b[A-Za-zÀ-ÿ-]+\s+\d+(?!\w)/;
     // const regex = /(\b\w+\b)\s+\d+[A-Z]*$/;
-    const body = $('body');
+    let body = $('body');
+    let html = '';
+    // $('body').children().each((i, element) => {
+    //     html += $(element).text() + ' ';
+    // });
+    // $('body').text(html);
     const filteredElements = $('body').find('*').not('script, link, meta, style, path, symbol, noscript, img');
+    
     const reversedElements = $(filteredElements).get().reverse();
     // console.log(body.text())
     // console.log(body)
     for(let index = 0; index < reversedElements.length; index++) {
         const element = reversedElements[index];
+
+        fs.appendFile('bodyFilteredTextNoCleanup.txt', `${$(element)}\n\n\n`, (err) => {
+            if (err) throw err;
+        });
+
         let isCorrectElement = false;
         
         for(let i = 0; i < addressSelectors.length; i++) {
@@ -34,13 +45,14 @@ function findRoad(htmlContent, $) {
             continue;
         }
         
-        let text = $(element).text().trim();
+        let text = elementTextCleanUp(element, $);
 
         text = textCleanUp(text);
 
-        fs.appendFile('element_text.txt', `${text}\n`, (err) => {
+        fs.appendFile('element_text.txt', `${element.name}\n${text}\n\n\n`, (err) => {
             if (err) throw err;
         });
+
         //TO CONSIDER: if the text is too long, split it by \n or \t into an array and loop through it
         
         // console.log(text);
@@ -58,9 +70,9 @@ function findRoad(htmlContent, $) {
             roadMatches.add([roadNumber, road]);
 
             // Write the match to a file
-            // fs.appendFile('matchesFromStreet.txt', `${text}\n`, (err) => {
-            //     if (err) throw err;
-            // });
+            fs.appendFile('matchesFromStreet.txt', `${text}\n`, (err) => {
+                if (err) throw err;
+            });
         }
         // else if (text.match(streetRegexNumBegin)) 
         // {
@@ -107,7 +119,24 @@ function findRoad(htmlContent, $) {
 function textCleanUp(text) {
     text = text.replace(/\n|\t/g, " ");      
     text = text.replace(/[\uE017©•"-*|]/g, '').replace(/\s+/g, ' ');
+    text = text.replace(/[^\x20-\x7E]/g, '');
     return text;
+}
+
+function elementTextCleanUp(element, $) {
+    let text = '';
+    $(element).contents().each(function () {
+        if (this.type === 'text') {
+            // Add trimmed text and a space to separate from the next element
+            text += this.data.trim() + ' ';
+        } else {
+            // Recursively clean up the inner text of child elements
+            const childText = elementTextCleanUp(this, $);
+            // Add the cleaned text and a space to separate from the next element
+            text += childText + ' ';
+        }
+    });
+    return textCleanUp(text);
 }
 
 // get all possible matches for road name
