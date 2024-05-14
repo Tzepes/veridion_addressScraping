@@ -5,11 +5,11 @@ async function getFirstPageLinks(domain, htmlContent, $) {
     const aTags = $('a');
     const unwantedLinkRegex = /^#|javascript:|mailto:|tel:|ftp:|data:|\.(pdf|jpg|png|mp3|mp4)$/;
     const socialMediaRegex = /twitter\.com|facebook\.com|instagram\.com|linkedin\.com|youtube\.com|pinterest\.com|patreon\.com|snapchat\.com/;
-    const ignoredRoutes = ['shop', 'product', 'news', 'media', 'services'];
+    const ignoredRoutes = ['shop', 'product', 'products', 'collection', 'collections', 'news', 'media', 'services'];
 
     aTags.each((i, el) => {
         let link = $(el).attr('href');
-        console.log(link);
+        // console.log(link);
         if (link && !unwantedLinkRegex.test(link) && !socialMediaRegex.test(link)) {
             // If the link is a protocol-relative URL, add "https:"
             if (link.startsWith('//')) {
@@ -30,7 +30,7 @@ async function getFirstPageLinks(domain, htmlContent, $) {
 
     links = first10Links.concat(last10Links, restOfLinks);
 
-    console.log(links);
+    // console.log(links);
     return links;
 }
 
