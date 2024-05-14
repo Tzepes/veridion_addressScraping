@@ -1,6 +1,8 @@
 const {getDataFromParseAPI, getDataFromZipcodeBase} = require('../apis/postalcodeParseAPI.js');
 const { getCountryAbbreviation } = require('../countriesCodes.js');
 
+const fs = require('fs');
+
 async function loopForPostcodeIfCountry(text = null, countryRegex = null, countryFromURL = null, countryCode = null, postcodeData = null, $) {  
     let postcodeDefaultRegex = /\b\d{5}\b/; // use a defalt regex that could match most postcodes
     let postcodeCountryRegex = null;
@@ -11,10 +13,12 @@ async function loopForPostcodeIfCountry(text = null, countryRegex = null, countr
     let postcode = null;
     let postcodeAPIResponse;
     let matchingPostcodes = new Set();
-
-    const filteredElements = $('body').find('*').not('script, link, meta, style, path, symbol, noscript');
+    const addressSelectors = ['address', 'p', 'br', 'span', 'div'];
+    const filteredElements = $('body').find('*').not('script, link, meta, style, path, symbol, noscript, img');
     const reversedElements = $(filteredElements).get().reverse(); // reverse the webpage elements since most postcodes are at the base of the page
-   
+
+    let textGlobalVar;
+
     // Start search for postcode
     // we insert each matching string of numbers into a Set() array, then we loop them until the valid postcode is found
     for(let index = 0; index < reversedElements.length; index++) {
@@ -23,12 +27,14 @@ async function loopForPostcodeIfCountry(text = null, countryRegex = null, countr
             continue;
         }
 
-        const text = $(element).text();
+        let text = $(element).text();
+        text = textCleanUp(text);
 
         postcodeMatch = text.match(postcodeDefaultRegex);
         if (postcodeMatch) {
             postcode = postcodeMatch[0];
             matchingPostcodes.add(postcode);
+            textGlobalVar = text;
             // continue;
         }
         
@@ -37,6 +43,7 @@ async function loopForPostcodeIfCountry(text = null, countryRegex = null, countr
         if (postcodeMatch) {
             postcode = postcodeMatch[0]; 
             matchingPostcodes.add(postcode);
+            textGlobalVar = text;
             // continue;
         }
     }
@@ -53,6 +60,9 @@ async function loopForPostcodeIfCountry(text = null, countryRegex = null, countr
         } else {
             console.log('postcode found:', postcodeOfArr);
             postcode = postcodeOfArr;
+            fs.appendFile('matchesFromPostcode.txt', `${textGlobalVar}\n`, (err) => {
+                if (err) throw err;
+            });
             return { postcode, postcodeAPIResponse };
         }
     }
@@ -115,6 +125,12 @@ async function getZipcodeBaseAPI(postcode, country) { // pass country code as pa
         }
     }
     return null;
+}
+
+function textCleanUp(text) {
+    text = text.replace(/\n|\t/g, " ");      
+    text = text.replace(/[\uE017©•"-*|]/g, '').replace(/\s+/g, ' ');
+    return text;
 }
 
 module.exports = {loopForPostcodeIfCountry};
