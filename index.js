@@ -32,9 +32,15 @@ const csvWriter = createCsvWriter({
 (async () => {  // the main function that starts the search, loops trough all linkfs from .parquet and starts search for data
     let reader = await parquet.ParquetReader.openFile('websites.snappy .parquet');
     let cursor = reader.getCursor();
+    let beginAt = 0; // skip the first 100 records
+    let index = 0;
 
     let record = null;
     while(record = await cursor.next()) {
+        if(index < beginAt){
+            index++;
+            continue;
+        }
         let retreivedData = await accessDomain('https://' + record.domain);
 
         if(!retreivedData?.postcode){ //incase the postcode hasn't been found, get the linkfs of the landing page and search trough them as well (initiate only if postcode missing since street tends to be placed next to it)
