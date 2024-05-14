@@ -1,3 +1,5 @@
+const fs = require('fs');
+
 const addressSelectors = [
     'address', 'p', 'br', 'span', 'div'
 ];
@@ -13,62 +15,86 @@ function findRoad(htmlContent, $) {
     const streetRegexNumEnd = /\b[A-Za-zÀ-ÿ-]+\s+\d+(?!\w)/;
     // const regex = /(\b\w+\b)\s+\d+[A-Z]*$/;
     const body = $('body');
-    body.find('script, style, link, meta, path, symbol, noscript').remove();
+    const filteredElements = $('body').find('*').not('script, link, meta, style, path, symbol, noscript, img');
+    const reversedElements = $(filteredElements).get().reverse();
     // console.log(body.text())
     // console.log(body)
-    for (const selector of addressSelectors) {
-        const elements = body.find(selector);
-        elements.each((index, element) => {
-            let text = $(element).text().trim();
-            
-            text = textCleanUp(text);
-            //TO CONSIDER: if the text is too long, split it by \n or \t into an array and loop through it
-            
-            // console.log(text);
-
-            // console.log('Looking for match');
-            // console.log('Num begin:', text.match(streetRegexNumBegin));
-            // console.log('Num end:', text.match(streetRegexNumEnd));
-            // take road
-            if(text.match(streetNameRegex)){
-                // console.log(text);
-                let matches = text.match(streetNameRegex);
-                roadNumber = matches[1].trim();
-                road = matches[2].trim();
-                roadMatches.add([roadNumber, road]);
+    for(let index = 0; index < reversedElements.length; index++) {
+        const element = reversedElements[index];
+        let isCorrectElement = false;
+        
+        for(let i = 0; i < addressSelectors.length; i++) {
+            if ($(element).is(addressSelectors[i])) {
+                isCorrectElement = true;
+                break;
             }
-            // else if (text.match(streetRegexNumBegin)) 
-            // {
-            //     let matches = text.match(streetRegexNumBegin);
-            //     let splitMatches = matches[0].split(' ');
-            //     roadNumber = splitMatches[0].trim();
-            //     road = splitMatches.slice(1).join(' ').trim();
-            //     roadMatches.add([roadNumber, road]);
-            // } 
-            // else if (text.match(streetRegexNumEnd))
-            // {
-            //     let matches = text.match(streetRegexNumEnd);
-            //     let splitMatches = matches[0].split(' ');
-            //     road = splitMatches.slice(0, -1).join(' ').trim();
-            //     roadNumber = splitMatches[splitMatches.length - 1].trim();
-            //     roadMatches.add([roadNumber, road]);
-            // }
+        }
 
-            // console.log('done looking for match');
+        if (!isCorrectElement) {
+            continue;
+        }
+        
+        let text = $(element).text().trim();
 
-            // pass trough geocoding API
-                // if valid road
-                    // if same postcode with api postcode
-                        // return road
-                    // if no postcode
-                        // return postcode, city and region from geocoding API
-                // else
-                    // continue search
+        text = textCleanUp(text);
+
+        fs.appendFile('element_text.txt', `${text}\n`, (err) => {
+            if (err) throw err;
         });
+        //TO CONSIDER: if the text is too long, split it by \n or \t into an array and loop through it
+        
+        // console.log(text);
 
-        // algorithm loops trough each element but stops the moment a match is found, which can be from the first element
-            // if a match is found, store in a set with unique elements
-            // conitnue looping till all elements are checked
+        // console.log('Looking for match');
+        // console.log('Num begin:', text.match(streetRegexNumBegin));
+        // console.log('Num end:', text.match(streetRegexNumEnd));
+        // take road
+        if(text.match(streetNameRegex)){
+            // console.log(text);
+            let matches = text.match(streetNameRegex);
+            console.log('matches:', matches);
+            roadNumber = matches[1].trim();
+            road = matches[2].trim();
+            roadMatches.add([roadNumber, road]);
+
+            // Write the match to a file
+            // fs.appendFile('matchesFromStreet.txt', `${text}\n`, (err) => {
+            //     if (err) throw err;
+            // });
+        }
+        // else if (text.match(streetRegexNumBegin)) 
+        // {
+        //     let matches = text.match(streetRegexNumBegin);
+        //     let splitMatches = matches[0].split(' ');
+        //     roadNumber = splitMatches[0].trim();
+        //     road = splitMatches.slice(1).join(' ').trim();
+        //     roadMatches.add([roadNumber, road]);
+        // } 
+        // else if (text.match(streetRegexNumEnd))
+        // {
+        //     let matches = text.match(streetRegexNumEnd);
+        //     let splitMatches = matches[0].split(' ');
+        //     road = splitMatches.slice(0, -1).join(' ').trim();
+        //     roadNumber = splitMatches[splitMatches.length - 1].trim();
+        //     roadMatches.add([roadNumber, road]);
+        // }
+
+        // console.log('done looking for match');
+
+        // pass trough geocoding API
+            // if valid road
+                // if same postcode with api postcode
+                    // return road
+                // if no postcode
+                    // return postcode, city and region from geocoding API
+            // else
+                // continue search
+    
+
+    // algorithm loops trough each element but stops the moment a match is found, which can be from the first element
+        // if a match is found, store in a set with unique elements
+        // conitnue looping till all elements are checked
+
         if (road) { 
             break;
         }
@@ -80,7 +106,7 @@ function findRoad(htmlContent, $) {
 
 function textCleanUp(text) {
     text = text.replace(/\n|\t/g, " ");      
-    text = text.replace(/[\uE017©•]/g, '').replace(/\s+/g, ' ');
+    text = text.replace(/[\uE017©•"-*|]/g, '').replace(/\s+/g, ' ');
     return text;
 }
 
