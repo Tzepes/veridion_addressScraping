@@ -28,9 +28,9 @@ function findRoad(htmlContent, $) {
     for(let index = 0; index < reversedElements.length; index++) {
         const element = reversedElements[index];
 
-        fs.appendFile('bodyFilteredTextNoCleanup.txt', `${$(element)}\n\n\n`, (err) => {
-            if (err) throw err;
-        });
+        // fs.appendFile('bodyFilteredTextNoCleanup.txt', `${$(element)}\n\n\n`, (err) => {
+        //     if (err) throw err;
+        // });
 
         let isCorrectElement = false;
         
@@ -70,7 +70,7 @@ function findRoad(htmlContent, $) {
             roadMatches.add([roadNumber, road]);
 
             // Write the match to a file
-            fs.appendFile('matchesFromStreet.txt', `${text}\n`, (err) => {
+            fs.appendFile('matchesFromStreet.txt', `${element.name}\n${text}\n\n`, (err) => {
                 if (err) throw err;
             });
         }
@@ -116,13 +116,6 @@ function findRoad(htmlContent, $) {
     return { roadNumber, road: road || null };
 }
 
-function textCleanUp(text) {
-    text = text.replace(/\n|\t/g, " ");      
-    text = text.replace(/[\uE017©•"-*|]/g, '').replace(/\s+/g, ' ');
-    text = text.replace(/[^\x20-\x7E]/g, '');
-    return text;
-}
-
 function elementTextCleanUp(element, $) {
     let text = '';
     $(element).contents().each(function () {
@@ -137,6 +130,13 @@ function elementTextCleanUp(element, $) {
         }
     });
     return textCleanUp(text);
+}
+
+function textCleanUp(text) {
+    text = text.replace(/\n|\t/g, " ");      
+    text = text.replace(/[\uE017©•"-*|]/g, '').replace(/\s+/g, ' ');
+    text = text.replace(/[^\x20-\x7E]/g, '');
+    return text;
 }
 
 // get all possible matches for road name
