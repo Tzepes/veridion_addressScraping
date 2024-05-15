@@ -4,6 +4,8 @@ const cheerio = require('cheerio');
 
 const createCsvWriter = require('csv-writer').createObjectCsvWriter;
 
+const LoopTroughElements = require('./pageScrapper.js');
+
 const {countries, getCountryAbbreviation} = require('./countriesCodes.js');
 const getFirstPageLinks = require('./Extractors/firstPageLinksExtractor.js');
 const {findCountry, getCountryFromURL} = require('./Extractors/countryExtractor.js');
@@ -43,18 +45,52 @@ const csvWriter = createCsvWriter({
         }
         let retreivedData = {country: null, region: null, city: null, postcode: null, road: null, roadNumber: null};
         retreivedData = await accessDomain('https://' + record.domain);
-        let lastRetreivedActualData ={country: retreivedData?.country, region: retreivedData?.region, city: retreivedData?.city, postcode: retreivedData?.postcode, road: retreivedData?.road, roadNumber: retreivedData?.roadNumber};
+        let lastRetreivedActualData = {country: retreivedData?.country, region: retreivedData?.region, city: retreivedData?.city, postcode: retreivedData?.postcode, road: retreivedData?.road, roadNumber: retreivedData?.roadNumber};
 
         if(!retreivedData?.postcode || !retreivedData?.road){ //incase the postcode hasn't been found, get the linkfs of the landing page and search trough them as well (initiate only if postcode missing since street tends to be placed next to it)
-            resolveNoDataFound(retreivedData, lastRetreivedActualData, firstPageLinks);
+            for(let link of firstPageLinks){
+                await new Promise(resolve => setTimeout(resolve, 500)); // delay to prevent blocking by the server
+                retreivedData = await accessDomain(link);
+                lastRetreivedActualData = updateRetrievedData(retreivedData, lastRetreivedActualData); 
+            }
+            retreivedData = updateMissingData(retreivedData, lastRetreivedActualData);
         }
         firstPageLinks = [];
-        writeCSV(retreivedData, record.domain); //write data into CSV file
+        // console.log('postcode:', retreivedData?.postcode, 'road:', retreivedData?.road)
+        await writeCSV(retreivedData, record.domain); //write data into CSV file
     }
     console.log("");
 
     await reader.close();
 })();
+
+function updateRetrievedData(retreivedData, lastRetreivedActualData) {
+    if(retreivedData?.postcode){
+        lastRetreivedActualData.city = retreivedData.city;
+        lastRetreivedActualData.postcode = retreivedData.postcode;
+        lastRetreivedActualData.region = retreivedData.region;
+    }
+    if(retreivedData?.road){
+        lastRetreivedActualData.road = retreivedData.road;
+        lastRetreivedActualData.roadNumber = retreivedData.roadNumber;
+    }
+    return lastRetreivedActualData;
+}
+
+function updateMissingData(retreivedData, lastRetreivedActualData) {
+    if(!retreivedData?.postcode && lastRetreivedActualData?.postcode){
+        retreivedData = retreivedData || {};
+        retreivedData.city = lastRetreivedActualData.city;
+        retreivedData.postcode = lastRetreivedActualData.postcode;
+        retreivedData.region = lastRetreivedActualData.region;
+    }
+    if(!retreivedData?.road && lastRetreivedActualData?.road){
+        retreivedData = retreivedData || {};
+        retreivedData.road = lastRetreivedActualData.road;
+        retreivedData.roadNumber = lastRetreivedActualData.roadNumber;
+    }
+    return retreivedData;
+}
 
 async function accessDomain(domain){
     let response;
@@ -65,10 +101,12 @@ async function accessDomain(domain){
         if (response.status === 200) {
             console.log(`Response status: ${response.status}`);
             console.log(`Response headers: ${response.headers}`);
+
             if (response.headers['content-type'] === 'application/pdf' || response.headers['content-type'] === 'audio/mpeg' || response.headers['content-type'] === 'video/mp4') {
                 console.log('Irrelevant file detected. Skipping...');
                 return;
             }
+
             retreivedData = await retrieveLocationData(response.data, domain);
         } else {
             console.log(`Failed to access domain. Response status: ${response.status}`);
@@ -88,34 +126,7 @@ async function accessDomain(domain){
 }
 
 async function resolveNoDataFound(retreivedData, lastRetreivedActualData, firstPageLinks){
-    for(let link of firstPageLinks){
-        await new Promise(resolve => setTimeout(resolve, 500)); // delay to prevent blocking by the server
-        retreivedData = await accessDomain(link);
-        if(retreivedData?.postcode){
-            lastRetreivedActualData.city = retreivedData.city;
-            lastRetreivedActualData.postcode = retreivedData.postcode;
-            lastRetreivedActualData.region = retreivedData.region;
-        }
-        if(retreivedData?.road){
-            lastRetreivedActualData.road = retreivedData.road;
-            lastRetreivedActualData.roadNumber = retreivedData.roadNumber;
-        }
-        if(retreivedData?.postcode && retreivedData?.road){
-            firstPageLinks = [];
-            break;
-        }  
-    }
-    if(!retreivedData?.postcode && lastRetreivedActualData?.postcode){
-        retreivedData = retreivedData || {};
-        retreivedData.city = lastRetreivedActualData.city;
-        retreivedData.postcode = lastRetreivedActualData.postcode;
-        retreivedData.region = lastRetreivedActualData.region;
-    }
-    if(!retreivedData?.road && lastRetreivedActualData?.road){
-        retreivedData = retreivedData || {};
-        retreivedData.road = lastRetreivedActualData.road;
-        retreivedData.roadNumber = lastRetreivedActualData.roadNumber;
-    }
+
 }
 
 async function retrieveLocationData(htmlContent, url) {
@@ -130,6 +141,8 @@ async function retrieveLocationData(htmlContent, url) {
 
     const $ = cheerio.load(htmlContent);
     const text = $('body').text();
+    let pageLanguage = getLanguage(text);
+    LoopTroughElements($);
 
     if(firstPageLinks.length === 0){
         firstPageLinks = await getFirstPageLinks(url, $);
@@ -183,7 +196,7 @@ async function retrieveLocationData(htmlContent, url) {
     return {country, region, city, postcode, road, roadNumber}; // Return extracted data
 }
 
-function writeCSV(data, domain) {
+async function writeCSV(data, domain) {
     let dataObject = [{
         domain: domain,
         country: data?.country || getCountryFromURL(domain),
