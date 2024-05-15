@@ -46,34 +46,7 @@ const csvWriter = createCsvWriter({
         let lastRetreivedActualData ={country: retreivedData?.country, region: retreivedData?.region, city: retreivedData?.city, postcode: retreivedData?.postcode, road: retreivedData?.road, roadNumber: retreivedData?.roadNumber};
 
         if(!retreivedData?.postcode || !retreivedData?.road){ //incase the postcode hasn't been found, get the linkfs of the landing page and search trough them as well (initiate only if postcode missing since street tends to be placed next to it)
-            for(let link of firstPageLinks){
-                await new Promise(resolve => setTimeout(resolve, 500)); // delay to prevent blocking by the server
-                retreivedData = await accessDomain(link);
-                if(retreivedData?.postcode){
-                    lastRetreivedActualData.city = retreivedData.city;
-                    lastRetreivedActualData.postcode = retreivedData.postcode;
-                    lastRetreivedActualData.region = retreivedData.region;
-                }
-                if(retreivedData?.road){
-                    lastRetreivedActualData.road = retreivedData.road;
-                    lastRetreivedActualData.roadNumber = retreivedData.roadNumber;
-                }
-                if(retreivedData?.postcode && retreivedData?.road){
-                    firstPageLinks = [];
-                    break;
-                }  
-            }
-            if(!retreivedData?.postcode && lastRetreivedActualData?.postcode){
-                retreivedData = retreivedData || {};
-                retreivedData.city = lastRetreivedActualData.city;
-                retreivedData.postcode = lastRetreivedActualData.postcode;
-                retreivedData.region = lastRetreivedActualData.region;
-            }
-            if(!retreivedData?.road && lastRetreivedActualData?.road){
-                retreivedData = retreivedData || {};
-                retreivedData.road = lastRetreivedActualData.road;
-                retreivedData.roadNumber = lastRetreivedActualData.roadNumber;
-            }
+            resolveNoDataFound(retreivedData, lastRetreivedActualData, firstPageLinks);
         }
         firstPageLinks = [];
         writeCSV(retreivedData, record.domain); //write data into CSV file
@@ -112,6 +85,37 @@ async function accessDomain(domain){
     }
 
     return retreivedData;
+}
+
+async function resolveNoDataFound(retreivedData, lastRetreivedActualData, firstPageLinks){
+    for(let link of firstPageLinks){
+        await new Promise(resolve => setTimeout(resolve, 500)); // delay to prevent blocking by the server
+        retreivedData = await accessDomain(link);
+        if(retreivedData?.postcode){
+            lastRetreivedActualData.city = retreivedData.city;
+            lastRetreivedActualData.postcode = retreivedData.postcode;
+            lastRetreivedActualData.region = retreivedData.region;
+        }
+        if(retreivedData?.road){
+            lastRetreivedActualData.road = retreivedData.road;
+            lastRetreivedActualData.roadNumber = retreivedData.roadNumber;
+        }
+        if(retreivedData?.postcode && retreivedData?.road){
+            firstPageLinks = [];
+            break;
+        }  
+    }
+    if(!retreivedData?.postcode && lastRetreivedActualData?.postcode){
+        retreivedData = retreivedData || {};
+        retreivedData.city = lastRetreivedActualData.city;
+        retreivedData.postcode = lastRetreivedActualData.postcode;
+        retreivedData.region = lastRetreivedActualData.region;
+    }
+    if(!retreivedData?.road && lastRetreivedActualData?.road){
+        retreivedData = retreivedData || {};
+        retreivedData.road = lastRetreivedActualData.road;
+        retreivedData.roadNumber = lastRetreivedActualData.roadNumber;
+    }
 }
 
 async function retrieveLocationData(htmlContent, url) {
