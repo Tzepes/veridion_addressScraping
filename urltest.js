@@ -1,4 +1,5 @@
 const axios = require('axios');
+const puppeteer = require('puppeteer');
 const cheerio = require('cheerio');
 const {countries, countryAbbreviations, getCountryAbbreviation} = require('./countriesCodes.js');
 const getFirstPageLinks = require('./Extractors/firstPageLinksExtractor.js');
@@ -11,67 +12,71 @@ const findRoad = require('./Extractors/roadExtractor.js');
 async function retrieveLocationData(url) {
     console.log(url);
     try {
-        const response = await axios.get(url, { timeout: 10000 });
-        if (response.status === 200) {
-            let country;
-            let region;
-            let city;
-            let postcode;
-            const htmlContent = response.data;
+        const browser = await puppeteer.launch();
+        const page = await browser.newPage();
+        await page.goto(url, {waitUntil: 'networkidle2', timeout: 30000});
 
-            const $ = cheerio.load(htmlContent);
-            const text = $('body').text();
+        const htmlContent = await page.content();
 
-            let firstPageLinks = await getFirstPageLinks(url, htmlContent, $);
+        await browser.close();
 
-            console.log('getting country');
-            country = getCountryFromURL(url);
+        let country;
+        let region;
+        let city;
+        let postcode;
 
-            let postcodeObject;
+        const $ = cheerio.load(htmlContent);
+        const text = $('body').text();
+        console.log(text)
+
+        let firstPageLinks = await getFirstPageLinks(url, $);
+        console.log(firstPageLinks)
+        console.log('getting country');
+        country = getCountryFromURL(url);
+
+        let postcodeObject;
+        
+        console.log('getting postcode');
+        postcodeObject = await loopForPostcodeIfCountry(text, getPostalCodeFormat(country), country, $);  
+        if(postcodeObject){
+            postcode = postcodeObject.postcode;
+            postcodeAPIResponse = postcodeObject.postcodeAPIResponse;
+            if (postcodeAPIResponse && postcodeAPIResponse?.city?.name) { // check for parseAPI response
+                city = postcodeAPIResponse?.city?.name;
+                region = postcodeAPIResponse?.state?.name;
+            } else if(postcodeAPIResponse && postcodeAPIResponse?.city){  // check for zpicodeBase api response
+                city = postcodeAPIResponse?.city;
+                region = postcodeAPIResponse?.state;
+            } 
             
-            console.log('getting postcode');
-            postcodeObject = await loopForPostcodeIfCountry(text, getPostalCodeFormat(country), country, getCountryAbbreviation(country),null, $, axios);  
-            if(postcodeObject){
-                postcode = postcodeObject.postcode;
-                postcodeAPIResponse = postcodeObject.postcodeAPIResponse;
-                if (postcodeAPIResponse && postcodeAPIResponse?.city?.name) { // check for parseAPI response
-                    city = postcodeAPIResponse?.city?.name;
-                    region = postcodeAPIResponse?.state?.name;
-                } else if(postcodeAPIResponse && postcodeAPIResponse?.city){  // check for zpicodeBase api response
-                    city = postcodeAPIResponse?.city;
-                    region = postcodeAPIResponse?.state;
-                } 
-                
-                if (!country) {
-                    country = postcodeObject.postcodeAPIResponse?.country?.name ?? postcodeObject.postcodeAPIResponse?.country;
-                }
+            if (!country) {
+                country = postcodeObject.postcodeAPIResponse?.country?.name ?? postcodeObject.postcodeAPIResponse?.country;
             }
-
-            if(!postcode && !country){
-                country = findCountry(text, countries);
-            }
-
-            console.log('getting road');
-            const road = findRoad(htmlContent, $);
-                // sometimes road can be correct but postcode not
-                    // pass road to geolocator API
-                        // compare returned postcode with postcode from other APIs
-                            // if different
-                                // compare countries of two post codes
-                            // else return postcode
-
-            // postcodeData = await getPostcodeDataParseAPI(postcode);
-
-            console.log('outputing');
-            // Output extracted data
-            console.log('Country:', country);
-            console.log('Region:', region);
-            console.log('City:', city);
-            console.log('Postcode:', postcode);
-            console.log('Road:', road);
-        } else {
-            console.log('Failed to fetch URL:', url);
         }
+
+        if(!postcode && !country){
+            country = findCountry(text, countries);
+        }
+
+        console.log('getting road');
+        const road = findRoad($);
+            // sometimes road can be correct but postcode not
+                // pass road to geolocator API
+                    // compare returned postcode with postcode from other APIs
+                        // if different
+                            // compare countries of two post codes
+                        // else return postcode
+
+        // postcodeData = await getPostcodeDataParseAPI(postcode);
+
+        console.log('outputing');
+        // Output extracted data
+        console.log('Country:', country);
+        console.log('Region:', region);
+        console.log('City:', city);
+        console.log('Postcode:', postcode);
+        console.log('Road:', road);
+      
     } catch (error) {
         console.error(error);
     }
@@ -135,7 +140,13 @@ const urlsToTest = [
     //26 -> possibly a javascript rendered page, so no html is returned, pupeteer might fix this issue
     'https://www.twinpondsnashua.com/',
     //27
-    'https://greyhackle.com/contact/'
+    'https://greyhackle.com/contact/',
+    //28 -> check what the html looks like when extracted, <br> dont get separated
+    'https://www.athensgop.com/',
+    //29
+    'https://www.plentyconsulting.com/plenty-team',
+    //30
+    'https://www.wargoenterprises.com/'
 ];
 
-retrieveLocationData(urlsToTest[27]);
+retrieveLocationData(urlsToTest[30]);

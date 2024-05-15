@@ -128,7 +128,7 @@ async function retrieveLocationData(htmlContent, url) {
     const text = $('body').text();
 
     if(firstPageLinks.length === 0){
-        firstPageLinks = await getFirstPageLinks(url, htmlContent, $);
+        firstPageLinks = await getFirstPageLinks(url, $);
     }
 
     country = getCountryFromURL(url);
@@ -137,7 +137,7 @@ async function retrieveLocationData(htmlContent, url) {
     let postcodeObject;
     // the returned JSONs are different for parseAPI and zipcodebase API
     // we first check if the JSON is of parseAPI, otherwise, we try zipcodebase JSON format
-    postcodeObject = await loopForPostcodeIfCountry(text, getPostalCodeFormat(country), country, getCountryAbbreviation(country),null, $);  
+    postcodeObject = await loopForPostcodeIfCountry(text, getPostalCodeFormat(country), country, $);  
     if(postcodeObject){
         postcode = postcodeObject.postcode;
         postcodeAPIResponse = postcodeObject.postcodeAPIResponse;
@@ -163,7 +163,7 @@ async function retrieveLocationData(htmlContent, url) {
     }
 
     // Extract road
-    roadObject = findRoad(text, $);
+    roadObject = findRoad($);
     road = roadObject.road;
     roadNumber = roadObject.roadNumber;
     

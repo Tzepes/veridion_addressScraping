@@ -6,7 +6,7 @@ const addressSelectors = [
 
 const roadMatches = new Set();
 
-function findRoad(htmlContent, $) {
+function findRoad($) {
     let road = '';
     let roadNumber = '';
     // add google API to translate road name to country (if taken from URL or Postcode)

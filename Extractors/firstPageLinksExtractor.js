@@ -1,6 +1,6 @@
 const url = require('url');
 
-async function getFirstPageLinks(domain, htmlContent, $) {
+async function getFirstPageLinks(domain, $) {
     let links = new Set();
     const aTags = $('a');
     const unwantedLinkRegex = /^#|javascript:|mailto:|tel:|ftp:|data:|\.(pdf|jpg|png|mp3|mp4)$/;

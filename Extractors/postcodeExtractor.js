@@ -3,7 +3,7 @@ const { getCountryAbbreviation } = require('../countriesCodes.js');
 
 const fs = require('fs');
 
-async function loopForPostcodeIfCountry(text = null, countryRegex = null, countryFromURL = null, countryCode = null, postcodeData = null, $) {  
+async function loopForPostcodeIfCountry(text = null, countryRegex = null, countryFromURL = null, $) {  
     let postcodeDefaultRegex = /\b\d{5}\b/; // use a defalt regex that could match most postcodes
     let postcodeCountryRegex = null;
     if(countryRegex){
