@@ -1,5 +1,6 @@
 const parquet = require('@dsnp/parquetjs');
 const axios = require('axios-https-proxy-fix');
+const puppeteer = require('puppeteer');
 const cheerio = require('cheerio');
 
 const createCsvWriter = require('csv-writer').createObjectCsvWriter;
@@ -34,24 +35,28 @@ const csvWriter = createCsvWriter({
 (async () => {  // the main function that starts the search, loops trough all linkfs from .parquet and starts search for data
     let reader = await parquet.ParquetReader.openFile('websites.snappy .parquet');
     let cursor = reader.getCursor();
-    let beginAt = 0; // skip the first 100 records
+    let beginAt = 200; // skip the first 100 records
     let index = 0;
 
     let record = null;
+    let browser = await puppeteer.launch();
     while(record = await cursor.next()) {
         if(index < beginAt){
             index++;
             continue;
         }
         let retreivedData = {country: null, region: null, city: null, postcode: null, road: null, roadNumber: null};
-        retreivedData = await accessDomain('https://' + record.domain);
+        retreivedData = await accessDomain('https://' + record.domain, browser);
         let lastRetreivedActualData = {country: retreivedData?.country, region: retreivedData?.region, city: retreivedData?.city, postcode: retreivedData?.postcode, road: retreivedData?.road, roadNumber: retreivedData?.roadNumber};
-
+        
         if(!retreivedData?.postcode || !retreivedData?.road){ //incase the postcode hasn't been found, get the linkfs of the landing page and search trough them as well (initiate only if postcode missing since street tends to be placed next to it)
             for(let link of firstPageLinks){
                 await new Promise(resolve => setTimeout(resolve, 500)); // delay to prevent blocking by the server
-                retreivedData = await accessDomain(link);
+                retreivedData = await accessDomain(link, browser);
                 lastRetreivedActualData = updateRetrievedData(retreivedData, lastRetreivedActualData); 
+                if(retreivedData?.postcode && retreivedData?.road){
+                    break;
+                }
             }
             retreivedData = updateMissingData(retreivedData, lastRetreivedActualData);
         }
@@ -92,25 +97,24 @@ function updateMissingData(retreivedData, lastRetreivedActualData) {
     return retreivedData;
 }
 
-async function accessDomain(domain){
+async function accessDomain(domain, browser){
     let response;
     let retreivedData = null;
+    let page = await browser.newPage();
     console.log('Accesing domain: ' + domain);
     try {
-        response = await axios.get(domain, { timeout: 5000 });
-        if (response.status === 200) {
-            console.log(`Response status: ${response.status}`);
-            console.log(`Response headers: ${response.headers}`);
+        await page.goto(domain);
+        let pageBody = await page.evaluate(() => document.body.innerHTML);
 
-            if (response.headers['content-type'] === 'application/pdf' || response.headers['content-type'] === 'audio/mpeg' || response.headers['content-type'] === 'video/mp4') {
-                console.log('Irrelevant file detected. Skipping...');
-                return;
-            }
+        let contentType = await page.evaluate(() => document.contentType);
 
-            retreivedData = await retrieveLocationData(response.data, domain);
-        } else {
-            console.log(`Failed to access domain. Response status: ${response.status}`);
+        if (contentType === 'application/pdf' || contentType === 'audio/mpeg' || contentType === 'video/mp4') {
+            console.log('Irrelevant file detected. Skipping...');
+            return;
         }
+
+        retreivedData = await retrieveLocationData(pageBody, domain);
+
     } catch (error) {
         console.log(`Error accessing domain: ${error.message}`);
         if (error.response) {
@@ -121,7 +125,7 @@ async function accessDomain(domain){
             console.log(`Error request: ${error.request}`);
         }
     }
-
+    await page.close();
     return retreivedData;
 }
 

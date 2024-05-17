@@ -7,7 +7,7 @@ function elementTextCleanUp(element, $) {
         } else {
             // Recursively clean up the inner text of child elements
             const childText = elementTextCleanUp(this, $);
-            const cleanedChildText = childText.replace(/<img[^>]*>/g, '');
+            const cleanedChildText = childText.replace(/<img[^>]*>|<iframe[^>]*>/g, '');
             // Add the cleaned text and a space to separate from the next element
             text += cleanedChildText + ' ';
         }

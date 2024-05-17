@@ -18,6 +18,7 @@
     "csv-writer": "^1.6.0",
     "node-nlp": "^4.27.0",
     "parquetjs": "^0.11.2",
+    "puppeteer": "^22.8.1",
     "url": "^0.11.3"
   }
 }

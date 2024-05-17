@@ -1,7 +1,7 @@
 const fs = require('fs');
 const {elementTextCleanUp, textCleanUp} = require('../dataCleanup.js');
 const addressSelectors = [
-    'address', 'p', 'font', 'span', 'strong', 'div'
+    'address', 'p', 'font', 'span', 'strong','li', 'ul', 'div'
 ];
 
 const roadMatches = new Set();

@@ -7,6 +7,8 @@ const getPostalCodeFormat = require('./postalcodeRegex.js');
 const { findCountry, getCountryFromURL } = require('./Extractors/countryExtractor.js');
 const {findPostcode, loopForPostcodeIfCountry} = require('./Extractors/postcodeExtractor.js');
 const findRoad = require('./Extractors/roadExtractor.js');
+const LoopTroughElements = require('./pageScrapper.js');
+const {elementTextCleanUp, textCleanUp}= require('./dataCleanup.js');
 
 
 async function retrieveLocationData(url) {
@@ -17,8 +19,12 @@ async function retrieveLocationData(url) {
         await page.goto(url, {waitUntil: 'networkidle2', timeout: 30000});
 
         const htmlContent = await page.content();
-
+        
         await browser.close();
+        
+        // const response = await axios.get(url);
+        // const htmlContent = response.data;
+
 
         let country;
         let region;
@@ -26,8 +32,11 @@ async function retrieveLocationData(url) {
         let postcode;
 
         const $ = cheerio.load(htmlContent);
-        const text = $('body').text();
+        let cleanedText = elementTextCleanUp('body', $);
+        const text = textCleanUp(cleanedText);
         console.log(text)
+
+        LoopTroughElements($);
 
         let firstPageLinks = await getFirstPageLinks(url, $);
         console.log(firstPageLinks)
@@ -69,7 +78,6 @@ async function retrieveLocationData(url) {
 
         // postcodeData = await getPostcodeDataParseAPI(postcode);
 
-        console.log('outputing');
         // Output extracted data
         console.log('Country:', country);
         console.log('Region:', region);
@@ -146,7 +154,7 @@ const urlsToTest = [
     //29
     'https://www.plentyconsulting.com/plenty-team',
     //30
-    'https://www.wargoenterprises.com/'
+    'https://servemenow.org/'
 ];
 
 retrieveLocationData(urlsToTest[30]);

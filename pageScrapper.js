@@ -38,9 +38,9 @@ function LoopTroughElements($){
                 // if road
                     // return road
 
-        fs.appendFile('element_text.txt', `${element.name}\n${elementText}\n\n\n`, (err) => {
-            if (err) throw err;
-        });
+        // fs.appendFile('element_text.txt', `${element.name}\n${elementText}\n\n\n`, (err) => {
+        //     if (err) throw err;
+        // });
     }
 }
 

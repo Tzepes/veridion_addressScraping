@@ -14,11 +14,13 @@ async function loopForPostcodeIfCountry(text = null, countryRegex = null, countr
     let postcode = null;
     let postcodeAPIResponse;
     let matchingPostcodes = new Set();
-    const addressSelectors = ['address', 'p', 'font', 'span', 'strong', 'div'];
+    const addressSelectors = ['address', 'p', 'font', 'span', 'strong','li', 'ul', 'div'];
     const filteredElements = $('body').find('*').not('script, link, meta, style, path, symbol, noscript, img');
     const reversedElements = $(filteredElements).get().reverse(); // reverse the webpage elements since most postcodes are at the base of the page
 
     let textGlobalVar;
+    let elementGlobalVar;
+    let postcodeTextLocation = {};
 
     // Start search for postcode
     // we insert each matching string of numbers into a Set() array, then we loop them until the valid postcode is found
@@ -37,14 +39,15 @@ async function loopForPostcodeIfCountry(text = null, countryRegex = null, countr
 
         let text = elementTextCleanUp(element, $);
         text = textCleanUp(text);
-
+        
+        
         postcodeMatch = text.match(postcodeDefaultRegex);
         if (postcodeMatch) {
             postcode = postcodeMatch[0];
             matchingPostcodes.add(postcode);
-            fs.appendFile('matchesFromPostcode.txt', `${element.name}\n${text}\n\n`, (err) => {
-                if (err) throw err;
-            });
+            elementGlobalVar = element.name;
+            textGlobalVar = text;
+            postcodeTextLocation[postcode] = {element: elementGlobalVar, text: textGlobalVar };
             // continue;
         }
         
@@ -53,9 +56,9 @@ async function loopForPostcodeIfCountry(text = null, countryRegex = null, countr
         if (postcodeMatch) {
             postcode = postcodeMatch[0]; 
             matchingPostcodes.add(postcode);
-            fs.appendFile('matchesFromPostcode.txt', `${element.name}\n${text}\n\n`, (err) => {
-                if (err) throw err;
-            });
+            elementGlobalVar = element.name;
+            textGlobalVar = text;
+            postcodeTextLocation[postcode] = {element: elementGlobalVar, text: textGlobalVar };
             // continue;
         }
     }
@@ -72,6 +75,14 @@ async function loopForPostcodeIfCountry(text = null, countryRegex = null, countr
         } else {
             console.log('postcode found:', postcodeOfArr);
             postcode = postcodeOfArr;
+            if (postcode) {
+                let data = postcodeTextLocation[postcode];
+                fs.appendFile('matchesFromPostcode.txt', `${data.element}\n${data.text}\n\n`, (err) => {
+                    if (err) throw err;
+                });
+            }
+            elementGlobalVar = null;
+            textGlobalVar = null;
             return { postcode, postcodeAPIResponse };
         }
     }
