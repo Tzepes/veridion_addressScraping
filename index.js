@@ -16,6 +16,8 @@ const getPostalCodeFormat = require('./postalcodeRegex.js');
 
 const { getLanguage } = require('./MLM/languageNLP.js');
 
+const { cleanUpFromGPEs } = require('./dataCleanup.js');
+
 const {fetchStreetDetails, fetchGPEandORG} = require('./apis/spacyLocalAPI.js');
 
 // Declare links array:
@@ -131,10 +133,6 @@ async function accessDomain(domain, browser){
     return retreivedData;
 }
 
-async function resolveNoDataFound(retreivedData, lastRetreivedActualData, firstPageLinks){
-
-}
-
 async function retrieveLocationData(htmlContent, url) {
     let country;
     let region;
@@ -188,6 +186,8 @@ async function retrieveLocationData(htmlContent, url) {
     let addressInPageText;
     if(postcode){
         addressInPageText = postcodeObject?.addressInPageTxt.text;
+        let GPEs = await fetchGPEandORG(addressInPageText).GPE;
+        addressInPageText = cleanUpFromGPEs(addressInPageText, GPEs);
         let addressLabled = await fetchStreetDetails(addressInPageText);
         road = addressLabled.Street_Name;
         roadNumber = addressLabled.Street_Num;
