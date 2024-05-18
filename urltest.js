@@ -154,7 +154,11 @@ const urlsToTest = [
     //29
     'https://www.plentyconsulting.com/plenty-team',
     //30
-    'https://servemenow.org/'
+    'https://servemenow.org/',
+    //31 --> IP BAN, SEE IF BRIGHT DATA FIXES THIS
+    'https://holmesandturner.com/',
+    //32
+    'https://systemadix.com'
 ];
 
-retrieveLocationData(urlsToTest[30]);
+retrieveLocationData(urlsToTest[32]);
