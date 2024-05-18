@@ -39,7 +39,7 @@ const csvWriter = createCsvWriter({
 (async () => {  // the main function that starts the search, loops trough all linkfs from .parquet and starts search for data
     let reader = await parquet.ParquetReader.openFile('websites.snappy .parquet');
     let cursor = reader.getCursor();
-    let beginAt = 0; // skip the first 100 records
+    let beginAt = 14; // skip the first 100 records
     let index = 0;
 
     let record = null;
@@ -107,7 +107,7 @@ async function accessDomain(domain, browser){
     let page = await browser.newPage();
     console.log('Accesing domain: ' + domain);
     try {
-        await page.goto(domain);
+        await page.goto(domain, { timeout: 30000 });
         let pageBody = await page.evaluate(() => document.body.innerHTML);
 
         let contentType = await page.evaluate(() => document.contentType);
@@ -118,7 +118,6 @@ async function accessDomain(domain, browser){
         }
 
         retreivedData = await retrieveLocationData(pageBody, domain);
-
     } catch (error) {
         console.log(`Error accessing domain: ${error.message}`);
         if (error.response) {
@@ -129,6 +128,9 @@ async function accessDomain(domain, browser){
             console.log(`Error request: ${error.request}`);
         }
     }
+    // } finally{
+    //     await page.close();
+    // }
     await page.close();
     return retreivedData;
 }
@@ -187,13 +189,15 @@ async function retrieveLocationData(htmlContent, url) {
     if(postcode){
         addressInPageText = postcodeObject?.addressInPageTxt.text;
         let GPEs = await fetchGPEandORG(addressInPageText).GPE;
-        addressInPageText = cleanUpFromGPEs(addressInPageText, GPEs);
+        if(GPEs){
+            addressInPageText = cleanUpFromGPEs(addressInPageText, GPEs);
+        }
         let addressLabled = await fetchStreetDetails(addressInPageText);
         road = addressLabled.Street_Name;
         roadNumber = addressLabled.Street_Num;
     }
 
-    if(!road){
+    if(!road || road != ''){
         // Extract road
         roadObject = findRoad($);
         road = roadObject.road;

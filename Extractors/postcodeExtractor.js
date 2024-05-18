@@ -85,7 +85,6 @@ async function loopForPostcodeIfCountry(text = null, countryRegex = null, countr
             let addressInPageTxt;
             if (postcode) {
                 let data = postcodeTextLocation[postcode];
-                console.log(postcodeTextLocation[postcode])
                 let element = $(data.element);
                 let text = data.text;
                 const minNum = 6; // Set this to the minimum number of tokens you want
@@ -93,7 +92,6 @@ async function loopForPostcodeIfCountry(text = null, countryRegex = null, countr
 
                 addressInPageTxt = traverseElement(element, text, minNum, maxNum, postcode, $);
                 addressInPageTxt.text = removePhoneNumbersAndEmails(addressInPageTxt.text);
-                console.log('RETURNING POSTCODE')
                 fs.appendFile('matchesFromPostcode.txt', `${addressInPageTxt.element[0].name}\n${addressInPageTxt.text}\n\n`, (err) => {
                     if (err) throw err;
                 });
@@ -112,14 +110,18 @@ function traverseElement(element, text, minNum, maxNum, postcode, $) {
     // Split the text into tokens
     let tokens = currentText.split(/\s+/);
 
+    let iterations = 0;
+    const maxIterations = 3;
+
     // Traverse up or down the hierarchy to adjust the token count
-    while (tokens.length < minNum || tokens.length > maxNum) {
+    while ((tokens.length < minNum || tokens.length > maxNum) && iterations < maxIterations) {
+        console.log('traversing postcode elements')
         if (tokens.length > maxNum) {
             // If too many tokens, traverse downwards
             let childElements = currentElement.children();
             let found = false;
             for (let i = 0; i < childElements.length; i++) {
-                let childText = $(childElements[i]).text();
+                let childText = $(childElements[i]) ? $(childElements[i]).text() : null;
                 if (childText.includes(postcode)) {
                     currentElement = $(childElements[i]);
                     currentText = childText;
@@ -133,7 +135,7 @@ function traverseElement(element, text, minNum, maxNum, postcode, $) {
             // If too few tokens, traverse upwards
             let parentElement = currentElement.parent();
             if (parentElement.length === 0) break; // No parent element, stop traversing upwards
-            let parentText = parentElement.text();
+            let parentText = parentElement ? parentElement.text() : null;
             if (parentText.includes(postcode)) {
                 currentElement = parentElement;
                 currentText = parentText;
@@ -142,14 +144,15 @@ function traverseElement(element, text, minNum, maxNum, postcode, $) {
                 break; // Parent text does not contain postcode, stop traversing upwards
             }
         }
+        iterations++;
     }
 
     // Ensure the final text contains the postcode and has the correct token count
-    if (currentText.includes(postcode) && tokens.length >= minNum && tokens.length <= maxNum) {
-        return { text: currentText, element: currentElement };
-    } else {
-        return null; // Unable to find suitable text
-    }
+    // if (currentText.includes(postcode) && tokens.length >= minNum && tokens.length <= maxNum) {
+    return { text: currentText, element: currentElement };
+    // } else {
+    //     return null; // Unable to find suitable text
+    // }
 }
 
 

@@ -28,7 +28,9 @@ function textCleanUp(text) {
 
 function removePhoneNumbersAndEmails(text) {
     // Regex pattern for phone numbers
+    console.log('cleaning phones')
     const phonePattern = /(\+?\d{1,4}[\s-]?)?(\(?\d{1,3}\)?[\s-]?)?[\d\s-]{7,15}/g;
+    console.log('cleaning emails')
     // Regex pattern for emails
     const emailPattern = /[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}/g;
     
@@ -36,7 +38,7 @@ function removePhoneNumbersAndEmails(text) {
     text = text.replace(phonePattern, ' ');
     // Remove emails from text
     text = text.replace(emailPattern, ' ');
-
+    console.log('done cleaning phones and emails')
     // Return the cleaned text
     return text;
 }
@@ -44,9 +46,10 @@ function removePhoneNumbersAndEmails(text) {
 function cleanUpFromGPEs(text, GPEs) {
     // Remove GPEs from the text
     for (let GPE of GPEs) {
+        console.log('cleaning GPEs')
         text = text.replace(GPE, ' ');
     }
-
+    console.log('done cleaing GPEs');
     return text;
 }
 
