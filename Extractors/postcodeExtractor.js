@@ -1,7 +1,9 @@
 const {getDataFromParseAPI, getDataFromZipcodeBase} = require('../apis/postalcodeParseAPI.js');
 const { getCountryAbbreviation } = require('../countriesCodes.js');
 
-const {elementTextCleanUp, textCleanUp, removePhoneNumbersAndEmails} = require('../dataCleanup.js');
+const {fetchStreetDetails} = require('../apis/spacyLocalAPI.js');
+
+const {elementTextCleanUp, textCleanUp, removeNonAddressDetails} = require('../dataCleanup.js');
 const fs = require('fs');
 
 async function loopForPostcodeIfCountry(text = null, countryRegex = null, countryFromURL = null, $) {  
@@ -91,7 +93,7 @@ async function loopForPostcodeIfCountry(text = null, countryRegex = null, countr
                 const maxNum = 15; // Set this to the maximum number of tokens you want
 
                 addressInPageTxt = traverseElement(element, text, minNum, maxNum, postcode, $);
-                addressInPageTxt.text = removePhoneNumbersAndEmails(addressInPageTxt.text);
+                addressInPageTxt.text = removeNonAddressDetails(addressInPageTxt.text);
                 fs.appendFile('matchesFromPostcode.txt', `${addressInPageTxt.element[0].name}\n${addressInPageTxt.text}\n\n`, (err) => {
                     if (err) throw err;
                 });

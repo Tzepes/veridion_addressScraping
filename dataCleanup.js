@@ -26,18 +26,21 @@ function textCleanUp(text) {
     return text;
 }
 
-function removePhoneNumbersAndEmails(text) {
+function removeNonAddressDetails(text) {
     // Regex pattern for phone numbers
     console.log('cleaning phones')
     const phonePattern = /(\+?\d{1,4}[\s-]?)?(\(?\d{1,3}\)?[\s-]?)?[\d\s-]{7,15}/g;
     console.log('cleaning emails')
     // Regex pattern for emails
     const emailPattern = /[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}/g;
+    const urlPattern = /https?:\/\/[^\s]+/g;
     
     // Remove phone numbers from text
     text = text.replace(phonePattern, ' ');
     // Remove emails from text
     text = text.replace(emailPattern, ' ');
+    // Remove links
+    text = text.replace(urlPattern, ' ');
     console.log('done cleaning phones and emails')
     // Return the cleaned text
     return text;
@@ -53,4 +56,4 @@ function cleanUpFromGPEs(text, GPEs) {
     return text;
 }
 
-module.exports = { elementTextCleanUp, textCleanUp, removePhoneNumbersAndEmails, cleanUpFromGPEs };
+module.exports = { elementTextCleanUp, textCleanUp, removeNonAddressDetails, cleanUpFromGPEs };

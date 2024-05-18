@@ -16,12 +16,14 @@ const getPostalCodeFormat = require('./postalcodeRegex.js');
 
 const { getLanguage } = require('./MLM/languageNLP.js');
 
-const { cleanUpFromGPEs } = require('./dataCleanup.js');
+const { elementTextCleanUp, textCleanUp, cleanUpFromGPEs } = require('./dataCleanup.js');
 
 const {fetchStreetDetails, fetchGPEandORG} = require('./apis/spacyLocalAPI.js');
 
 // Declare links array:
 let firstPageLinks = [];
+let ORGs = [];
+let GPEs = [];
 
 const csvWriter = createCsvWriter({
     path: 'results/linkResultsTable.csv',
@@ -39,7 +41,7 @@ const csvWriter = createCsvWriter({
 (async () => {  // the main function that starts the search, loops trough all linkfs from .parquet and starts search for data
     let reader = await parquet.ParquetReader.openFile('websites.snappy .parquet');
     let cursor = reader.getCursor();
-    let beginAt = 14; // skip the first 100 records
+    let beginAt = 0; // skip the first 100 records
     let index = 0;
 
     let record = null;
@@ -56,7 +58,7 @@ const csvWriter = createCsvWriter({
         if(!retreivedData?.postcode || !retreivedData?.road){ //incase the postcode hasn't been found, get the linkfs of the landing page and search trough them as well (initiate only if postcode missing since street tends to be placed next to it)
             for(let link of firstPageLinks){
                 await new Promise(resolve => setTimeout(resolve, 500)); // delay to prevent blocking by the server
-                retreivedData = await accessDomain(link, browser);
+                retreivedData = await accessDomain(link, browser, false);
                 lastRetreivedActualData = updateRetrievedData(retreivedData, lastRetreivedActualData); 
                 if(retreivedData?.postcode && retreivedData?.road){
                     break;
@@ -65,6 +67,26 @@ const csvWriter = createCsvWriter({
             retreivedData = updateMissingData(retreivedData, lastRetreivedActualData);
         }
         firstPageLinks = [];
+
+        //In case no postcode and no road has been found after search trough links, find GPE and ORG tags, and search google with them
+        if(!retreivedData?.postcode && !retreivedData?.road){
+            let orgIndex = 0;
+            console.log('Beginning search on google');
+            console.log(ORGs);
+            for(let ORG of ORGs){
+                let searchQuery = encodeURIComponent(ORG + ' ' + GPEs[orgIndex]);
+                retreivedData = await accessDomain('https://www.google.com/search?q=' + searchQuery, browser, false);
+                lastRetreivedActualData = updateRetrievedData(retreivedData, lastRetreivedActualData); 
+                console.log('postcode:', retreivedData?.postcode, 'road:', retreivedData?.road)
+                if(retreivedData.postcode && retreivedData.road){
+                    break;
+                }
+                orgIndex++;
+            }
+        }
+        
+        ORGs.length = 0;
+        GPEs.length = 0;
         // console.log('postcode:', retreivedData?.postcode, 'road:', retreivedData?.road)
         await writeCSV(retreivedData, record.domain); //write data into CSV file
     }
@@ -101,13 +123,14 @@ function updateMissingData(retreivedData, lastRetreivedActualData) {
     return retreivedData;
 }
 
-async function accessDomain(domain, browser){
+async function accessDomain(domain, browser, isFirstPage = true){
     let response;
     let retreivedData = null;
     let page = await browser.newPage();
     console.log('Accesing domain: ' + domain);
     try {
-        await page.goto(domain, { timeout: 30000 });
+        response = await page.goto(domain, { timeout: 30000 });
+
         let pageBody = await page.evaluate(() => document.body.innerHTML);
 
         let contentType = await page.evaluate(() => document.contentType);
@@ -115,6 +138,10 @@ async function accessDomain(domain, browser){
         if (contentType === 'application/pdf' || contentType === 'audio/mpeg' || contentType === 'video/mp4') {
             console.log('Irrelevant file detected. Skipping...');
             return;
+        }
+
+        if(isFirstPage){
+            await getGPEandORG(pageBody);
         }
 
         retreivedData = await retrieveLocationData(pageBody, domain);
@@ -214,6 +241,19 @@ async function retrieveLocationData(htmlContent, url) {
     // console.log('language:', getLanguage(text));
 
     return {country, region, city, postcode, road, roadNumber}; // Return extracted data
+}
+
+async function getGPEandORG(htmlContent){
+    const $ = cheerio.load(htmlContent);
+    
+    let text = elementTextCleanUp($('body'), $);
+    text = textCleanUp(text);
+    
+    let pageLanguage = getLanguage(text);
+    
+    let fetchResult = await fetchGPEandORG(text);
+    ORGs = fetchResult.ORG;
+    GPEs = fetchResult.GPE;
 }
 
 async function writeCSV(data, domain) {
