@@ -26,4 +26,20 @@ function textCleanUp(text) {
     return text;
 }
 
-module.exports = { elementTextCleanUp, textCleanUp };
+function removePhoneNumbersAndEmails(text) {
+    // Regex pattern for phone numbers
+    const phonePattern = /(\+?\d{1,4}[\s-]?)?(\(?\d{1,3}\)?[\s-]?)?[\d\s-]{7,15}/g;
+    // Regex pattern for emails
+    const emailPattern = /[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}/g;
+    
+    // Remove phone numbers from text
+    text = text.replace(phonePattern, '');
+    // Remove emails from text
+    text = text.replace(emailPattern, '');
+
+    // Return the cleaned text
+    return text;
+}
+
+
+module.exports = { elementTextCleanUp, textCleanUp, removePhoneNumbersAndEmails };

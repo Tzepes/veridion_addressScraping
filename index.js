@@ -16,6 +16,8 @@ const getPostalCodeFormat = require('./postalcodeRegex.js');
 
 const { getLanguage } = require('./MLM/languageNLP.js');
 
+const {fetchStreetDetails, fetchGPEandORG} = require('./apis/spacyLocalAPI.js');
+
 // Declare links array:
 let firstPageLinks = [];
 
@@ -183,10 +185,20 @@ async function retrieveLocationData(htmlContent, url) {
         country = country.charAt(0).toUpperCase() + country.slice(1); // Capitalize first letter
     }
 
-    // Extract road
-    roadObject = findRoad($);
-    road = roadObject.road;
-    roadNumber = roadObject.roadNumber;
+    let addressInPageText;
+    if(postcode){
+        addressInPageText = postcodeObject?.addressInPageTxt.text;
+        let addressLabled = await fetchStreetDetails(addressInPageText);
+        road = addressLabled.Street_Name;
+        roadNumber = addressLabled.Street_Num;
+    }
+
+    if(!road){
+        // Extract road
+        roadObject = findRoad($);
+        road = roadObject.road;
+        roadNumber = roadObject.roadNumber;
+    }
     
     // Output extracted data
     console.log('Country:', country)

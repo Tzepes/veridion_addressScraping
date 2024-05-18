@@ -40,14 +40,19 @@ async function loopForPostcodeIfCountry(text = null, countryRegex = null, countr
         let text = elementTextCleanUp(element, $);
         text = textCleanUp(text);
         
+        // fs.appendFile('postcodeLoopElements.txt', `${element.name}\n${text}\n\n`, (err) => {
+        //     if (err) throw err;
+        // });
         
         postcodeMatch = text.match(postcodeDefaultRegex);
         if (postcodeMatch) {
             postcode = postcodeMatch[0];
-            matchingPostcodes.add(postcode);
-            elementGlobalVar = element.name;
-            textGlobalVar = text;
-            postcodeTextLocation[postcode] = {element: elementGlobalVar, text: textGlobalVar };
+            if (!matchingPostcodes.has(postcode)) { // Check if postcode has already been found
+                matchingPostcodes.add(postcode);
+                elementGlobalVar = element.name;
+                textGlobalVar = text;
+                postcodeTextLocation[postcode] = {element: elementGlobalVar, text: textGlobalVar };
+            }
             // continue;
         }
         
@@ -55,10 +60,12 @@ async function loopForPostcodeIfCountry(text = null, countryRegex = null, countr
         postcodeMatch = text.match(postcodeCountryRegex);
         if (postcodeMatch) {
             postcode = postcodeMatch[0]; 
-            matchingPostcodes.add(postcode);
-            elementGlobalVar = element.name;
-            textGlobalVar = text;
-            postcodeTextLocation[postcode] = {element: elementGlobalVar, text: textGlobalVar };
+            if (!matchingPostcodes.has(postcode)) { // Check if postcode has already been found
+                matchingPostcodes.add(postcode);
+                elementGlobalVar = element.name;
+                textGlobalVar = text;
+                postcodeTextLocation[postcode] = {element: elementGlobalVar, text: textGlobalVar };
+            }
             // continue;
         }
     }
@@ -75,18 +82,76 @@ async function loopForPostcodeIfCountry(text = null, countryRegex = null, countr
         } else {
             console.log('postcode found:', postcodeOfArr);
             postcode = postcodeOfArr;
+            let addressInPageTxt;
             if (postcode) {
                 let data = postcodeTextLocation[postcode];
-                fs.appendFile('matchesFromPostcode.txt', `${data.element}\n${data.text}\n\n`, (err) => {
+                console.log(postcodeTextLocation[postcode])
+                let element = $(data.element);
+                let text = data.text;
+                const minNum = 6; // Set this to the minimum number of tokens you want
+                const maxNum = 15; // Set this to the maximum number of tokens you want
+
+                addressInPageTxt = traverseElement(element, text, minNum, maxNum, postcode, $);
+                console.log('RETURNING POSTCODE')
+                fs.appendFile('matchesFromPostcode.txt', `${addressInPageTxt.element[0].name}\n${addressInPageTxt.text}\n\n`, (err) => {
                     if (err) throw err;
                 });
             }
             elementGlobalVar = null;
             textGlobalVar = null;
-            return { postcode, postcodeAPIResponse };
+            return { postcode, postcodeAPIResponse, addressInPageTxt};
         }
     }
 }
+
+function traverseElement(element, text, minNum, maxNum, postcode, $) {
+    let currentElement = $(element);
+    let currentText = text;
+
+    // Split the text into tokens
+    let tokens = currentText.split(/\s+/);
+
+    // Traverse up or down the hierarchy to adjust the token count
+    while (tokens.length < minNum || tokens.length > maxNum) {
+        if (tokens.length > maxNum) {
+            // If too many tokens, traverse downwards
+            let childElements = currentElement.children();
+            let found = false;
+            for (let i = 0; i < childElements.length; i++) {
+                let childText = $(childElements[i]).text();
+                if (childText.includes(postcode)) {
+                    currentElement = $(childElements[i]);
+                    currentText = childText;
+                    tokens = currentText.split(/\s+/);
+                    found = true;
+                    break;
+                }
+            }
+            if (!found) break; // No suitable child found, stop traversing downwards
+        } else if (tokens.length < minNum) {
+            // If too few tokens, traverse upwards
+            let parentElement = currentElement.parent();
+            if (parentElement.length === 0) break; // No parent element, stop traversing upwards
+            let parentText = parentElement.text();
+            if (parentText.includes(postcode)) {
+                currentElement = parentElement;
+                currentText = parentText;
+                tokens = currentText.split(/\s+/);
+            } else {
+                break; // Parent text does not contain postcode, stop traversing upwards
+            }
+        }
+    }
+
+    // Ensure the final text contains the postcode and has the correct token count
+    if (currentText.includes(postcode) && tokens.length >= minNum && tokens.length <= maxNum) {
+        return { text: currentText, element: currentElement };
+    } else {
+        return null; // Unable to find suitable text
+    }
+}
+
+
 
 async function passPostcodeToAPI(postcode, countryFromURL) {
     let postcodeAPIResponse;

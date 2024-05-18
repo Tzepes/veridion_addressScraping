@@ -17,6 +17,8 @@ function findRoad($) {
     const filteredElements = $('body').find('*').not('script, link, meta, style, path, symbol, noscript, img');
     const reversedElements = $(filteredElements).get().reverse();
 
+    let elementTxtGlobalVar;
+
     for(let index = 0; index < reversedElements.length; index++) {
         const element = reversedElements[index];
 
@@ -51,6 +53,7 @@ function findRoad($) {
             fs.appendFile('matchesFromStreet.txt', `${element.name}\n${text}\n\n`, (err) => {
                 if (err) throw err;
             });
+            elementTxtGlobalVar = text;
         }
 
         // pass trough geocoding API
@@ -69,7 +72,7 @@ function findRoad($) {
 
     console.log('street array:', roadMatches);
     roadMatches.clear();
-    return { roadNumber, road: road || null };
+    return { roadNumber, road: road || null , elementTxtGlobalVar};
 }
 
 // get all possible matches for road name

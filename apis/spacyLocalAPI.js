@@ -36,6 +36,6 @@ async function logDetails() {
     }
 }
 
-logDetails()
+// logDetails()
 
 module.exports = {fetchStreetDetails, fetchGPEandORG};
