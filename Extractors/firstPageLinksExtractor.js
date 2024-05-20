@@ -5,7 +5,7 @@ async function getFirstPageLinks(domain, $) {
     let differentDomainLinks = new Set();
     const aTags = $('a');
     const unwantedLinkRegex = /^#|javascript:|mailto:|tel:|ftp:|data:|\.(pdf|jpg|png|mp3|mp4)$/;
-    const socialMediaRegex = /twitter\.com|facebook\.com|instagram\.com|linkedin\.com|youtube\.com|pinterest\.com|patreon\.com|snapchat\.com/;
+    const socialMediaRegex = /twitter\.com|facebook\.com|instagram\.com|linkedin\.com|youtube\.com|pinterest\.com|patreon\.com|snapchat\.com|github\.com/;
     const ignoredRoutes = ['shop', 'product', 'products', 'collection', 'collections', 'news', 'media', 'services'];
     let domainHostname = url.parse(domain).hostname;
     domainHostname = domainHostname.replace('www.', '');

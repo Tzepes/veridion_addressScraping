@@ -107,7 +107,11 @@ async function loopForPostcodeIfCountry(text = null, countryRegex = null, countr
                     text = data.texts[i];
                     addressInPageTxt = traverseElement(element, text, minNum, maxNum, postcode, $);
                     addressInPageTxt.text = removeNonAddressDetails(addressInPageTxt.text);
-                    if(fetchGPEandORG(addressInPageTxt.text).GPE.length > 0){
+                    
+                    const gpeAndOrgDetails = await fetchGPEandORG(addressInPageTxt.text);
+                    let GPEs = gpeAndOrgDetails.GPE;
+
+                    if(GPEs.length > 0){
                         containGPEinText = true;
                     }
             
