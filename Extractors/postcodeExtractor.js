@@ -1,7 +1,7 @@
 const {getDataFromParseAPI, getDataFromZipcodeBase} = require('../apis/postalcodeParseAPI.js');
 const { getCountryAbbreviation } = require('../countriesCodes.js');
 
-const {fetchStreetDetails} = require('../apis/spacyLocalAPI.js');
+const {fetchStreetDetails, fetchGPEandORG} = require('../apis/spacyLocalAPI.js');
 
 const {elementTextCleanUp, textCleanUp, removeNonAddressDetails} = require('../dataCleanup.js');
 const fs = require('fs');
@@ -85,6 +85,7 @@ async function loopForPostcodeIfCountry(text = null, countryRegex = null, countr
 
     for (let postcodeOfArr of uniquePostcodes) { // check each matching string
         let postcodeInfo = await passPostcodeToAPI(postcodeOfArr, countryFromURL);
+        let containGPEinText = false;
         postcodeAPIResponse = postcodeInfo.postcodeAPIResponse;
         console.log(postcodeAPIResponse);
         if(postcodeAPIResponse == null){
@@ -106,6 +107,9 @@ async function loopForPostcodeIfCountry(text = null, countryRegex = null, countr
                     text = data.texts[i];
                     addressInPageTxt = traverseElement(element, text, minNum, maxNum, postcode, $);
                     addressInPageTxt.text = removeNonAddressDetails(addressInPageTxt.text);
+                    if(fetchGPEandORG(addressInPageTxt.text).GPE.length > 0){
+                        containGPEinText = true;
+                    }
             
                     // Call fetchStreetDetails API and break the loop if it returns street_name and street_number
                     let streetDetails = await fetchStreetDetails(addressInPageTxt.text);
@@ -117,7 +121,9 @@ async function loopForPostcodeIfCountry(text = null, countryRegex = null, countr
                         break;
                     }
                 }
-            
+                if(!containGPEinText){
+                    continue;
+                }
                 elementGlobalVar = null;
                 textGlobalVar = null;
                 return { postcode, postcodeAPIResponse, addressText };
