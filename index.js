@@ -55,11 +55,11 @@ const csvWriter = createCsvWriter({
             continue;
         }
         let retreivedData = {country: null, region: null, city: null, postcode: null, road: null, roadNumber: null};
-        retreivedData = await accessDomain('https://' + record.domain, browser);
+        retreivedData = await accessDomain('https://' + 'sk4designs.com', browser);
         let lastRetreivedActualData = {country: retreivedData?.country, region: retreivedData?.region, city: retreivedData?.city, postcode: retreivedData?.postcode, road: retreivedData?.road, roadNumber: retreivedData?.roadNumber};
         
-        // for no check only if postcode has not been found, the NER needs updated training + better data cleaning and text selection from element
-        if(!retreivedData?.postcode){ //incase the postcode hasn't been found, get the linkfs of the landing page and search trough them as well (initiate only if postcode missing since street tends to be placed next to it)
+        // for now check only if postcode has not been found, the NER needs updated training + better data cleaning and text selection from element
+        if(!retreivedData.postcode || !retreivedData.road){ //incase the postcode hasn't been found, get the linkfs of the landing page and search trough them as well (initiate only if postcode missing since street tends to be placed next to it)
             for(let link of firstPageLinks){
                 await new Promise(resolve => setTimeout(resolve, 500)); // delay to prevent blocking by the server
                 retreivedData = await accessDomain(link, browser);
@@ -73,7 +73,7 @@ const csvWriter = createCsvWriter({
         firstPageLinks = [];
 
         //In case no postcode and no road has been found after search trough links, find GPE and ORG tags, and search google with them
-        if(!retreivedData?.postcode && !retreivedData?.road){
+        if(!retreivedData.postcode && !retreivedData.road){
             let orgIndex = 0;
             console.log('Beginning search on google');
             console.log(ORGs);
@@ -217,19 +217,20 @@ async function retrieveLocationData(htmlContent, url) {
         country = country.charAt(0).toUpperCase() + country.slice(1); // Capitalize first letter
     }
 
-    let addressInPageText;
-    if(postcode){
-        addressInPageText = postcodeObject?.addressInPageTxt.text;
-        let GPEs = await fetchGPEandORG(addressInPageText).GPE;
+    let addressText;
+    if(postcode && postcodeObject.addressText){
+        addressText = postcodeObject.addressText;
+        let GPEs = await fetchGPEandORG(addressText).GPE;
         if(GPEs){
-            addressInPageText = cleanUpFromGPEs(addressInPageText, GPEs);
+            addressText = cleanUpFromGPEs(addressText, GPEs);
         }
-        let addressLabled = await fetchStreetDetails(addressInPageText);
+        let addressLabled = await fetchStreetDetails(addressText);
         road = addressLabled.Street_Name;
         roadNumber = addressLabled.Street_Num;
     }
+    console.log(road, roadNumber)
 
-    if(!road || road != ''){
+    if(!road){
         // Extract road
         roadObject = findRoad($);
         road = roadObject.road;

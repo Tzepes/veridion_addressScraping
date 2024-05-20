@@ -1,5 +1,6 @@
 const fs = require('fs');
 const {elementTextCleanUp, textCleanUp} = require('../dataCleanup.js');
+const { fetchStreetDetails } = require('../apis/spacyLocalAPI.js');
 const addressSelectors = [
     'address', 'p', 'font', 'span', 'strong', 'div'
 ];
@@ -44,9 +45,9 @@ function findRoad($) {
         if(text.match(streetNameRegex)){
             // console.log(text);
             let matches = text.match(streetNameRegex);
-            console.log('matches:', matches);
-            roadNumber = matches[1].trim();
-            road = matches[2].trim();
+            let addressLabled = fetchStreetDetails(text);
+            road = addressLabled.Street_Name;
+            roadNumber = addressLabled.Street_Num;
             roadMatches.add([roadNumber, road]);
 
             // Write the match to a file

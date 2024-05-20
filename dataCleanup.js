@@ -33,12 +33,14 @@ function removeNonAddressDetails(text) {
     console.log('cleaning emails')
     // Regex pattern for emails
     const emailPattern = /[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}/g;
+    const ATwithTextPattern = /\b\w+@\w+\b/g;
     const urlPattern = /https?:\/\/[^\s]+/g;
     
     // Remove phone numbers from text
     text = text.replace(phonePattern, ' ');
     // Remove emails from text
     text = text.replace(emailPattern, ' ');
+    text = text.replace(ATwithTextPattern, ' ');
     // Remove links
     text = text.replace(urlPattern, ' ');
     console.log('done cleaning phones and emails')
