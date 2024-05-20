@@ -1,7 +1,7 @@
 const fs = require('fs');
 const {elementTextCleanUp, textCleanUp} = require('../dataCleanup.js');
 const addressSelectors = [
-    'address', 'p', 'font', 'span', 'strong','li', 'ul', 'div'
+    'address', 'p', 'font', 'span', 'strong', 'div'
 ];
 
 const roadMatches = new Set();
@@ -14,7 +14,7 @@ function findRoad($) {
     const streetRegexNumBegin = /^\d+\s(?:[A-Za-zÀ-ÿ-]+\s?)+?\b/g;
     const streetRegexNumEnd = /\b[A-Za-zÀ-ÿ-]+\s+\d+(?!\w)/;
 
-    const filteredElements = $('body').find('*').not('script, link, meta, style, path, symbol, noscript, img');
+    const filteredElements = $('body').find('*').not('script, link, meta, style, path, symbol, noscript, img, code');
     const reversedElements = $(filteredElements).get().reverse();
 
     let elementTxtGlobalVar;

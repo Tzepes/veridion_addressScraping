@@ -20,10 +20,12 @@ const { elementTextCleanUp, textCleanUp, cleanUpFromGPEs } = require('./dataClea
 
 const {fetchStreetDetails, fetchGPEandORG} = require('./apis/spacyLocalAPI.js');
 
+const SBR_WS_ENDPOINT = 'wss://brd-customer-hl_39f6f47e-zone-scraping_browser1:20tfspbnsze2@brd.superproxy.io:9222';
+
 // Declare links array:
 let firstPageLinks = [];
-let ORGs = [];
-let GPEs = [];
+let ORGs;
+let GPEs;
 
 const csvWriter = createCsvWriter({
     path: 'results/linkResultsTable.csv',
@@ -45,6 +47,7 @@ const csvWriter = createCsvWriter({
     let index = 0;
 
     let record = null;
+    console.log('Connecting to Scraping Browser...');
     let browser = await puppeteer.launch();
     while(record = await cursor.next()) {
         if(index < beginAt){
@@ -55,10 +58,11 @@ const csvWriter = createCsvWriter({
         retreivedData = await accessDomain('https://' + record.domain, browser);
         let lastRetreivedActualData = {country: retreivedData?.country, region: retreivedData?.region, city: retreivedData?.city, postcode: retreivedData?.postcode, road: retreivedData?.road, roadNumber: retreivedData?.roadNumber};
         
-        if(!retreivedData?.postcode || !retreivedData?.road){ //incase the postcode hasn't been found, get the linkfs of the landing page and search trough them as well (initiate only if postcode missing since street tends to be placed next to it)
+        // for no check only if postcode has not been found, the NER needs updated training + better data cleaning and text selection from element
+        if(!retreivedData?.postcode){ //incase the postcode hasn't been found, get the linkfs of the landing page and search trough them as well (initiate only if postcode missing since street tends to be placed next to it)
             for(let link of firstPageLinks){
                 await new Promise(resolve => setTimeout(resolve, 500)); // delay to prevent blocking by the server
-                retreivedData = await accessDomain(link, browser, false);
+                retreivedData = await accessDomain(link, browser);
                 lastRetreivedActualData = updateRetrievedData(retreivedData, lastRetreivedActualData); 
                 if(retreivedData?.postcode && retreivedData?.road){
                     break;
@@ -73,9 +77,10 @@ const csvWriter = createCsvWriter({
             let orgIndex = 0;
             console.log('Beginning search on google');
             console.log(ORGs);
+            console.log(GPEs);
             for(let ORG of ORGs){
                 let searchQuery = encodeURIComponent(ORG + ' ' + GPEs[orgIndex]);
-                retreivedData = await accessDomain('https://www.google.com/search?q=' + searchQuery, browser, false);
+                retreivedData = await accessDomain('https://www.google.com/search?q=' + searchQuery, browser, true);
                 lastRetreivedActualData = updateRetrievedData(retreivedData, lastRetreivedActualData); 
                 console.log('postcode:', retreivedData?.postcode, 'road:', retreivedData?.road)
                 if(retreivedData.postcode && retreivedData.road){
@@ -123,7 +128,7 @@ function updateMissingData(retreivedData, lastRetreivedActualData) {
     return retreivedData;
 }
 
-async function accessDomain(domain, browser, isFirstPage = true){
+async function accessDomain(domain, browser, googleScraping = false){
     let response;
     let retreivedData = null;
     let page = await browser.newPage();
@@ -140,7 +145,7 @@ async function accessDomain(domain, browser, isFirstPage = true){
             return;
         }
 
-        if(isFirstPage){
+        if(!googleScraping){
             await getGPEandORG(pageBody);
         }
 

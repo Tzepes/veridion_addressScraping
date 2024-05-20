@@ -72,7 +72,7 @@ const postalCodeRegex = {
     'Saint Lucia': /^(?:LCA)?[0-9]{4}$/,
     'Saint Vincent and the Grenadines': /^(?:VCT)?[0-9]{4}$/,
     'Trinidad and Tobago': /^(?:TTO)?[0-9]{6}$/,
-    'United States': /(?<=\b[A-Z]{2}\s?[\s.-]?\s?)\d{5}\b/i,
+    'United States': /\b\d{5}\b/,
     Argentina: /\b\d{4}\b/,
     Bolivia: /\b\d{4}\b/,
     Brazil: /^\d{5}-\d{3}$/,
