@@ -6,7 +6,7 @@ const {fetchStreetDetails, fetchGPEandORG} = require('../apis/spacyLocalAPI.js')
 const {elementTextCleanUp, textCleanUp, removeNonAddressDetails} = require('../dataCleanup.js');
 const fs = require('fs');
 
-async function loopForPostcodeIfCountry(countryRegex = null, countryFromURL = null, $) {  
+async function loopForPostcodeIfCountry(countryRegex = null, countryFromURL = null, $, targetTag = 'body') {  
     let postcodeDefaultRegex = /\b\d{5}\b/; // use a defalt regex that could match most postcodes
     let postcodeCountryRegex = null;
     if(countryRegex){
@@ -17,7 +17,7 @@ async function loopForPostcodeIfCountry(countryRegex = null, countryFromURL = nu
     let postcodeAPIResponse;
     let matchingPostcodes = new Set();
     const addressSelectors = ['address', 'p', 'font', 'span', 'strong', 'div'];
-    const filteredElements = $('body').find('*').not('script, link, meta, style, path, symbol, noscript, img, code');
+    const filteredElements = $(targetTag).find('*').filter(function() { return !/^(script|link|meta|style|path|symbol|noscript|img|code)$/i.test(this.nodeName) });
     const reversedElements = $(filteredElements).get().reverse(); // reverse the webpage elements since most postcodes are at the base of the page
 
     let postcodeTextLocation = {};

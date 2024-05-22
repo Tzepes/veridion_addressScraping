@@ -7,7 +7,7 @@ const addressSelectors = [
 
 const roadMatches = new Set();
 
-function findRoad($) {
+function findRoad($, targetTag = 'body') {
     let road = '';
     let roadNumber = '';
     // add google API to translate road name to country (if taken from URL or Postcode)
@@ -15,7 +15,7 @@ function findRoad($) {
     const streetRegexNumBegin = /^\d+\s(?:[A-Za-zÀ-ÿ-]+\s?)+?\b/g;
     const streetRegexNumEnd = /\b[A-Za-zÀ-ÿ-]+\s+\d+(?!\w)/;
 
-    const filteredElements = $('body').find('*').not('script, link, meta, style, path, symbol, noscript, img, code');
+    const filteredElements = $(targetTag).find('*').filter(function() { return !/^(script|link|meta|style|path|symbol|noscript|img|code)$/i.test(this.nodeName) });
     const reversedElements = $(filteredElements).get().reverse();
 
     let elementTxtGlobalVar;

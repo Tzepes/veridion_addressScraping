@@ -5,8 +5,6 @@ const cheerio = require('cheerio');
 
 const createCsvWriter = require('csv-writer').createObjectCsvWriter;
 
-const LoopTroughElements = require('./pageScrapper.js');
-
 const {countries, getCountryAbbreviation} = require('./countriesCodes.js');
 const getFirstPageLinks = require('./Extractors/firstPageLinksExtractor.js');
 const {findCountry, getCountryFromURL} = require('./Extractors/countryExtractor.js');
@@ -26,6 +24,7 @@ const SBR_WS_ENDPOINT = 'wss://brd-customer-hl_39f6f47e-zone-scraping_browser1:2
 let firstPageLinks = [];
 let ORGs;
 let GPEs;
+let ORGs_GPEs_Sorted
 
 const csvWriterFullAddress = createCsvWriter({
     path: 'results/fullAddressResults.csv',
@@ -97,47 +96,36 @@ const csvWriterNoAddress = createCsvWriter({
         //     break;
         // }
         let retreivedData = {country: null, region: null, city: null, postcode: null, road: null, roadNumber: null};
-        retreivedData = await accessDomain('https://' + record.domain, page);
-        setDomainForSpacy(record.domain)
+        await accessDomain('https://' + record.domain, page);
+        setDomainForSpacy(record.domain) // THIS DOESN T WORK FIX IT MAYBE
         let lastRetreivedActualData = {country: retreivedData?.country, region: retreivedData?.region, city: retreivedData?.city, postcode: retreivedData?.postcode, road: retreivedData?.road, roadNumber: retreivedData?.roadNumber};
         
-        // for now check only if postcode has not been found, the NER needs updated training + better data cleaning and text selection from element
-        if(!retreivedData?.postcode || !retreivedData?.road){ //incase the postcode hasn't been found, get the linkfs of the landing page and search trough them as well (initiate only if postcode missing since street tends to be placed next to it)
-            for(let link of firstPageLinks){
-                await new Promise(resolve => setTimeout(resolve, 500)); // delay to prevent blocking by athe server
-                retreivedData = await accessDomain(link, page);
-                lastRetreivedActualData = updateRetrievedData(retreivedData, lastRetreivedActualData); 
-                if(retreivedData?.postcode && retreivedData?.road){
-                    break;
-                }
+        if(!retreivedData?.postcode || !retreivedData?.road){
+            if(ORGs_GPEs_Sorted){
+                retreivedData = await googleScrape(ORGs_GPEs_Sorted, page);
+            } else if(ORGs){
+                retreivedData = await googleScrape(ORGs, page);
             }
-            retreivedData = updateMissingData(retreivedData, lastRetreivedActualData);
+            lastRetreivedActualData = updateRetrievedData(retreivedData, lastRetreivedActualData); 
         }
-        firstPageLinks = [];
 
-        //In case no postcode and no road has been found after search trough links, find GPE and ORG tags, and search google with them
-        // if(!retreivedData?.postcode && !retreivedData?.road){
-            
-            //add second check: if(ORGs_GPEs_Sorted) || if(ORGs) // then google scrape for sorted or ORGs
-
-        //     let orgIndex = 0;
-        //     console.log('Beginning search on google');
-        //     console.log(ORGs);
-        //     console.log(GPEs);
-        //     for(let ORG of ORGs){
-        //         let searchQuery = encodeURIComponent(ORG + ' ' + GPEs[orgIndex]);
-        //         retreivedData = await accessDomain('https://www.google.com/search?q=' + searchQuery, page, true);
+        // for now check only if postcode has not been found, the NER needs updated training + better data cleaning and text selection from element
+        // if(!retreivedData?.postcode || !retreivedData?.road){ //incase the postcode hasn't been found, get the linkfs of the landing page and search trough them as well (initiate only if postcode missing since street tends to be placed next to it)
+        //     for(let link of firstPageLinks){
+        //         await new Promise(resolve => setTimeout(resolve, 500)); // delay to prevent blocking by athe server
+        //         retreivedData = await accessDomain(link, page);
         //         lastRetreivedActualData = updateRetrievedData(retreivedData, lastRetreivedActualData); 
-        //         console.log('postcode:', retreivedData?.postcode, 'road:', retreivedData?.road)
-        //         if(retreivedData.postcode && retreivedData.road){
+        //         if(retreivedData?.postcode && retreivedData?.road){
         //             break;
         //         }
-        //         orgIndex++;
         //     }
+        //     retreivedData = updateMissingData(retreivedData, lastRetreivedActualData);
         // }
+        firstPageLinks = [];
         
-        ORGs.length = 0;
-        GPEs.length = 0;
+        ORGs = [];
+        GPEs = [];
+        ORGs_GPEs_Sorted = [];
         // console.log('postcode:', retreivedData?.postcode, 'road:', retreivedData?.road)
         await writeCSV(retreivedData, record.domain); //write data into CSV file
     }
@@ -183,9 +171,11 @@ async function accessDomain(domain, page, googleScraping = false){
     try {
         response = await page.goto(domain, { waitUntil: 'networkidle2', timeout: 30000 });
 
-        let pageBody = await page.content();
+        let pageContent = await page.content();
 
         let contentType = await page.evaluate(() => document.contentType);
+
+        let pageText = await page.evaluate(() => document.body.innerText); //inner text fails sometimes
 
         if (contentType === 'application/pdf' || contentType === 'audio/mpeg' || contentType === 'video/mp4') {
             console.log('Irrelevant file detected. Skipping...');
@@ -193,10 +183,10 @@ async function accessDomain(domain, page, googleScraping = false){
         }
 
         if(!googleScraping){
-            await getGPEandORG(pageBody);
-        }
+            await getGPEandORG(pageText, domain);
+        } 
 
-        retreivedData = await retrieveLocationData(pageBody, domain);
+        retreivedData = await retrieveLocationData(pageContent, domain, googleScraping);
     } catch (error) {
         console.log(`Error accessing domain: ${error.message}`);
         console.log(`Error trace: ${error.stack}`);
@@ -211,7 +201,19 @@ async function accessDomain(domain, page, googleScraping = false){
     return retreivedData;
 }
 
-async function retrieveLocationData(htmlContent, url) {
+async function googleScrape(queries, page){
+    console.log('Beginning search on google for:', queries);
+    //query will be an array, loop trough it
+    for(let query of queries){
+        let searchQuery = encodeURIComponent(query);
+        let retreivedData = await accessDomain('https://www.google.com/search?q=' + searchQuery, page, true);
+        if(retreivedData?.postcode && retreivedData?.road){
+            return retreivedData;
+        }
+    }
+}
+
+async function retrieveLocationData(htmlContent, url, googleScraping = false) {
     let country;
     let region;
     let city;
@@ -222,9 +224,15 @@ async function retrieveLocationData(htmlContent, url) {
     let roadNumber;
 
     const $ = cheerio.load(htmlContent);
-    const text = $('body').text();
+    let htmlText;
+    let targetTag;
+    if(!googleScraping){
+        targetTag = 'body'
+    } else {
+        targetTag = 'div[jsname="xQjRM"]';
+    }
 
-    LoopTroughElements($);
+    htmlText = $(targetTag).text(); // select google maps div with address
 
     if(firstPageLinks.length === 0){
         firstPageLinks = await getFirstPageLinks(url, $);
@@ -236,7 +244,7 @@ async function retrieveLocationData(htmlContent, url) {
     let postcodeObject;
     // the returned JSONs are different for parseAPI and zipcodebase API
     // we first check if the JSON is of parseAPI, otherwise, we try zipcodebase JSON format
-    postcodeObject = await loopForPostcodeIfCountry(getPostalCodeFormat(country), country, $);  
+    postcodeObject = await loopForPostcodeIfCountry(getPostalCodeFormat(country), country, $, targetTag);  
     if(postcodeObject){
         postcode = postcodeObject.postcode;
         postcodeAPIResponse = postcodeObject.postcodeAPIResponse;
@@ -255,7 +263,7 @@ async function retrieveLocationData(htmlContent, url) {
 
     // if neither options worked for finding at least the country, search for it trough the text of the page
     if(!postcode && !country){
-        country = findCountry(text, countries);
+        country = findCountry(htmlText, countries);
     }
     if (country) {
         country = country.charAt(0).toUpperCase() + country.slice(1); // Capitalize first letter
@@ -271,7 +279,7 @@ async function retrieveLocationData(htmlContent, url) {
 
     if(!road){
         // Extract road
-        roadObject = findRoad($);
+        roadObject = findRoad($, targetTag);
         road = roadObject.road;
         roadNumber = roadObject.roadNumber;
     }
@@ -288,17 +296,17 @@ async function retrieveLocationData(htmlContent, url) {
     return {country, region, city, postcode, road, roadNumber}; // Return extracted data
 }
 
-async function getGPEandORG(htmlContent){
-    const $ = cheerio.load(htmlContent);
+async function getGPEandORG(pageText, domain){
+    console.log(`Getting GPE and ORG entities of ${domain}...`)
+    pageText = textCleanUp(pageText);
     
-    let text = elementTextCleanUp($('body'), $);
-    text = textCleanUp(text);
+    let pageLanguage = getLanguage(pageText);
     
-    let pageLanguage = getLanguage(text);
-    
-    let fetchResult = await fetchGPEandORG(text);
+    let fetchResult = await fetchGPEandORG(pageText, domain);
     ORGs = fetchResult.ORG;
     GPEs = fetchResult.GPE;
+    ORGs_GPEs_Sorted = fetchResult?.ORG_GPE_Sorted.slice(0, 10); // get only the first 10 elements of the array for they are the most relevant
+    console.log(fetchResult);
 }
 
 async function writeCSV(data, domain) {

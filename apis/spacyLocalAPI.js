@@ -16,7 +16,7 @@ async function fetchGPEandORG(text, _domain = null) {
     try {
         const response = await axios.post('http://127.0.0.1:8000/extract_gpe_org/', {
             text: text,
-            domain: domain
+            domain: _domain
         });
         return response.data;
     } catch (error) {

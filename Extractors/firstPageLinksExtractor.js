@@ -37,8 +37,10 @@ async function getFirstPageLinks(domain, $) {
 
     const links = new Set([...first10Links, ...last10Links, ...restOfLinks, ...differentDomainLinks]);
 
-    console.log(links);
-    return links;
+    const limitedLinks = new Set(Array.from(links).slice(0, 30));
+
+    console.log(limitedLinks);
+    return limitedLinks;
 }
 
 module.exports = getFirstPageLinks;
