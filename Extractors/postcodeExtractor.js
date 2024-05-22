@@ -6,7 +6,7 @@ const {fetchStreetDetails, fetchGPEandORG} = require('../apis/spacyLocalAPI.js')
 const {elementTextCleanUp, textCleanUp, removeNonAddressDetails} = require('../dataCleanup.js');
 const fs = require('fs');
 
-async function loopForPostcodeIfCountry(text = null, countryRegex = null, countryFromURL = null, $) {  
+async function loopForPostcodeIfCountry(countryRegex = null, countryFromURL = null, $) {  
     let postcodeDefaultRegex = /\b\d{5}\b/; // use a defalt regex that could match most postcodes
     let postcodeCountryRegex = null;
     if(countryRegex){
@@ -20,8 +20,6 @@ async function loopForPostcodeIfCountry(text = null, countryRegex = null, countr
     const filteredElements = $('body').find('*').not('script, link, meta, style, path, symbol, noscript, img, code');
     const reversedElements = $(filteredElements).get().reverse(); // reverse the webpage elements since most postcodes are at the base of the page
 
-    let textGlobalVar;
-    let elementGlobalVar;
     let postcodeTextLocation = {};
 
     // Start search for postcode
@@ -52,30 +50,14 @@ async function loopForPostcodeIfCountry(text = null, countryRegex = null, countr
         
         postcodeMatch = text.match(postcodeDefaultRegex);
         if (postcodeMatch) {
-            postcode = postcodeMatch[0];
-            matchingPostcodes.add(postcode);
-            elementGlobalVar = element.name;
-            textGlobalVar = text;
-            if (!postcodeTextLocation[postcode]) {
-                postcodeTextLocation[postcode] = {elements: [], texts: []};
-            }
-            postcodeTextLocation[postcode].elements.push(elementGlobalVar);
-            postcodeTextLocation[postcode].texts.push(textGlobalVar);
+            handlePostcodeMatch(postcodeMatch, matchingPostcodes, postcodeTextLocation, element, text);
             continue;
         }
         
         // Look for postcode using country regex
         postcodeMatch = text.match(postcodeCountryRegex);
         if (postcodeMatch) {
-            postcode = postcodeMatch[0]; 
-            matchingPostcodes.add(postcode);
-            elementGlobalVar = element.name;
-            textGlobalVar = text;
-            if (!postcodeTextLocation[postcode]) {
-                postcodeTextLocation[postcode] = {elements: [], texts: []};
-            }
-            postcodeTextLocation[postcode].elements.push(elementGlobalVar);
-            postcodeTextLocation[postcode].texts.push(textGlobalVar);
+            handlePostcodeMatch(postcodeMatch, matchingPostcodes, postcodeTextLocation, element, text);
             continue;
         }
     }
@@ -84,55 +66,79 @@ async function loopForPostcodeIfCountry(text = null, countryRegex = null, countr
     console.log(uniquePostcodes);
 
     for (let postcodeOfArr of uniquePostcodes) { // check each matching string
-        let postcodeInfo = await passPostcodeToAPI(postcodeOfArr, countryFromURL);
-        let containGPEinText = false;
-        postcodeAPIResponse = postcodeInfo.postcodeAPIResponse;
-        console.log(postcodeAPIResponse);
-        if(postcodeAPIResponse == null){
-            postcode = null;
-        } else {
-            console.log('postcode found:', postcodeOfArr);
-            postcode = postcodeOfArr;
-            if (postcode) {
-                let data = postcodeTextLocation[postcode];
-                let element;
-                let text;
-                let addressInPageTxt;
-                let addressText;
-                const minNum = 6; // Set this to the minimum number of tokens you want
-                const maxNum = 15; // Set this to the maximum number of tokens you want
-            
-                for (let i = 0; i < data.texts.length; i++) {
-                    element = $(data.elements[i]);
-                    text = data.texts[i];
-                    addressInPageTxt = traverseElement(element, text, minNum, maxNum, postcode, $);
-                    addressInPageTxt.text = removeNonAddressDetails(addressInPageTxt.text);
-                    
-                    const gpeAndOrgDetails = await fetchGPEandORG(addressInPageTxt.text);
-                    let GPEs = gpeAndOrgDetails.GPE;
-
-                    if(GPEs.length > 0){
-                        containGPEinText = true;
-                    }
-            
-                    // Call fetchStreetDetails API and break the loop if it returns street_name and street_number
-                    let streetDetails = await fetchStreetDetails(addressInPageTxt.text);
-                    if (streetDetails.Street_Name && streetDetails.Street_Num) {
-                        addressText = addressInPageTxt.text;
-                        fs.appendFile('matchesFromPostcode.txt', `${addressInPageTxt.element[0].name}\n${addressInPageTxt.text}\n\n`, (err) => {
-                            if (err) throw err;
-                        });
-                        break;
-                    }
-                }
-                if(!containGPEinText){
-                    continue;
-                }
-                elementGlobalVar = null;
-                textGlobalVar = null;
-                return { postcode, postcodeAPIResponse, addressText };
-            }
+        let PostcodeObject = await VerifyPostcode(postcodeOfArr, countryFromURL);
+        postcode = PostcodeObject.postcode;
+        if(!postcode) continue;
+        let streetDetails = await VerifyTextOfPostcode(postcodeTextLocation, postcodeOfArr, $);
+        if(postcode){
+            console.log('address found:', streetDetails)
+            return {postcode: postcode, postcodeAPIResponse: PostcodeObject.postcodeAPIResponse, streetDetails};
         }
+    }
+}
+
+function handlePostcodeMatch(postcodeMatch, matchingPostcodes, postcodeTextLocation, element, text) {
+    let postcode = postcodeMatch[0];
+    matchingPostcodes.add(postcode);
+    if (!postcodeTextLocation[postcode]) {
+        postcodeTextLocation[postcode] = {elements: [], texts: []};
+    }
+    postcodeTextLocation[postcode].elements.push(element.name);
+    postcodeTextLocation[postcode].texts.push(text);
+}
+
+async function VerifyPostcode(_postcodeToVerify, countryFromURL){
+    let response = await passPostcodeToAPI(_postcodeToVerify, countryFromURL);
+    let postcodeAPIResponse = response.postcodeAPIResponse;
+    if(postcodeAPIResponse == null){
+        postcode = null;
+        return null;
+    } else {
+        console.log('postcode found:', _postcodeToVerify);
+        return { postcode: _postcodeToVerify, postcodeAPIResponse};
+    }
+}
+
+async function VerifyTextOfPostcode(postcodeTextLocation, postcode, $){
+    let data = postcodeTextLocation[postcode];
+    let element;
+    let text;
+    let addressInPageTxt;
+    let addressText;
+    const minNum = 6; // Set this to the minimum number of tokens you want
+    const maxNum = 15; // Set this to the maximum number of tokens you want
+
+    for (let i = 0; i < data.texts.length; i++) {
+        element = $(data.elements[i]);
+        text = data.texts[i];
+        addressInPageTxt = traverseElement(element, text, minNum, maxNum, postcode, $);
+        addressInPageTxt.text = removeNonAddressDetails(addressInPageTxt.text);
+        // if(await isValidAddressText(addressInPageTxt) == false){
+        //     return null;
+        // }
+
+        // Call fetchStreetDetails API and break the loop if it returns street_name and street_number
+        let streetDetails = await fetchStreetDetails(addressInPageTxt.text);
+
+        if (streetDetails.Street_Name && streetDetails.Street_Num) {
+            addressText = addressInPageTxt.text;
+            fs.appendFile('matchesFromPostcode.txt', `${addressInPageTxt.element[0].name}\n${addressInPageTxt.text}\n\n`, (err) => {
+                if (err) throw err;
+            });
+
+            return streetDetails;
+        }
+    }
+}
+
+async function isValidAddressText(addressInPageTxt){
+    const gpeAndOrgDetails = await fetchGPEandORG(addressInPageTxt.text);
+    let GPEs = gpeAndOrgDetails.GPE;
+
+    if(GPEs.length == 0){
+        return flase;
+    } else {
+        return true;
     }
 }
 

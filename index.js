@@ -18,7 +18,7 @@ const { getLanguage } = require('./MLM/languageNLP.js');
 
 const { elementTextCleanUp, textCleanUp, cleanUpFromGPEs } = require('./dataCleanup.js');
 
-const {fetchStreetDetails, fetchGPEandORG} = require('./apis/spacyLocalAPI.js');
+const {fetchStreetDetails, fetchGPEandORG, setDomainForSpacy} = require('./apis/spacyLocalAPI.js');
 
 const SBR_WS_ENDPOINT = 'wss://brd-customer-hl_39f6f47e-zone-scraping_browser1:20tfspbnsze2@brd.superproxy.io:9222';
 
@@ -27,8 +27,8 @@ let firstPageLinks = [];
 let ORGs;
 let GPEs;
 
-const csvWriter = createCsvWriter({
-    path: 'results/linkResultsTable.csv',
+const csvWriterFullAddress = createCsvWriter({
+    path: 'results/fullAddressResults.csv',
     header: [
         {id: 'domain', title: 'Domain'},
         {id: 'country', title: 'Country'},
@@ -37,32 +37,75 @@ const csvWriter = createCsvWriter({
         {id: 'postcode', title: 'Postcode'},
         {id: 'road', title: 'Road'},
         {id: 'roadNumber', title: 'Road Number'}
-    ]
+    ],
+});
+
+const csvWriterPostcode = createCsvWriter({
+    path: 'results/postcodeResults.csv',
+    header: [
+        {id: 'domain', title: 'Domain'},
+        {id: 'country', title: 'Country'},
+        {id: 'region', title: 'Region'},
+        {id: 'city', title: 'City'},
+        {id: 'postcode', title: 'Postcode'},
+        {id: 'road', title: 'Road'},
+        {id: 'roadNumber', title: 'Road Number'}
+    ],
+});
+const csvWriterStreet = createCsvWriter({
+    path: 'results/streetResults.csv',
+    header: [
+        {id: 'domain', title: 'Domain'},
+        {id: 'country', title: 'Country'},
+        {id: 'region', title: 'Region'},
+        {id: 'city', title: 'City'},
+        {id: 'postcode', title: 'Postcode'},
+        {id: 'road', title: 'Road'},
+        {id: 'roadNumber', title: 'Road Number'}
+    ],
+});
+const csvWriterNoAddress = createCsvWriter({
+    path: 'results/noAddressResults.csv',
+    header: [
+        {id: 'domain', title: 'Domain'},
+        {id: 'country', title: 'Country'},
+        {id: 'region', title: 'Region'},
+        {id: 'city', title: 'City'},
+        {id: 'postcode', title: 'Postcode'},
+        {id: 'road', title: 'Road'},
+        {id: 'roadNumber', title: 'Road Number'}
+    ],
 });
 
 (async () => {  // the main function that starts the search, loops trough all linkfs from .parquet and starts search for data
     let reader = await parquet.ParquetReader.openFile('websites.snappy .parquet');
     let cursor = reader.getCursor();
     let beginAt = 0; // skip the first 100 records
+    let stopAT = 500; // stop at 100 records
     let index = 0;
 
     let record = null;
     console.log('Connecting to Scraping Browser...');
     let browser = await puppeteer.launch();
+    let page = await browser.newPage();
     while(record = await cursor.next()) {
         if(index < beginAt){
             index++;
             continue;
         }
+        // if(index >= stopAT){
+        //     break;
+        // }
         let retreivedData = {country: null, region: null, city: null, postcode: null, road: null, roadNumber: null};
-        retreivedData = await accessDomain('https://' + 'sk4designs.com', browser);
+        retreivedData = await accessDomain('https://' + record.domain, page);
+        setDomainForSpacy(record.domain)
         let lastRetreivedActualData = {country: retreivedData?.country, region: retreivedData?.region, city: retreivedData?.city, postcode: retreivedData?.postcode, road: retreivedData?.road, roadNumber: retreivedData?.roadNumber};
         
         // for now check only if postcode has not been found, the NER needs updated training + better data cleaning and text selection from element
-        if(!retreivedData.postcode || !retreivedData.road){ //incase the postcode hasn't been found, get the linkfs of the landing page and search trough them as well (initiate only if postcode missing since street tends to be placed next to it)
+        if(!retreivedData?.postcode || !retreivedData?.road){ //incase the postcode hasn't been found, get the linkfs of the landing page and search trough them as well (initiate only if postcode missing since street tends to be placed next to it)
             for(let link of firstPageLinks){
-                await new Promise(resolve => setTimeout(resolve, 500)); // delay to prevent blocking by the server
-                retreivedData = await accessDomain(link, browser);
+                await new Promise(resolve => setTimeout(resolve, 500)); // delay to prevent blocking by athe server
+                retreivedData = await accessDomain(link, page);
                 lastRetreivedActualData = updateRetrievedData(retreivedData, lastRetreivedActualData); 
                 if(retreivedData?.postcode && retreivedData?.road){
                     break;
@@ -73,22 +116,25 @@ const csvWriter = createCsvWriter({
         firstPageLinks = [];
 
         //In case no postcode and no road has been found after search trough links, find GPE and ORG tags, and search google with them
-        if(!retreivedData.postcode && !retreivedData.road){
-            let orgIndex = 0;
-            console.log('Beginning search on google');
-            console.log(ORGs);
-            console.log(GPEs);
-            for(let ORG of ORGs){
-                let searchQuery = encodeURIComponent(ORG + ' ' + GPEs[orgIndex]);
-                retreivedData = await accessDomain('https://www.google.com/search?q=' + searchQuery, browser, true);
-                lastRetreivedActualData = updateRetrievedData(retreivedData, lastRetreivedActualData); 
-                console.log('postcode:', retreivedData?.postcode, 'road:', retreivedData?.road)
-                if(retreivedData.postcode && retreivedData.road){
-                    break;
-                }
-                orgIndex++;
-            }
-        }
+        // if(!retreivedData?.postcode && !retreivedData?.road){
+            
+            //add second check: if(ORGs_GPEs_Sorted) || if(ORGs) // then google scrape for sorted or ORGs
+
+        //     let orgIndex = 0;
+        //     console.log('Beginning search on google');
+        //     console.log(ORGs);
+        //     console.log(GPEs);
+        //     for(let ORG of ORGs){
+        //         let searchQuery = encodeURIComponent(ORG + ' ' + GPEs[orgIndex]);
+        //         retreivedData = await accessDomain('https://www.google.com/search?q=' + searchQuery, page, true);
+        //         lastRetreivedActualData = updateRetrievedData(retreivedData, lastRetreivedActualData); 
+        //         console.log('postcode:', retreivedData?.postcode, 'road:', retreivedData?.road)
+        //         if(retreivedData.postcode && retreivedData.road){
+        //             break;
+        //         }
+        //         orgIndex++;
+        //     }
+        // }
         
         ORGs.length = 0;
         GPEs.length = 0;
@@ -97,6 +143,8 @@ const csvWriter = createCsvWriter({
     }
     console.log("");
 
+    await page.close();
+    await browser.close();
     await reader.close();
 })();
 
@@ -128,15 +176,14 @@ function updateMissingData(retreivedData, lastRetreivedActualData) {
     return retreivedData;
 }
 
-async function accessDomain(domain, browser, googleScraping = false){
+async function accessDomain(domain, page, googleScraping = false){
     let response;
     let retreivedData = null;
-    let page = await browser.newPage();
     console.log('Accesing domain: ' + domain);
     try {
-        response = await page.goto(domain, { timeout: 30000 });
+        response = await page.goto(domain, { waitUntil: 'networkidle2', timeout: 30000 });
 
-        let pageBody = await page.evaluate(() => document.body.innerHTML);
+        let pageBody = await page.content();
 
         let contentType = await page.evaluate(() => document.contentType);
 
@@ -152,6 +199,7 @@ async function accessDomain(domain, browser, googleScraping = false){
         retreivedData = await retrieveLocationData(pageBody, domain);
     } catch (error) {
         console.log(`Error accessing domain: ${error.message}`);
+        console.log(`Error trace: ${error.stack}`);
         if (error.response) {
             console.log(`Error response data: ${error.response.data}`);
             console.log(`Error response status: ${error.response.status}`);
@@ -160,10 +208,6 @@ async function accessDomain(domain, browser, googleScraping = false){
             console.log(`Error request: ${error.request}`);
         }
     }
-    // } finally{
-    //     await page.close();
-    // }
-    await page.close();
     return retreivedData;
 }
 
@@ -179,7 +223,7 @@ async function retrieveLocationData(htmlContent, url) {
 
     const $ = cheerio.load(htmlContent);
     const text = $('body').text();
-    let pageLanguage = getLanguage(text);
+
     LoopTroughElements($);
 
     if(firstPageLinks.length === 0){
@@ -192,7 +236,7 @@ async function retrieveLocationData(htmlContent, url) {
     let postcodeObject;
     // the returned JSONs are different for parseAPI and zipcodebase API
     // we first check if the JSON is of parseAPI, otherwise, we try zipcodebase JSON format
-    postcodeObject = await loopForPostcodeIfCountry(text, getPostalCodeFormat(country), country, $);  
+    postcodeObject = await loopForPostcodeIfCountry(getPostalCodeFormat(country), country, $);  
     if(postcodeObject){
         postcode = postcodeObject.postcode;
         postcodeAPIResponse = postcodeObject.postcodeAPIResponse;
@@ -217,18 +261,13 @@ async function retrieveLocationData(htmlContent, url) {
         country = country.charAt(0).toUpperCase() + country.slice(1); // Capitalize first letter
     }
 
-    let addressText;
-    if(postcode && postcodeObject.addressText){
-        addressText = postcodeObject.addressText;
-        let GPEs = await fetchGPEandORG(addressText).GPE;
-        if(GPEs){
-            addressText = cleanUpFromGPEs(addressText, GPEs);
-        }
-        let addressLabled = await fetchStreetDetails(addressText);
-        road = addressLabled.Street_Name;
-        roadNumber = addressLabled.Street_Num;
+
+    if(postcode && postcodeObject.streetDetails){
+        let streetLabeled = postcodeObject.streetDetails;
+        road = streetLabeled.Street_Name;
+        roadNumber = streetLabeled.Street_Num;
     }
-    console.log(road, roadNumber)
+    console.log('road and number after postcode: ', road, roadNumber)
 
     if(!road){
         // Extract road
@@ -273,5 +312,13 @@ async function writeCSV(data, domain) {
         roadNumber: data?.roadNumber
     }];
 
-    csvWriter.writeRecords(dataObject);
+    if (dataObject[0].postcode && dataObject[0].road) {
+        csvWriterFullAddress.writeRecords(dataObject)
+    } else if (dataObject[0].postcode && !dataObject[0].road) {
+        csvWriterPostcode.writeRecords(dataObject)
+    } else if (!dataObject[0].postcode && (dataObject[0].road || dataObject[0].roadNumber)) {
+        csvWriterStreet.writeRecords(dataObject)
+    } else {
+        csvWriterNoAddress.writeRecords(dataObject)
+    }
 }

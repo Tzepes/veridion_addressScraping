@@ -17,7 +17,7 @@ function elementTextCleanUp(element, $) {
 }
 
 function textCleanUp(text) {
-    text = text.replace(/\n|\t/g, " ");      
+    text = text.replace(/\n|\t/g, ' ');      
     text = text.replace(/[\uE017©•"-*.|]/g, ' ').replace(/\s+/g, ' ');
     text = text.replace(/[^\x20-\x7E]/g, ' ');
     //Remove CSS and HTML-like content

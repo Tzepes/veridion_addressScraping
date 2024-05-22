@@ -10,6 +10,7 @@ const findRoad = require('./Extractors/roadExtractor.js');
 const LoopTroughElements = require('./pageScrapper.js');
 const {elementTextCleanUp, textCleanUp}= require('./dataCleanup.js');
 const {fetchStreetDetails, fetchGPEandORG} = require('./apis/spacyLocalAPI.js');
+const {getLanguage} = require('./MLM/languageNLP.js');
 
 const SBR_WS_ENDPOINT = 'wss://brd-customer-hl_39f6f47e-zone-scraping_browser1:20tfspbnsze2@brd.superproxy.io:9222';
 
@@ -40,6 +41,11 @@ async function retrieveLocationData(url) {
         let cleanedText = elementTextCleanUp('body', $);
         const text = textCleanUp(cleanedText);
         console.log('text cleaned')
+
+        let pageLanguage = getLanguage(text);
+        console.log('page language:', pageLanguage);
+
+
         let GPEORG = await fetchGPEandORG(text);
         let GPEs = GPEORG.GPE;
         let ORGs = GPEORG.ORG;
@@ -59,7 +65,7 @@ async function retrieveLocationData(url) {
         let postcodeObject;
         
         console.log('getting postcode');
-        postcodeObject = await loopForPostcodeIfCountry(text, getPostalCodeFormat(country), country, $);  
+        postcodeObject = await loopForPostcodeIfCountry(getPostalCodeFormat(country), country, $);  
         if(postcodeObject){
             postcode = postcodeObject.postcode;
             postcodeAPIResponse = postcodeObject.postcodeAPIResponse;
@@ -81,16 +87,10 @@ async function retrieveLocationData(url) {
         }
 
         
-        let addressInPageText;
-        if(postcode){
-            addressInPageText = postcodeObject?.addressInPageTxt.text;
-            let GPEs = await fetchGPEandORG(addressInPageText).GPE;
-            if(GPEs){
-                addressInPageText = cleanUpFromGPEs(addressInPageText, GPEs);
-            }
-            let addressLabled = await fetchStreetDetails(addressInPageText);
-            road = addressLabled.Street_Name;
-            roadNumber = addressLabled.Street_Num;
+        if(postcode && postcodeObject.streetDetails){
+            let streetLabeled = postcodeObject.streetDetails;
+            road = streetLabeled.Street_Name;
+            roadNumber = streetLabeled.Street_Num;
         }
 
         console.log('getting road');
@@ -202,7 +202,7 @@ const urlsToTest = [
     //36
     'https://happystagger.com/',
     //37
-    'https://yanceyworks.com'
+    'https://www.dillonmusic.com/'
 ];
 
-retrieveLocationData(urlsToTest[32]);
+retrieveLocationData(urlsToTest[20]);
