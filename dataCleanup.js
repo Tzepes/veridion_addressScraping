@@ -7,7 +7,7 @@ function elementTextCleanUp(element, $) {
         } else {
             // Recursively clean up the inner text of child elements
             const childText = elementTextCleanUp(this, $);
-            const cleanedChildText = childText.replace(/<img[^>]*>|<iframe[^>]*>/g, ' ');
+            const cleanedChildText = childText.replace(/<img[^>]*>|<iframe[^>]*>|<br>|<p>|<span>/g, ' ');
             // Add the cleaned text and a space to separate from the next element
             text += cleanedChildText + ' ';
         }
@@ -17,7 +17,7 @@ function elementTextCleanUp(element, $) {
 }
 
 function textCleanUp(text) {
-    text = text.replace(/\n|\t/g, ' ');      
+    text = text.replace(/\n|\t|\n811/g, ' ');      
     text = text.replace(/[\uE017©•"-*.|/]/g, ' ').replace(/\s+/g, ' ');
     text = text.replace(/[^\x20-\x7E]/g, ' ');
     //Remove CSS and HTML-like content

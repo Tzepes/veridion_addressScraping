@@ -22,9 +22,9 @@ const SBR_WS_ENDPOINT = 'wss://brd-customer-hl_39f6f47e-zone-scraping_browser1:2
 
 // Declare links array:
 let firstPageLinks = [];
-let ORGs;
-let GPEs;
-let ORGs_GPEs_Sorted
+let ORGs = [];
+let GPEs = [];
+let ORGs_GPEs_Sorted = [];
 
 const csvWriterFullAddress = createCsvWriter({
     path: 'results/fullAddressResults.csv',
@@ -95,9 +95,11 @@ const csvWriterNoAddress = createCsvWriter({
         // if(index >= stopAT){
         //     break;
         // }
+        let domain = record.domain;
+
         let retreivedData = {country: null, region: null, city: null, postcode: null, road: null, roadNumber: null};
-        await accessDomain('https://' + record.domain, page);
-        setDomainForSpacy(record.domain) // THIS DOESN T WORK FIX IT MAYBE
+        retreivedData = await accessDomain('https://' + domain, page);
+        setDomainForSpacy(domain) // THIS DOESN T WORK FIX IT MAYBE
         let lastRetreivedActualData = {country: retreivedData?.country, region: retreivedData?.region, city: retreivedData?.city, postcode: retreivedData?.postcode, road: retreivedData?.road, roadNumber: retreivedData?.roadNumber};
         
         if(!retreivedData?.postcode || !retreivedData?.road){
@@ -110,17 +112,17 @@ const csvWriterNoAddress = createCsvWriter({
         }
 
         // for now check only if postcode has not been found, the NER needs updated training + better data cleaning and text selection from element
-        // if(!retreivedData?.postcode || !retreivedData?.road){ //incase the postcode hasn't been found, get the linkfs of the landing page and search trough them as well (initiate only if postcode missing since street tends to be placed next to it)
-        //     for(let link of firstPageLinks){
-        //         await new Promise(resolve => setTimeout(resolve, 500)); // delay to prevent blocking by athe server
-        //         retreivedData = await accessDomain(link, page);
-        //         lastRetreivedActualData = updateRetrievedData(retreivedData, lastRetreivedActualData); 
-        //         if(retreivedData?.postcode && retreivedData?.road){
-        //             break;
-        //         }
-        //     }
-        //     retreivedData = updateMissingData(retreivedData, lastRetreivedActualData);
-        // }
+        if(!retreivedData?.postcode || !retreivedData?.road){ //incase the postcode hasn't been found, get the linkfs of the landing page and search trough them as well (initiate only if postcode missing since street tends to be placed next to it)
+            for(let link of firstPageLinks){
+                await new Promise(resolve => setTimeout(resolve, 500)); // delay to prevent blocking by athe server
+                retreivedData = await accessDomain(link, page);
+                lastRetreivedActualData = updateRetrievedData(retreivedData, lastRetreivedActualData); 
+                if(retreivedData?.postcode && retreivedData?.road){
+                    break;
+                }
+            }
+            retreivedData = updateMissingData(retreivedData, lastRetreivedActualData);
+        }
         firstPageLinks = [];
         
         ORGs = [];
@@ -182,7 +184,7 @@ async function accessDomain(domain, page, googleScraping = false){
             return;
         }
 
-        if(!googleScraping){
+        if(!googleScraping && GPEs.length === 0 && ORGs.length === 0){
             await getGPEandORG(pageText, domain);
         } 
 
@@ -229,7 +231,7 @@ async function retrieveLocationData(htmlContent, url, googleScraping = false) {
     if(!googleScraping){
         targetTag = 'body'
     } else {
-        targetTag = 'div[jsname="xQjRM"]';
+        targetTag = '.gqkR3b.hP3ybd';
     }
 
     htmlText = $(targetTag).text(); // select google maps div with address
@@ -293,7 +295,7 @@ async function retrieveLocationData(htmlContent, url, googleScraping = false) {
     console.log('Road number:', roadNumber);
     // console.log('language:', getLanguage(text));
 
-    return {country, region, city, postcode, road, roadNumber}; // Return extracted data
+    return  {country: country, region: region, city: city, postcode: postcode, road: road, roadNumber: roadNumber}; // Return extracted data
 }
 
 async function getGPEandORG(pageText, domain){
@@ -303,9 +305,14 @@ async function getGPEandORG(pageText, domain){
     let pageLanguage = getLanguage(pageText);
     
     let fetchResult = await fetchGPEandORG(pageText, domain);
+
     ORGs = fetchResult.ORG;
     GPEs = fetchResult.GPE;
-    ORGs_GPEs_Sorted = fetchResult?.ORG_GPE_Sorted.slice(0, 10); // get only the first 10 elements of the array for they are the most relevant
+    if(fetchResult.ORG_GPE_Sorted.length > 10){
+        ORGs_GPEs_Sorted = fetchResult?.ORG_GPE_Sorted.slice(0, 10); // get only the first 10 elements of the array for they are the most relevant
+    } else {
+        ORGs_GPEs_Sorted = fetchResult?.ORG_GPE_Sorted;
+    }
     console.log(fetchResult);
 }
 

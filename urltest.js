@@ -7,7 +7,6 @@ const getPostalCodeFormat = require('./postalcodeRegex.js');
 const { findCountry, getCountryFromURL } = require('./Extractors/countryExtractor.js');
 const {findPostcode, loopForPostcodeIfCountry} = require('./Extractors/postcodeExtractor.js');
 const findRoad = require('./Extractors/roadExtractor.js');
-const LoopTroughElements = require('./pageScrapper.js');
 const {elementTextCleanUp, textCleanUp}= require('./dataCleanup.js');
 const {fetchStreetDetails, fetchGPEandORG} = require('./apis/spacyLocalAPI.js');
 const {getLanguage} = require('./MLM/languageNLP.js');
@@ -46,15 +45,12 @@ async function retrieveLocationData(url) {
         console.log('page language:', pageLanguage);
 
 
-        let GPEORG = await fetchGPEandORG(text);
+        let GPEORG = await fetchGPEandORG(text, url);
         let GPEs = GPEORG.GPE;
         let ORGs = GPEORG.ORG;
         console.log(text)
         console.log("ORGs:", ORGs)
         console.log("GPEs:", GPEs)
-
-        console.log('looping through elements');
-        LoopTroughElements($);
 
         let firstPageLinks = await getFirstPageLinks(url, $);
         console.log('got first page links')
@@ -202,7 +198,7 @@ const urlsToTest = [
     //36
     'https://happystagger.com/',
     //37
-    'https://www.dillonmusic.com/'
+    'https://www.mulchandsod.com'
 ];
 
-retrieveLocationData(urlsToTest[20]);
+retrieveLocationData(urlsToTest[0]);

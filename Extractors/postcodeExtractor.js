@@ -16,7 +16,7 @@ async function loopForPostcodeIfCountry(countryRegex = null, countryFromURL = nu
     let postcode = null;
     let postcodeAPIResponse;
     let matchingPostcodes = new Set();
-    const addressSelectors = ['address', 'p', 'font', 'span', 'strong', 'div'];
+    const addressSelectors = ['p', 'address', 'font', 'span', 'strong', 'div'];
     const filteredElements = $(targetTag).find('*').filter(function() { return !/^(script|link|meta|style|path|symbol|noscript|img|code)$/i.test(this.nodeName) });
     const reversedElements = $(filteredElements).get().reverse(); // reverse the webpage elements since most postcodes are at the base of the page
 
@@ -24,42 +24,40 @@ async function loopForPostcodeIfCountry(countryRegex = null, countryFromURL = nu
 
     // Start search for postcode
     // we insert each matching string of numbers into a Set() array, then we loop them until the valid postcode is found
-    for(let index = 0; index < reversedElements.length; index++) {
-        const element = reversedElements[index];
-        if ($(element).is('script') || $(element).find('script').length > 0 || $(element).find('style').length > 0){
-            continue;
-        }
+    // Loop through each address selector
+    for(let i = 0; i < addressSelectors.length; i++) {
+        // Find all elements that match the current address selector
+        const elements = $(targetTag).find(addressSelectors[i]);
 
-        let isCorrectElement = false; //reset the value
-        
-        for(let i = 0; i < addressSelectors.length; i++) {
-            if ($(element).is(addressSelectors[i])) {
-                isCorrectElement = true;
-                break;
+        // Loop through each element that matches the current address selector
+        elements.each(function() {
+            const element = this;
+
+            // Skip if the element is a script or contains a script or style
+            if ($(element).is('script') || $(element).find('script').length > 0 || $(element).find('style').length > 0){
+                return;
             }
-        }
-        
-        if(!isCorrectElement) continue;
 
-        let text = elementTextCleanUp(element, $);
-        text = textCleanUp(text);
-        
-        // fs.appendFile('postcodeLoopElements.txt', `${element.name}\n${text}\n\n`, (err) => {
-        //     if (err) throw err;
-        // });
-        
-        postcodeMatch = text.match(postcodeDefaultRegex);
-        if (postcodeMatch) {
-            handlePostcodeMatch(postcodeMatch, matchingPostcodes, postcodeTextLocation, element, text);
-            continue;
-        }
-        
-        // Look for postcode using country regex
-        postcodeMatch = text.match(postcodeCountryRegex);
-        if (postcodeMatch) {
-            handlePostcodeMatch(postcodeMatch, matchingPostcodes, postcodeTextLocation, element, text);
-            continue;
-        }
+            let text = elementTextCleanUp(element, $);
+            text = textCleanUp(text);
+
+            fs.appendFile('postcodeLoopElements.txt', `${element.name}\n${text}\n\n`, (err) => {
+                if (err) throw err;
+            });
+
+            let postcodeMatch = text.match(postcodeDefaultRegex);
+            if (postcodeMatch) {
+                handlePostcodeMatch(postcodeMatch, matchingPostcodes, postcodeTextLocation, element, text);
+                return;
+            }
+
+            // Look for postcode using country regex
+            postcodeMatch = text.match(postcodeCountryRegex);
+            if (postcodeMatch) {
+                handlePostcodeMatch(postcodeMatch, matchingPostcodes, postcodeTextLocation, element, text);
+                return;
+            }
+        });
     }
 
     let uniquePostcodes = Array.from(matchingPostcodes);
@@ -67,7 +65,7 @@ async function loopForPostcodeIfCountry(countryRegex = null, countryFromURL = nu
 
     for (let postcodeOfArr of uniquePostcodes) { // check each matching string
         let PostcodeObject = await VerifyPostcode(postcodeOfArr, countryFromURL);
-        postcode = PostcodeObject.postcode;
+        postcode = PostcodeObject?.postcode;
         if(!postcode) continue;
         let streetDetails = await VerifyTextOfPostcode(postcodeTextLocation, postcodeOfArr, $);
         if(postcode){
@@ -113,6 +111,7 @@ async function VerifyTextOfPostcode(postcodeTextLocation, postcode, $){
         text = data.texts[i];
         addressInPageTxt = traverseElement(element, text, minNum, maxNum, postcode, $);
         addressInPageTxt.text = removeNonAddressDetails(addressInPageTxt.text);
+        addressInPageTxt.text = shortenText(postcode, addressInPageTxt.text);
         // if(await isValidAddressText(addressInPageTxt) == false){
         //     return null;
         // }
@@ -170,19 +169,20 @@ function traverseElement(element, text, minNum, maxNum, postcode, $) {
                 }
             }
             if (!found) break; // No suitable child found, stop traversing downwards
-        } else if (tokens.length < minNum) {
-            // If too few tokens, traverse upwards
-            let parentElement = currentElement.parent();
-            if (parentElement.length === 0) break; // No parent element, stop traversing upwards
-            let parentText = parentElement ? parentElement.text() : null;
-            if (parentText.includes(postcode)) {
-                currentElement = parentElement;
-                currentText = parentText;
-                tokens = currentText.split(/\s+/);
-            } else {
-                break; // Parent text does not contain postcode, stop traversing upwards
-            }
-        }
+        } 
+        // else if (tokens.length < minNum) {
+        //     // If too few tokens, traverse upwards
+        //     let parentElement = currentElement.parent();
+        //     if (parentElement.length === 0) break; // No parent element, stop traversing upwards
+        //     let parentText = parentElement ? parentElement.text() : null;
+        //     if (parentText.includes(postcode)) {
+        //         currentElement = parentElement;
+        //         currentText = parentText;
+        //         tokens = currentText.split(/\s+/);
+        //     } else {
+        //         break; // Parent text does not contain postcode, stop traversing upwards
+        //     }
+        // }
         iterations++;
     }
 
@@ -194,7 +194,32 @@ function traverseElement(element, text, minNum, maxNum, postcode, $) {
     // }
 }
 
+function shortenText(postcode, text, rule = 'US') {
+    // based on rule, take n tokens from postcode to left/right, or n/2 from both sides
+    // Find the position of the postcode in the text
+    const index = text.indexOf(postcode);
 
+    // Check if the postcode was found
+    if (index !== -1) {
+          // Extract the substring from the start to the index of the postcode
+        const substringBeforePostcode = text.substring(0, index + postcode.length);
+
+        // Split the substring into words
+        const words = substringBeforePostcode.split(/\s+/);
+
+        // Calculate the start index for slicing, ensure it doesn't go negative
+        const startIndex = Math.max(0, words.length - 10);
+
+        // Extract the last 10 words, including the postcode
+        const resultWords = words.slice(startIndex);
+        // Join the words back into a string
+        return resultWords.join(' ');
+    } else {
+        // Postcode not found in text
+        console.log('Postcode not found in text');
+        return text;
+    }
+}
 
 async function passPostcodeToAPI(postcode, countryFromURL) {
     let postcodeAPIResponse;
