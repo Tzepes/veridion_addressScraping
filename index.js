@@ -22,6 +22,7 @@ const SBR_WS_ENDPOINT = 'wss://brd-customer-hl_39f6f47e-zone-scraping_browser1:2
 
 // Declare links array:
 let firstPageLinks = [];
+let language;
 let ORGs = [];
 let GPEs = [];
 let ORGs_GPEs_Sorted = [];
@@ -87,6 +88,7 @@ const csvWriterNoAddress = createCsvWriter({
     console.log('Connecting to Scraping Browser...');
     let browser = await puppeteer.launch();
     let page = await browser.newPage();
+
     while(record = await cursor.next()) {
         if(index < beginAt){
             index++;
@@ -96,6 +98,8 @@ const csvWriterNoAddress = createCsvWriter({
         //     break;
         // }
         let domain = record.domain;
+
+        if (!domain.endsWith('.de')) { continue; }
 
         let retreivedData = {country: null, region: null, city: null, postcode: null, road: null, roadNumber: null};
         retreivedData = await accessDomain('https://' + domain, page);
@@ -124,12 +128,12 @@ const csvWriterNoAddress = createCsvWriter({
             retreivedData = updateMissingData(retreivedData, lastRetreivedActualData);
         }
         firstPageLinks = [];
-        
+        language = '';
         ORGs = [];
         GPEs = [];
         ORGs_GPEs_Sorted = [];
         // console.log('postcode:', retreivedData?.postcode, 'road:', retreivedData?.road)
-        await writeCSV(retreivedData, record.domain); //write data into CSV file
+        await writeCSV(retreivedData, domain); //write data into CSV file
     }
     console.log("");
 
@@ -178,6 +182,8 @@ async function accessDomain(domain, page, googleScraping = false){
         let contentType = await page.evaluate(() => document.contentType);
 
         let pageText = await page.evaluate(() => document.body.innerText); //inner text fails sometimes
+
+        language = getLanguage(pageText);
 
         if (contentType === 'application/pdf' || contentType === 'audio/mpeg' || contentType === 'video/mp4') {
             console.log('Irrelevant file detected. Skipping...');

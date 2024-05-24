@@ -223,11 +223,13 @@ function shortenText(postcode, text, rule = 'US') {
 
 async function passPostcodeToAPI(postcode, countryFromURL) {
     let postcodeAPIResponse;
-    
-        // postcode is first passed trough ParseAPI which is free and only for US postcodes
-        // if no data retrieved off ParseAPI, it could be invalid or non US, thereforse we try zipcodebase which is worldwide but paid, so we limit requests
+    // postcode is first passed trough ParseAPI which is free and only for US postcodes
+    // if no data retrieved off ParseAPI, it could be invalid or non US, thereforse we try zipcodebase which is worldwide but paid, so we limit requests
     try {
         postcodeAPIResponse = await getPostcodeDataParseAPI(postcode, countryFromURL);
+        if (postcodeAPIResponse === null) {
+            postcode = null;
+        }
     } catch(error) {
         postcodeAPIResponse = null;
         console.log('erronus postcode for API');
@@ -235,6 +237,9 @@ async function passPostcodeToAPI(postcode, countryFromURL) {
     if(!postcodeAPIResponse) { // check logic here it should not trigger if postcodeAPIResponse succeded
         try {
             postcodeAPIResponse = await getZipcodeBaseAPI(postcode, countryFromURL);
+            if (postcodeAPIResponse === null) {
+                postcode = null;
+            }
         } catch(error) {
             postcodeAPIResponse = null;
             console.log('erronus postcode for API');
@@ -243,6 +248,8 @@ async function passPostcodeToAPI(postcode, countryFromURL) {
         
     }
     
+    console.log(postcode, postcodeAPIResponse)
+
     return {postcode, postcodeAPIResponse};
 }
 
@@ -251,6 +258,7 @@ async function getPostcodeDataParseAPI(postcode, countryFromURL) { // parsecodeA
 
     if (postcode) {
         data = await getDataFromParseAPI(postcode);
+        console.log(countryFromURL !== data?.country?.name && countryFromURL !== null)
         if(countryFromURL !== data?.country?.name && countryFromURL !== null){
             return null;
         } else {
@@ -261,15 +269,15 @@ async function getPostcodeDataParseAPI(postcode, countryFromURL) { // parsecodeA
 }
 
 async function getZipcodeBaseAPI(postcode, country) { // pass country code as parametere if needed
-    let data;
+    let data; //TODO: take country, region and city from API, and search for it in Page text to verifiy it's validity, give points to each match and return the one with most points
     data = await getDataFromZipcodeBase(postcode)
     if (data.results[postcode] && data.results[postcode].length > 0) {
-        if (data.results[postcode].length === 1) {
+        if (data.results[postcode].length === 1 && data.results[postcode][0].latitude !== "0.00000000" && data.results[postcode][0].longitude !== "0.00000000") { // If long and lat = 0 it can mean dummy data
             return data.results[postcode][0];
         } else {
             let countryCode = getCountryAbbreviation(country);
             for (let postcodeInfo of data.results[postcode]) { // zipcodebase API could return multiple JSON objects for the same zipcode, therefore we loop trough them until country of postcode matches
-                if (postcodeInfo.country_code === countryCode) {
+                if (postcodeInfo.country_code === countryCode && postcodeInfo.latitude !== "0.00000000" && postcodeInfo.longitude !== "0.00000000") {
                     return postcodeInfo;
                 } else {
                     continue;

@@ -25,7 +25,6 @@ async function getDataFromZipcodeBase(postcode) {
     try {
         const response = await axios.get(apiUrl);
         const data = response.data;
-
         return data;
     } catch (error) {
      console.log(error);   
