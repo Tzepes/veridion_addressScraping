@@ -7,11 +7,12 @@ const addressSelectors = [
 
 const roadMatches = new Set();
 
-function findRoad($, targetTag = 'body') {
+function findRoad($, targetTag = 'body', language) {
     let road = '';
     let roadNumber = '';
     // add google API to translate road name to country (if taken from URL or Postcode)
     const streetNameRegex = /\b(\d+)\s+(.{1,40})\b(?:\s+(?:Street|St\.|Avenue|Ave\.|Road|Rd\.|Lane|Ln\.|Boulevard|Blvd\.|Drive|Dr\.|Court|Ct\.|Place|Pl\.|Square|Sq\.|Trail|Tr\.|Parkway|Pkwy\.|Circle|Cir\.|Terrace|Ter\.|Way|W\.|Highway|Hwy\.|Route|Rte\.|Path|Pth\.|Expressway|Expy\.|Freeway|Fwy\.|Turnpike|Tpke\.|Interstate|I-(?:[0-9]+)|US(?: Route)?-[0-9]+)\b)(?!.*(?:Categories|Powered by))/
+    const germanStreetNameRegex = /\b(\d+)\s+(.{1,40})\b(?:\s+(?:Straße|Str\.|Weg|Allee|Platz|Ring|Gasse|Berg|Graben|Hof|Rain|Steig|Stieg|Ufer|Garten|Park|Kamp|Kampen|Kuhle|Blick|Hain|Holz|Horst|Busch|Wald|Feld|Höhe|Tal|Damm|Deich|Geest|Hagen|Heide|Heim|Krug|Land|Loch|Moor|See|Weide|Winkel|Zeile|Zeile)\b)(?!.*(?:Kategorien|Angetrieben von))/
     const streetRegexNumBegin = /^\d+\s(?:[A-Za-zÀ-ÿ-]+\s?)+?\b/g;
     const streetRegexNumEnd = /\b[A-Za-zÀ-ÿ-]+\s+\d+(?!\w)/;
 
@@ -21,6 +22,9 @@ function findRoad($, targetTag = 'body') {
     let elementTxtGlobalVar;
 
     for(let index = 0; index < reversedElements.length; index++) {
+        if(language === 'de') {
+            streetNameRegex = germanStreetNameRegex;
+        }
         const element = reversedElements[index];
 
         let isCorrectElement = false;

@@ -14,7 +14,7 @@ const getPostalCodeFormat = require('./postalcodeRegex.js');
 
 const { getLanguage } = require('./MLM/languageNLP.js');
 
-const { elementTextCleanUp, textCleanUp, cleanUpFromGPEs } = require('./dataCleanup.js');
+const { elementTextCleanUp, textCleanUp, cleanUpFromGPEs, cleanUpStreet } = require('./dataCleanup.js');
 
 const {fetchStreetDetails, fetchGPEandORG, setDomainForSpacy} = require('./apis/spacyLocalAPI.js');
 
@@ -99,7 +99,7 @@ const csvWriterNoAddress = createCsvWriter({
         // }
         let domain = record.domain;
 
-        if (!domain.endsWith('.de')) { continue; }
+        // if (!domain.endsWith('.de')) { continue; }
 
         let retreivedData = {country: null, region: null, city: null, postcode: null, road: null, roadNumber: null};
         retreivedData = await accessDomain('https://' + domain, page);
@@ -194,7 +194,7 @@ async function accessDomain(domain, page, googleScraping = false){
             await getGPEandORG(pageText, domain);
         } 
 
-        retreivedData = await retrieveLocationData(pageContent, domain, googleScraping);
+        retreivedData = await retrieveLocationData(pageContent, pageText, domain, googleScraping);
     } catch (error) {
         console.log(`Error accessing domain: ${error.message}`);
         console.log(`Error trace: ${error.stack}`);
@@ -221,7 +221,7 @@ async function googleScrape(queries, page){
     }
 }
 
-async function retrieveLocationData(htmlContent, url, googleScraping = false) {
+async function retrieveLocationData(htmlContent, pageText, url, googleScraping = false) {
     let country;
     let region;
     let city;
@@ -252,7 +252,7 @@ async function retrieveLocationData(htmlContent, url, googleScraping = false) {
     let postcodeObject;
     // the returned JSONs are different for parseAPI and zipcodebase API
     // we first check if the JSON is of parseAPI, otherwise, we try zipcodebase JSON format
-    postcodeObject = await loopForPostcodeIfCountry(getPostalCodeFormat(country), country, $, targetTag);  
+    postcodeObject = await loopForPostcodeIfCountry(pageText, getPostalCodeFormat(country), country, $, targetTag);  
     if(postcodeObject){
         postcode = postcodeObject.postcode;
         postcodeAPIResponse = postcodeObject.postcodeAPIResponse;
@@ -278,8 +278,8 @@ async function retrieveLocationData(htmlContent, url, googleScraping = false) {
     }
 
 
-    if(postcode && postcodeObject.streetDetails){
-        let streetLabeled = postcodeObject.streetDetails;
+    if(postcode && postcodeObject.addressDetails){
+        let streetLabeled = postcodeObject.addressDetails;
         road = streetLabeled.Street_Name;
         roadNumber = streetLabeled.Street_Num;
     }
@@ -287,10 +287,12 @@ async function retrieveLocationData(htmlContent, url, googleScraping = false) {
 
     if(!road){
         // Extract road
-        roadObject = findRoad($, targetTag);
+        roadObject = findRoad($, targetTag, language);
         road = roadObject.road;
         roadNumber = roadObject.roadNumber;
     }
+
+    road = cleanUpStreet(road);
     
     // Output extracted data
     console.log('Country:', country)
