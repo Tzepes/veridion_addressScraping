@@ -19,14 +19,14 @@ function elementTextCleanUp(element, $) {
 function textCleanUp(text) {
     text = text.replace(/\n|\t|\n811/g, ' ');      
     text = text.replace(/[\uE017©•"-*.|/]/g, ' ').replace(/\s+/g, ' ');
-    text = text.replace(/[^\x20-\x7E]/g, ' ');
+    text = text.replace(/[^\x20-\x7EäöüßÄÖÜàâéèêëîïôùûüÿçÀÂÉÈÊËÎÏÔÙÛÜŸÇáíóúýčďěňřšťžČĎĚŇŘŠŤŽæøåÆØÅăâîșțĂÂÎȘȚñÑáéíóúü]/g, ' ');
     //Remove CSS and HTML-like content
     text = text.replace(/\w+[-\w]*\s*{[^}]*}/g, ' ');
     
     return text;
 }
 
-function removeNonAddressDetails(text) {
+function removeNonAddressDetails(text, postcode) {
     // Regex pattern for phone numbers
     console.log('cleaning phones')
     const phonePattern = /(\+?\d{1,4}[\s-]?)?(\(?\d{1,3}\)?[\s-]?)?[\d\s-]{7,15}/g;
@@ -58,4 +58,9 @@ function cleanUpFromGPEs(text, GPEs) {
     return text;
 }
 
-module.exports = { elementTextCleanUp, textCleanUp, removeNonAddressDetails, cleanUpFromGPEs };
+function cleanUpStreet(){
+    let cleanedText = text.replace(/[,"]/g, '');
+    return cleanedText;
+}
+
+module.exports = { elementTextCleanUp, textCleanUp, removeNonAddressDetails, cleanUpFromGPEs, cleanUpStreet };
