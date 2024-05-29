@@ -18,10 +18,13 @@ const { elementTextCleanUp, textCleanUp, cleanUpFromGPEs, cleanUpStreet } = requ
 
 const {fetchStreetDetails, fetchGPEandORG, setDomainForSpacy} = require('./apis/spacyLocalAPI.js');
 
+const { getCountryByScore } = require('./Extractors/countryProbabilityScore.js');
+
 const SBR_WS_ENDPOINT = 'wss://brd-customer-hl_39f6f47e-zone-scraping_browser1:20tfspbnsze2@brd.superproxy.io:9222';
 
 // Declare links array:
 let firstPageLinks = [];
+let country;
 let language;
 let ORGs = [];
 let GPEs = [];
@@ -99,7 +102,7 @@ const csvWriterNoAddress = createCsvWriter({
         // }
         let domain = record.domain;
 
-        // if (!domain.endsWith('.de')) { continue; }
+        // if (!domain.endsWith('.uk')) { continue; }
 
         let retreivedData = {country: null, region: null, city: null, postcode: null, road: null, roadNumber: null};
         retreivedData = await accessDomain('https://' + domain, page);
@@ -116,7 +119,7 @@ const csvWriterNoAddress = createCsvWriter({
         }
 
         // for now check only if postcode has not been found, the NER needs updated training + better data cleaning and text selection from element
-        if(!retreivedData?.postcode || !retreivedData?.road){ //incase the postcode hasn't been found, get the linkfs of the landing page and search trough them as well (initiate only if postcode missing since street tends to be placed next to it)
+        if(!retreivedData?.postcode && !retreivedData?.road){ //incase the postcode hasn't been found, get the linkfs of the landing page and search trough them as well (initiate only if postcode missing since street tends to be placed next to it)
             for(let link of firstPageLinks){
                 await new Promise(resolve => setTimeout(resolve, 500)); // delay to prevent blocking by athe server
                 retreivedData = await accessDomain(link, page);
@@ -128,7 +131,8 @@ const csvWriterNoAddress = createCsvWriter({
             retreivedData = updateMissingData(retreivedData, lastRetreivedActualData);
         }
         firstPageLinks = [];
-        language = '';
+        country = null;
+        language = null;
         ORGs = [];
         GPEs = [];
         ORGs_GPEs_Sorted = [];
@@ -222,7 +226,6 @@ async function googleScrape(queries, page){
 }
 
 async function retrieveLocationData(htmlContent, pageText, url, googleScraping = false) {
-    let country;
     let region;
     let city;
     let postcode;
@@ -246,7 +249,10 @@ async function retrieveLocationData(htmlContent, pageText, url, googleScraping =
         firstPageLinks = await getFirstPageLinks(url, $);
     }
 
-    country = getCountryFromURL(url);
+    if(!country){
+        country = getCountryFromURL(url);
+        country = getCountryByScore(GPEs, country, language);
+    }
 
     // Extract postcode
     let postcodeObject;
@@ -292,7 +298,9 @@ async function retrieveLocationData(htmlContent, pageText, url, googleScraping =
         roadNumber = roadObject.roadNumber;
     }
 
-    road = cleanUpStreet(road);
+    if(road){
+        road = cleanUpStreet(road);
+    }
     
     // Output extracted data
     console.log('Country:', country)

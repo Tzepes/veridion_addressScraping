@@ -58,7 +58,7 @@ function cleanUpFromGPEs(text, GPEs) {
     return text;
 }
 
-function cleanUpStreet(){
+function cleanUpStreet(text){
     let cleanedText = text.replace(/[,"]/g, '');
     return cleanedText;
 }
