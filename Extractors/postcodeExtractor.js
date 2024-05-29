@@ -27,6 +27,8 @@ async function loopForPostcodeIfCountry(pageText, countryRegex = null, countryFr
 
     let postcodeTextLocation = {};
 
+    console.log('country and its regex:', countryFromURL, postcodeCountryRegex)
+
     // Start search for postcode
     // we insert each matching string of numbers into a Set() array, then we loop them until the valid postcode is found
     // Loop through each address selector
@@ -49,14 +51,14 @@ async function loopForPostcodeIfCountry(pageText, countryRegex = null, countryFr
             let postcodeMatch = text.match(postcodeDefaultRegex);
             if (postcodeMatch) {
                 handlePostcodeMatch(postcodeMatch, matchingPostcodes, postcodeTextLocation, element, text);
-                return;
+                // return;
             }
 
             // Look for postcode using country regex
             postcodeMatch = text.match(postcodeCountryRegex);
             if (postcodeMatch) {
                 handlePostcodeMatch(postcodeMatch, matchingPostcodes, postcodeTextLocation, element, text);
-                return;
+                // return;
             }
         });
     }
@@ -65,23 +67,28 @@ async function loopForPostcodeIfCountry(pageText, countryRegex = null, countryFr
     console.log(uniquePostcodes);
 
     for (let postcodeOfArr of uniquePostcodes) { // check each matching string
+        
         let PostcodeObject = await VerifyPostcode(postcodeOfArr, countryFromURL);
         const countryCode = PostcodeObject?.postcodeAPIResponse?.country_code || PostcodeObject?.postcodeAPIResponse?.country?.alpha2;
         postcode = PostcodeObject?.postcode;
+        
         if(!postcode) continue;
+        
+        console.log(postcodeTextLocation[postcode])
+
         let addressDetails = await VerifyTextOfPostcode(postcodeTextLocation, postcodeOfArr, countryCode, $);
         if(postcode){ //
             // verifiy if the postcode is the one of the comany or if it s in the same text but regex matched wrong code
-            if(!(await postcodeDetailsInPage(pageText, PostcodeObject.postcodeAPIResponse))) {
-                if(addressDetails.Zipcode != postcode){
-                    PostcodeObject = await VerifyPostcode(addressDetails.Zipcode, countryFromURL);
-                    if(!(await postcodeDetailsInPage(pageText, PostcodeObject.postcodeAPIResponse))){
-                        continue;
-                    } else {
-                        postcode = addressDetails.Zipcode;
-                    }
-                }
-            }
+            // if(!(await postcodeDetailsInPage(pageText, PostcodeObject.postcodeAPIResponse))) {
+            //     if(addressDetails.Zipcode != postcode){
+            //         PostcodeObject = await VerifyPostcode(addressDetails.Zipcode, countryFromURL);
+            //         if(!(await postcodeDetailsInPage(pageText, PostcodeObject.postcodeAPIResponse))){
+            //             continue;
+            //         } else {
+            //             postcode = addressDetails.Zipcode;
+            //         }
+            //     }
+            // }
             console.log('address found:', addressDetails)
 
             fs.appendFile('matchesFromPostcode.txt', `${postcodeTextLocation[postcode].elements[0]}\n${postcodeTextLocation[postcode].texts[0]}\n\n`, (err) => {
@@ -145,7 +152,7 @@ async function VerifyTextOfPostcode(postcodeTextLocation, postcode, countryCode,
     let addressInPageTxtBackup;
     let addressText;
     let tokenRules = getTokenRules(countryCode);
-
+    console.log('country code:', countryCode, tokenRules)
     // Combine the texts and elements into an array of objects
     let combined = data.texts.map((text, i) => ({ text, element: data.elements[i] }));
 

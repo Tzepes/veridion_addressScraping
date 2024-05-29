@@ -4,7 +4,7 @@ const cheerio = require('cheerio');
 const {countries, countryAbbreviations, getCountryAbbreviation} = require('./countriesCodes.js');
 const getFirstPageLinks = require('./Extractors/firstPageLinksExtractor.js');
 const getPostalCodeFormat = require('./postalcodeRegex.js');
-const { findCountry, getCountryFromURL } = require('./Extractors/countryExtractor.js');
+const { findCountry, getCountryFromURL, getCountryFromLanguage } = require('./Extractors/countryExtractor.js');
 const {findPostcode, loopForPostcodeIfCountry} = require('./Extractors/postcodeExtractor.js');
 const findRoad = require('./Extractors/roadExtractor.js');
 const {elementTextCleanUp, textCleanUp}= require('./dataCleanup.js');
@@ -18,6 +18,7 @@ async function retrieveLocationData(url) {
     try {
         const browser = await puppeteer.connect({
             browserWSEndpoint: SBR_WS_ENDPOINT,
+            timeout: 20000
         });
         const page = await browser.newPage();
         console.log('loading page')
@@ -28,7 +29,7 @@ async function retrieveLocationData(url) {
         console.log('page content loaded')
         // const response = await axios.get(url);
         // const htmlContent = response.data;
-
+        // console.log(htmlContent)
         let country;
         let region;
         let city;
@@ -41,27 +42,25 @@ async function retrieveLocationData(url) {
         const text = textCleanUp(cleanedText);
         console.log('text cleaned')
 
-        let pageLanguage = getLanguage(text);
-        console.log('page language:', pageLanguage);
-
-
         let GPEORG = await fetchGPEandORG(text, url);
         let GPEs = GPEORG.GPE;
         let ORGs = GPEORG.ORG;
-        console.log(text)
+        let pageLanguage = GPEORG.language;
         console.log("ORGs:", ORGs)
         console.log("GPEs:", GPEs)
-
+        console.log('page language:', pageLanguage);
+        
         let firstPageLinks = await getFirstPageLinks(url, $);
         console.log('got first page links')
         console.log(firstPageLinks)
         console.log('getting country');
         country = getCountryFromURL(url);
+        console.log('country:', country)
 
         let postcodeObject;
         
         console.log('getting postcode');
-        postcodeObject = await loopForPostcodeIfCountry(getPostalCodeFormat(country), country, $);  
+        postcodeObject = await loopForPostcodeIfCountry(text, getPostalCodeFormat(country), country, $);  
         if(postcodeObject){
             postcode = postcodeObject.postcode;
             postcodeAPIResponse = postcodeObject.postcodeAPIResponse;
@@ -198,7 +197,9 @@ const urlsToTest = [
     //36
     'https://happystagger.com/',
     //37
-    'https://www.mulchandsod.com'
+    'https://www.heavensbestofbirmingham.com/Contact-Us.html',
+    //38
+    'https://newfield.co.uk'
 ];
 
-retrieveLocationData(urlsToTest[0]);
+retrieveLocationData(urlsToTest[38]);
