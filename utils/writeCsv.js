@@ -1,4 +1,5 @@
 const createCsvWriter = require('csv-writer').createObjectCsvWriter;
+const {getCountryFromURL} = require('../Extractors/countryExtractor.js');
 
 const csvWriterFullAddress = createCsvWriter({
     path: 'results/fullAddressResults.csv',
@@ -11,6 +12,7 @@ const csvWriterFullAddress = createCsvWriter({
         {id: 'road', title: 'Road'},
         {id: 'roadNumber', title: 'Road Number'}
     ],
+    append: true
 });
 
 const csvWriterPostcode = createCsvWriter({
@@ -24,6 +26,7 @@ const csvWriterPostcode = createCsvWriter({
         {id: 'road', title: 'Road'},
         {id: 'roadNumber', title: 'Road Number'}
     ],
+    append: true
 });
 const csvWriterStreet = createCsvWriter({
     path: 'results/streetResults.csv',
@@ -36,6 +39,7 @@ const csvWriterStreet = createCsvWriter({
         {id: 'road', title: 'Road'},
         {id: 'roadNumber', title: 'Road Number'}
     ],
+    append: true
 });
 const csvWriterNoAddress = createCsvWriter({
     path: 'results/noAddressResults.csv',
@@ -48,6 +52,7 @@ const csvWriterNoAddress = createCsvWriter({
         {id: 'road', title: 'Road'},
         {id: 'roadNumber', title: 'Road Number'}
     ],
+    append: true
 });
 
 async function writeCSV(data, domain) {

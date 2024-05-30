@@ -173,7 +173,7 @@ async function VerifyTextOfPostcode(postcodeTextLocation, postcode, countryCode,
 
         let tokenCount = countTokens(addressInPageTxt);
 
-        if(tokenCount < tokenRules.minNumberOfTokens){
+        if(tokenCount > tokenRules.maxNumberOfTokens){
             addressInPageTxt = shortenText(postcode, addressInPageTxt, tokenRules);
             tokenRules.takeAmmountOfTokens += 2;
             addressInPageTxtBackup = shortenText(postcode, addressInPageTxt, tokenRules);
@@ -262,7 +262,7 @@ function traverseElement(element, text, postcode, $) {
     // }
 }
 
-function shortenText(postcode, text, tokenRules = {minNumberOfTokens: 6, maxNumberOfTokens: 15, takeAmmountOfTokens: 10,}) {
+function shortenText(postcode, text, tokenRules) {
     // based on rule, take n tokens from postcode to left/right, or n/2 from both sides
     // Find the position of the postcode in the text
     const index = text.indexOf(postcode);

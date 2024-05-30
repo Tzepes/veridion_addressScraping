@@ -1,5 +1,4 @@
-const parquet = require('@dsnp/parquetjs');
-const axios = require('axios-https-proxy-fix');
+const { parentPort, workerData } = require('worker_threads');
 const puppeteer = require('puppeteer');
 const cheerio = require('cheerio');
 
@@ -30,31 +29,18 @@ let ORGs = [];
 let GPEs = [];
 let ORGs_GPEs_Sorted = [];
 
-
-
 (async () => {  // the main function that starts the search, loops trough all linkfs from .parquet and starts search for data
-    let reader = await parquet.ParquetReader.openFile('websites.snappy .parquet');
-    let cursor = reader.getCursor();
-    let beginAt = 1105; // skip the first 100 records
-    let stopAT = 500; // stop at 100 records
-    let index = 0;
 
-    let record = null;
+    const domains = workerData.domains;
+    // let beginAt = 1105; // skip the first 100 records
+    // let stopAT = 500; // stop at 100 records
+    // let index = 0;
+
     console.log('Connecting to Scraping Browser...');
     let browser = await puppeteer.launch();
     let page = await browser.newPage();
 
-    while(record = await cursor.next()) {
-        if(index < beginAt){
-            index++;
-            continue;
-        }
-        // if(index >= stopAT){
-        //     break;
-        // }
-        let domain = record.domain;
-
-        // if (!domain.endsWith('.uk')) { continue; }
+    for(let domain of domains) {
 
         let retreivedData = {country: null, region: null, city: null, postcode: null, road: null, roadNumber: null};
         retreivedData = await accessDomain('https://' + domain, page);
@@ -95,7 +81,6 @@ let ORGs_GPEs_Sorted = [];
 
     await page.close();
     await browser.close();
-    await reader.close();
 })();
 
 function updateRetrievedData(retreivedData, lastRetreivedActualData) {

@@ -1,28 +1,55 @@
 const rulesByCountry = {
     "US": {
-        minNumberOfTokens: 6,
-        maxNumberOfTokens: 15,
-        takeAmmountOfTokens: 9,
+        defaultVars: {
+            min: 6,
+            max: 12,
+            take: 9,
+        },
+        minNumberOfTokens: defaultVars.min,
+        maxNumberOfTokens: defaultVars.max,
+        takeAmmountOfTokens: defaultVars.take,
     },
     "UK": {
-        minNumberOfTokens: 4,
-        maxNumberOfTokens: 8,
-        takeAmmountOfTokens: 5,
+        defaultVars: {
+            min: 4,
+            max: 8,
+            take: 5,
+        },
+        minNumberOfTokens: defaultVars.min,
+        maxNumberOfTokens: defaultVars.max,
+        takeAmmountOfTokens: defaultVars.take,
     },
     "GB": {
-        minNumberOfTokens: 4,
-        maxNumberOfTokens: 8,
-        takeAmmountOfTokens: 5,
+        defaultVars: {
+            min: 4,
+            max: 8,
+            take: 5,
+        },
+        minNumberOfTokens: defaultVars.min,
+        maxNumberOfTokens: defaultVars.max,
+        takeAmmountOfTokens: defaultVars.take,
     },
     "DE": {
-        minNumberOfTokens: 3,
-        maxNumberOfTokens: 6,
-        takeAmmountOfTokens: 3,
+        defaultVars: {
+            min: 3,
+            max: 6,
+            take: 3,
+        },
+        minNumberOfTokens: defaultVars.min,
+        maxNumberOfTokens: defaultVars.max,
+        takeAmmountOfTokens: defaultVars.take,
     },
 }
 
 function getTokenRules(country) {
+    resetTokenVars(country);
     return rulesByCountry[country];
+}
+
+function resetTokenVars(country) {
+    rules[country].minNumberOfTokens = rules[country].defaultVars.min;
+    rules[country].maxNumberOfTokens = rules[country].defaultVars.max;
+    rules[country].takeAmmountOfTokens = rules[country].defaultVars.take;
 }
 
 module.exports = {getTokenRules};
