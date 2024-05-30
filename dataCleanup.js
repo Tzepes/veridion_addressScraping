@@ -18,7 +18,7 @@ function elementTextCleanUp(element, $) {
 
 function textCleanUp(text) {
     text = text.replace(/\n|\t|\n811/g, ' ');      
-    text = text.replace(/[\uE017©•"-*.|/]/g, ' ').replace(/\s+/g, ' ');
+    text = text.replace(/[\uE017©•*|/]/g, ' ').replace(/\s+/g, ' ');
     text = text.replace(/[^\x20-\x7EäöüßÄÖÜàâéèêëîïôùûüÿçÀÂÉÈÊËÎÏÔÙÛÜŸÇáíóúýčďěňřšťžČĎĚŇŘŠŤŽæøåÆØÅăâîșțĂÂÎȘȚñÑáéíóúü]/g, ' ');
     //Remove CSS and HTML-like content
     text = text.replace(/\w+[-\w]*\s*{[^}]*}/g, ' ');

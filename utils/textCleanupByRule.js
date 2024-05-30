@@ -2,7 +2,7 @@ const rulesByCountry = {
     "US": {
         minNumberOfTokens: 6,
         maxNumberOfTokens: 15,
-        takeAmmountOfTokens: 10,
+        takeAmmountOfTokens: 9,
     },
     "UK": {
         minNumberOfTokens: 4,

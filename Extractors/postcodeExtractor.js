@@ -168,13 +168,16 @@ async function VerifyTextOfPostcode(postcodeTextLocation, postcode, countryCode,
         text = data.texts[i];
         // addressInPageTxt = traverseElement(element, text, minNum, maxNum, postcode, $);
 
-        // text = traverseElement(element, text, postcode, $).text;
         addressInPageTxt = textCleanUp(text);
+        addressInPageTxt = removeNonAddressDetails(addressInPageTxt, postcode);
 
-        // addressInPageTxt = removeNonAddressDetails(addressInPageTxt, postcode);
-        addressInPageTxt = shortenText(postcode, addressInPageTxt, tokenRules);
-        tokenRules.takeAmmountOfTokens += 2;
-        addressInPageTxtBackup = shortenText(postcode, addressInPageTxt, tokenRules);
+        let tokenCount = countTokens(addressInPageTxt);
+
+        if(tokenCount < tokenRules.minNumberOfTokens){
+            addressInPageTxt = shortenText(postcode, addressInPageTxt, tokenRules);
+            tokenRules.takeAmmountOfTokens += 2;
+            addressInPageTxtBackup = shortenText(postcode, addressInPageTxt, tokenRules);
+        }
         // if(await isValidAddressText(addressInPageTxt) == false){
         //     return null;
         // }
@@ -266,7 +269,7 @@ function shortenText(postcode, text, tokenRules = {minNumberOfTokens: 6, maxNumb
 
     // Check if the postcode was found
     if (index !== -1) {
-          // Extract the substring from the start to the index of the postcode
+        // Extract the substring from the start to the index of the postcode
         const substringBeforePostcode = text.substring(0, index + postcode.length);
 
         // Split the substring into words
@@ -275,10 +278,20 @@ function shortenText(postcode, text, tokenRules = {minNumberOfTokens: 6, maxNumb
         // Calculate the start index for slicing, ensure it doesn't go negative
         const startIndex = Math.max(0, words.length - tokenRules.takeAmmountOfTokens - 1); // Subtract 1 to exclude the postcode itself
 
-        // Extract the last 10 words, including the postcode
-        const resultWords = words.slice(startIndex);
-        // Join the words back into a string
-        return resultWords.join(' ');
+        if (startIndex < tokenRules.minNumberOfTokens) {
+            let substringAfterPostcode = text.substring(index);
+            let wordsAfter = substringAfterPostcode.split(/\s+/);
+            // Check if the right side satisfies minNumberOfTokens
+            if (wordsAfter.length >= tokenRules.minNumberOfTokens) {
+                let resultWordsAfter = wordsAfter.slice(0, tokenRules.minNumberOfTokens);
+
+                return resultWordsAfter.join(' ');
+            }
+
+            let resultWords = words.slice(startIndex);
+
+            return resultWords.join(' ');
+        }
     } else {
         // Postcode not found in text
         console.log('Postcode not found in text');

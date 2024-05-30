@@ -1,6 +1,9 @@
 const axios = require('axios');
 let domain;
 async function fetchStreetDetails(text, country) {
+    if (!text) {
+        return null;
+    }
     try {
         const response = await axios.post('http://127.0.0.1:8000/extract_street/', {
             text: text,

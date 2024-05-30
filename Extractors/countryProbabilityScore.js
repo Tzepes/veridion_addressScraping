@@ -1186,50 +1186,32 @@ let scores = {
 function getCountryByScore(locations, countryFromURL = null, language) {
 
     if(countryFromURL){
-        let countryName = countryFromURL;
-        countryFromURL = convertCountryFromURLToCountryCode(countryFromURL);
-    
-        if(scores[countryFromURL] !== undefined){
-            scores[countryFromURL].score += 2;
-        } else {
-            scores[countryFromURL] = { score: 2, name: countryName };
-        }
+        scores[countryFromURL].score += 5;
     }
 
     for (const country in countryData) {
 
         const data = countryData[country];
 
-        // Check for country mentions
-        if (locations.includes(country)) {
-            scores[country].score += data.country;
-        }
-
-        if(language !== 'en'){
-            for(const language of data.language){
-                if(locations.includes(language)){
-                    scores[country].score += 10;
-                }
+        
+        for(const lang of data.language){
+            if(lang === language){
+                scores[country].score += 4;
             }
         }
-
-        for (const countryMention of data.countryMentions) {
-            if (locations.includes(countryMention)) {
-                scores[country].score += 10;
-            }
-        }
+        
 
         // Check for region mentions
         for (const region of data.regions) {
             if (locations.includes(region)) {
-                scores[country].score += 5;
+                scores[country].score += 10;
             }
         }
 
         // Check for city mentions
         for (const city of data.cities) {
             if (locations.includes(city)) {
-                scores[country].score += 5;
+                scores[country].score += 10;
             }
         }
     }

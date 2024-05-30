@@ -38,7 +38,6 @@ const domainExtensionMap = {
     'xk': 'Kosovo',
 
     // North American Countries
-    'com': 'United States',
     'us': 'United States',
     'ca': 'Canada',
     'mx': 'Mexico',

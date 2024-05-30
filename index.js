@@ -83,7 +83,7 @@ const csvWriterNoAddress = createCsvWriter({
 (async () => {  // the main function that starts the search, loops trough all linkfs from .parquet and starts search for data
     let reader = await parquet.ParquetReader.openFile('websites.snappy .parquet');
     let cursor = reader.getCursor();
-    let beginAt = 0; // skip the first 100 records
+    let beginAt = 1105; // skip the first 100 records
     let stopAT = 500; // stop at 100 records
     let index = 0;
 
