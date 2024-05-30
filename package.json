@@ -21,6 +21,7 @@
     "node-nlp": "^4.27.0",
     "parquetjs": "^0.11.2",
     "puppeteer": "^22.8.1",
-    "url": "^0.11.3"
+    "url": "^0.11.3",
+    "worker-nodes": "^2.7.0"
   }
 }

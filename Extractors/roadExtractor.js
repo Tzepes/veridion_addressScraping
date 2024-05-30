@@ -1,5 +1,5 @@
 const fs = require('fs');
-const {elementTextCleanUp, textCleanUp} = require('../dataCleanup.js');
+const {elementTextCleanUp, textCleanUp} = require('../utils/dataCleanup.js');
 const { fetchStreetDetails } = require('../apis/spacyLocalAPI.js');
 const addressSelectors = [
     'address', 'p', 'font', 'span', 'strong', 'div'

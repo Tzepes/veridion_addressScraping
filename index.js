@@ -3,18 +3,18 @@ const axios = require('axios-https-proxy-fix');
 const puppeteer = require('puppeteer');
 const cheerio = require('cheerio');
 
-const createCsvWriter = require('csv-writer').createObjectCsvWriter;
+const { writeCSV } = require('./utils/writeCsv.js');
 
-const {countries, getCountryAbbreviation} = require('./countriesCodes.js');
+const {countries, getCountryAbbreviation} = require('./utils/countriesCodes.js');
 const getFirstPageLinks = require('./Extractors/firstPageLinksExtractor.js');
 const {findCountry, getCountryFromURL} = require('./Extractors/countryExtractor.js');
 const {loopForPostcodeIfCountry} = require('./Extractors/postcodeExtractor.js');
 const findRoad = require('./Extractors/roadExtractor.js');
-const getPostalCodeFormat = require('./postalcodeRegex.js');
+const getPostalCodeFormat = require('./utils/postalcodeRegex.js');
 
 const { getLanguage } = require('./MLM/languageNLP.js');
 
-const { elementTextCleanUp, textCleanUp, cleanUpFromGPEs, cleanUpStreet } = require('./dataCleanup.js');
+const { elementTextCleanUp, textCleanUp, cleanUpFromGPEs, cleanUpStreet } = require('./utils/dataCleanup.js');
 
 const {fetchStreetDetails, fetchGPEandORG, setDomainForSpacy} = require('./apis/spacyLocalAPI.js');
 
@@ -30,55 +30,7 @@ let ORGs = [];
 let GPEs = [];
 let ORGs_GPEs_Sorted = [];
 
-const csvWriterFullAddress = createCsvWriter({
-    path: 'results/fullAddressResults.csv',
-    header: [
-        {id: 'domain', title: 'Domain'},
-        {id: 'country', title: 'Country'},
-        {id: 'region', title: 'Region'},
-        {id: 'city', title: 'City'},
-        {id: 'postcode', title: 'Postcode'},
-        {id: 'road', title: 'Road'},
-        {id: 'roadNumber', title: 'Road Number'}
-    ],
-});
 
-const csvWriterPostcode = createCsvWriter({
-    path: 'results/postcodeResults.csv',
-    header: [
-        {id: 'domain', title: 'Domain'},
-        {id: 'country', title: 'Country'},
-        {id: 'region', title: 'Region'},
-        {id: 'city', title: 'City'},
-        {id: 'postcode', title: 'Postcode'},
-        {id: 'road', title: 'Road'},
-        {id: 'roadNumber', title: 'Road Number'}
-    ],
-});
-const csvWriterStreet = createCsvWriter({
-    path: 'results/streetResults.csv',
-    header: [
-        {id: 'domain', title: 'Domain'},
-        {id: 'country', title: 'Country'},
-        {id: 'region', title: 'Region'},
-        {id: 'city', title: 'City'},
-        {id: 'postcode', title: 'Postcode'},
-        {id: 'road', title: 'Road'},
-        {id: 'roadNumber', title: 'Road Number'}
-    ],
-});
-const csvWriterNoAddress = createCsvWriter({
-    path: 'results/noAddressResults.csv',
-    header: [
-        {id: 'domain', title: 'Domain'},
-        {id: 'country', title: 'Country'},
-        {id: 'region', title: 'Region'},
-        {id: 'city', title: 'City'},
-        {id: 'postcode', title: 'Postcode'},
-        {id: 'road', title: 'Road'},
-        {id: 'roadNumber', title: 'Road Number'}
-    ],
-});
 
 (async () => {  // the main function that starts the search, loops trough all linkfs from .parquet and starts search for data
     let reader = await parquet.ParquetReader.openFile('websites.snappy .parquet');
@@ -330,26 +282,4 @@ async function getGPEandORG(pageText, domain){
         ORGs_GPEs_Sorted = fetchResult?.ORG_GPE_Sorted;
     }
     console.log(fetchResult);
-}
-
-async function writeCSV(data, domain) {
-    let dataObject = [{
-        domain: domain,
-        country: data?.country || getCountryFromURL(domain),
-        region: data?.region,
-        city: data?.city,
-        postcode: data?.postcode,
-        road: data?.road,
-        roadNumber: data?.roadNumber
-    }];
-
-    if (dataObject[0].postcode && dataObject[0].road) {
-        csvWriterFullAddress.writeRecords(dataObject)
-    } else if (dataObject[0].postcode && !dataObject[0].road) {
-        csvWriterPostcode.writeRecords(dataObject)
-    } else if (!dataObject[0].postcode && (dataObject[0].road || dataObject[0].roadNumber)) {
-        csvWriterStreet.writeRecords(dataObject)
-    } else {
-        csvWriterNoAddress.writeRecords(dataObject)
-    }
 }

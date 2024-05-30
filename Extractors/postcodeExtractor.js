@@ -1,9 +1,9 @@
 const {getDataFromParseAPI, getDataFromZipcodeBase} = require('../apis/postalcodeParseAPI.js');
-const { getCountryAbbreviation } = require('../countriesCodes.js');
+const { getCountryAbbreviation } = require('../utils/countriesCodes.js');
 
 const {fetchStreetDetails, fetchGPEandORG} = require('../apis/spacyLocalAPI.js');
 
-const {elementTextCleanUp, textCleanUp, removeNonAddressDetails} = require('../dataCleanup.js');
+const {elementTextCleanUp, textCleanUp, removeNonAddressDetails} = require('../utils/dataCleanup.js');
 const {getTokenRules} = require('../utils/textCleanupByRule.js');
 const fs = require('fs');
 
@@ -74,8 +74,6 @@ async function loopForPostcodeIfCountry(pageText, countryRegex = null, countryFr
         
         if(!postcode) continue;
         
-        console.log(postcodeTextLocation[postcode])
-
         let addressDetails = await VerifyTextOfPostcode(postcodeTextLocation, postcodeOfArr, countryCode, $);
         if(postcode){ //
             // verifiy if the postcode is the one of the comany or if it s in the same text but regex matched wrong code
@@ -158,6 +156,8 @@ async function VerifyTextOfPostcode(postcodeTextLocation, postcode, countryCode,
 
     // Sort the combined array based on token count in the text
     combined.sort((a, b) => countTokens(a.text) - countTokens(b.text));
+
+    console.log('combined:', combined)
 
     // Split the combined array back into texts and elements arrays
     data.texts = combined.map(item => item.text);
