@@ -1,4 +1,4 @@
-const {getDataFromParseAPI, getDataFromZipcodeBase} = require('../apis/postalcodeParseAPI.js');
+const {passPostcodeToAPI} = require('../apis/postalcodeAPIs.js');
 const { getCountryAbbreviation } = require('../utils/countriesCodes.js');
 
 const {fetchStreetDetails, fetchGPEandORG} = require('../apis/spacyLocalAPI.js');
@@ -69,7 +69,7 @@ async function loopForPostcodeIfCountry(pageText, countryRegex = null, countryFr
     for (let postcodeOfArr of uniquePostcodes) { // check each matching string
         
         let PostcodeObject = await VerifyPostcode(postcodeOfArr, countryFromURL);
-        const countryCode = PostcodeObject?.postcodeAPIResponse?.country_code || PostcodeObject?.postcodeAPIResponse?.country?.alpha2;
+        const countryCode = getCountryAbbreviation(countryFromURL);
         postcode = PostcodeObject?.postcode;
         
         if(!postcode) continue;
@@ -92,7 +92,7 @@ async function loopForPostcodeIfCountry(pageText, countryRegex = null, countryFr
             fs.appendFile('matchesFromPostcode.txt', `${postcodeTextLocation[postcode].elements[0]}\n${postcodeTextLocation[postcode].texts[0]}\n\n`, (err) => {
                 if (err) throw err;
             });
-            country = '';
+            country = null;
             GPEs_inPage = null;
             return {postcode: postcode, postcodeAPIResponse: PostcodeObject.postcodeAPIResponse, addressDetails};
         }
@@ -111,7 +111,7 @@ function handlePostcodeMatch(postcodeMatch, matchingPostcodes, postcodeTextLocat
 
 async function VerifyPostcode(_postcodeToVerify, countryFromURL){
     let response = await passPostcodeToAPI(_postcodeToVerify, countryFromURL);
-    let postcodeAPIResponse = response.postcodeAPIResponse;
+    let postcodeAPIResponse = response;
     if(postcodeAPIResponse == null){
         postcode = null;
         return null;
@@ -126,8 +126,8 @@ async function postcodeDetailsInPage(pageText, postcodeAPIResponse) {
         GPEs_inPage = await fetchGPEandORG(pageText).GPE;
     }
     if(GPEs_inPage){
-        let city = postcodeAPIResponse.city || postcodeAPIResponse.city?.name;
-        let region = postcodeAPIResponse.state || postcodeAPIResponse.state?.name;
+        let city = postcodeAPIResponse.city;
+        let region = postcodeAPIResponse.state;
 
         if(GPEs_inPage.includes(city) || GPEs_inPage.includes(region)){
             return true;
@@ -149,16 +149,14 @@ async function VerifyTextOfPostcode(postcodeTextLocation, postcode, countryCode,
     let addressInPageTxt;
     let addressInPageTxtBackup;
     let addressText;
-    let tokenRules = getTokenRules(countryCode);
-    console.log('country code:', countryCode, tokenRules)
     // Combine the texts and elements into an array of objects
     let combined = data.texts.map((text, i) => ({ text, element: data.elements[i] }));
-
+    
     // Sort the combined array based on token count in the text
     combined.sort((a, b) => countTokens(a.text) - countTokens(b.text));
-
+    
     console.log('combined:', combined)
-
+    
     // Split the combined array back into texts and elements arrays
     data.texts = combined.map(item => item.text);
     data.elements = combined.map(item => item.element);
@@ -167,11 +165,15 @@ async function VerifyTextOfPostcode(postcodeTextLocation, postcode, countryCode,
         element = $(data.elements[i]);
         text = data.texts[i];
         // addressInPageTxt = traverseElement(element, text, minNum, maxNum, postcode, $);
-
+        
         addressInPageTxt = textCleanUp(text);
-        addressInPageTxt = removeNonAddressDetails(addressInPageTxt, postcode);
-
+        addressInPageTxt = removeNonAddressDetails(addressInPageTxt, postcode); // postcode is passed in to be avoided from being removed
+        
+        let tokenRules = getTokenRules(countryCode);
+        console.log('country code:', countryCode, tokenRules)
+        console.log('addressInPageTxt:', addressInPageTxt)
         let tokenCount = countTokens(addressInPageTxt);
+        console.log('token count:', tokenCount)
 
         if(tokenCount > tokenRules.maxNumberOfTokens){
             addressInPageTxt = shortenText(postcode, addressInPageTxt, tokenRules);
@@ -188,11 +190,11 @@ async function VerifyTextOfPostcode(postcodeTextLocation, postcode, countryCode,
 
         console.log(addressDetails)
 
-        if (addressDetails.Street_Name && addressDetails.Street_Num) {
+        if ((addressDetails.Street_Name || addressDetails.Street_Num) && (!addressDetails.Street_Num && addressDetailsBackup.Street_Num)) {
             addressText = addressInPageTxt;
 
             return addressDetails;
-        } else if(addressDetailsBackup.Street_Name && addressDetailsBackup.Street_Num){
+        } else if(addressDetailsBackup.Street_Name || addressDetailsBackup.Street_Num){
             addressText = addressInPageTxtBackup;
 
             return addressDetailsBackup;
@@ -270,97 +272,36 @@ function shortenText(postcode, text, tokenRules) {
     // Check if the postcode was found
     if (index !== -1) {
         // Extract the substring from the start to the index of the postcode
-        const substringBeforePostcode = text.substring(0, index + postcode.length);
-
+        const substringBeforePostcode = text.substring(0, index);
+    
         // Split the substring into words
         const words = substringBeforePostcode.split(/\s+/);
-
+    
         // Calculate the start index for slicing, ensure it doesn't go negative
-        const startIndex = Math.max(0, words.length - tokenRules.takeAmmountOfTokens - 1); // Subtract 1 to exclude the postcode itself
-
+        const startIndex = Math.max(0, words.length - tokenRules.takeAmmountOfTokens);
+    
+        let resultWords = words.slice(startIndex);
+    
+        // Add the postcode to the resultWords
+        resultWords.push(postcode);
+    
         if (startIndex < tokenRules.minNumberOfTokens) {
-            let substringAfterPostcode = text.substring(index);
+            let substringAfterPostcode = text.substring(index + postcode.length);
             let wordsAfter = substringAfterPostcode.split(/\s+/);
             // Check if the right side satisfies minNumberOfTokens
             if (wordsAfter.length >= tokenRules.minNumberOfTokens) {
                 let resultWordsAfter = wordsAfter.slice(0, tokenRules.minNumberOfTokens);
-
-                return resultWordsAfter.join(' ');
+                resultWords = resultWords.concat(resultWordsAfter);
             }
-
-            let resultWords = words.slice(startIndex);
-
-            return resultWords.join(' ');
         }
+    
+        console.log('resulted shortened text: ', resultWords.join(' '))
+        return resultWords.join(' ');
     } else {
         // Postcode not found in text
         console.log('Postcode not found in text');
         return text;
     }
-}
-
-async function passPostcodeToAPI(postcode, countryFromURL) {
-    let postcodeAPIResponse;
-    // postcode is first passed trough ParseAPI which is free and only for US postcodes
-    // if no data retrieved off ParseAPI, it could be invalid or non US, thereforse we try zipcodebase which is worldwide but paid, so we limit requests
-    try {
-        postcodeAPIResponse = await getPostcodeDataParseAPI(postcode, countryFromURL);
-    } catch(error) {
-        postcodeAPIResponse = null;
-        console.log('erronus postcode for API');
-    }
-    if(!postcodeAPIResponse) { // check logic here it should not trigger if postcodeAPIResponse succeded
-        try {
-            postcodeAPIResponse = await getZipcodeBaseAPI(postcode, countryFromURL);
-        } catch(error) {
-            postcodeAPIResponse = null;
-            console.log('erronus postcode for API');
-            console.log(error);
-        }
-        
-    }
-
-    if (postcodeAPIResponse === null) {
-        postcode = null;
-    }
-    
-    console.log(postcode, postcodeAPIResponse)
-
-    return {postcode, postcodeAPIResponse};
-}
-
-async function getPostcodeDataParseAPI(postcode, countryFromURL) { // parsecodeAPI
-    let data;
-
-    if (postcode) {
-        data = await getDataFromParseAPI(postcode);
-        if(countryFromURL !== data?.country?.name && countryFromURL !== null){
-            return null;
-        } else {
-            return data;
-        }
-    }
-    return null;
-}
-
-async function getZipcodeBaseAPI(postcode, country) { // pass country code as parametere if needed
-    let data; //TODO: take country, region and city from API, and search for it in Page text to verifiy it's validity, give points to each match and return the one with most points
-    data = await getDataFromZipcodeBase(postcode)
-    if (data.results[postcode] && data.results[postcode].length > 0) {
-        if (data.results[postcode].length === 1 && data.results[postcode][0].latitude !== "0.00000000" && data.results[postcode][0].longitude !== "0.00000000") { // If long and lat = 0 it can mean dummy data
-            return data.results[postcode][0];
-        } else {
-            let countryCode = getCountryAbbreviation(country);
-            for (let postcodeInfo of data.results[postcode]) { // zipcodebase API could return multiple JSON objects for the same zipcode, therefore we loop trough them until country of postcode matches
-                if (postcodeInfo.country_code === countryCode && postcodeInfo.latitude !== "0.00000000" && postcodeInfo.longitude !== "0.00000000") {
-                    return postcodeInfo;
-                } else {
-                    continue;
-                }
-            }
-        }
-    }
-    return null;
 }
 
 module.exports = {loopForPostcodeIfCountry};
