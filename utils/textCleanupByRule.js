@@ -1,44 +1,60 @@
 const rulesByCountry = {
-    "US": {
-        defaultVars: {
+    "US": (() => {
+        const defaultVars = {
             min: 6,
             max: 12,
             take: 9,
-        },
-        minNumberOfTokens: defaultVars.min,
-        maxNumberOfTokens: defaultVars.max,
-        takeAmmountOfTokens: defaultVars.take,
-    },
-    "UK": {
-        defaultVars: {
+        };
+        
+        return {
+            defaultVars,
+            minNumberOfTokens: defaultVars.min,
+            maxNumberOfTokens: defaultVars.max,
+            takeAmmountOfTokens: defaultVars.take,
+        };
+    })(),
+    "UK": (() => {
+        const defaultVars = {
             min: 4,
             max: 8,
-            take: 5,
-        },
-        minNumberOfTokens: defaultVars.min,
-        maxNumberOfTokens: defaultVars.max,
-        takeAmmountOfTokens: defaultVars.take,
-    },
-    "GB": {
-        defaultVars: {
+            take: 6,
+        };
+        
+        return {
+            defaultVars,
+            minNumberOfTokens: defaultVars.min,
+            maxNumberOfTokens: defaultVars.max,
+            takeAmmountOfTokens: defaultVars.take,
+        };
+    })(),
+    "GB": (() => {
+        defaultVars = {
             min: 4,
             max: 8,
-            take: 5,
-        },
-        minNumberOfTokens: defaultVars.min,
-        maxNumberOfTokens: defaultVars.max,
-        takeAmmountOfTokens: defaultVars.take,
-    },
-    "DE": {
-        defaultVars: {
+            take: 6,
+        };
+
+        return {
+            defaultVars,
+            minNumberOfTokens: defaultVars.min,
+            maxNumberOfTokens: defaultVars.max,
+            takeAmmountOfTokens: defaultVars.take,
+        };
+    })(),
+    "DE": (() => {
+        const defaultVars = {
             min: 3,
             max: 6,
-            take: 3,
-        },
-        minNumberOfTokens: defaultVars.min,
-        maxNumberOfTokens: defaultVars.max,
-        takeAmmountOfTokens: defaultVars.take,
-    },
+            take: 4,
+        };
+
+        return {
+            defaultVars,
+            minNumberOfTokens: defaultVars.min,
+            maxNumberOfTokens: defaultVars.max,
+            takeAmmountOfTokens: defaultVars.take,
+        };
+    })(),
 }
 
 function getTokenRules(country) {
@@ -47,9 +63,9 @@ function getTokenRules(country) {
 }
 
 function resetTokenVars(country) {
-    rules[country].minNumberOfTokens = rules[country].defaultVars.min;
-    rules[country].maxNumberOfTokens = rules[country].defaultVars.max;
-    rules[country].takeAmmountOfTokens = rules[country].defaultVars.take;
+    rulesByCountry[country].minNumberOfTokens = rulesByCountry[country].defaultVars.min;
+    rulesByCountry[country].maxNumberOfTokens = rulesByCountry[country].defaultVars.max;
+    rulesByCountry[country].takeAmmountOfTokens = rulesByCountry[country].defaultVars.take;
 }
 
 module.exports = {getTokenRules};

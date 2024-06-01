@@ -27,10 +27,14 @@ function textCleanUp(text) {
 }
 
 function removeNonAddressDetails(text, postcode) {
+    // Placeholder for the postcode
+    const placeholder = 'POSTCODE_PLACEHOLDER';
+
+    // Replace the postcode with the placeholder
+    text = text.replace(new RegExp(postcode, 'g'), placeholder);
+
     // Regex pattern for phone numbers
-    console.log('cleaning phones')
     const phonePattern = /(\+?\d{1,4}[\s-]?)?(\(?\d{1,3}\)?[\s-]?)?[\d\s-]{7,15}/g;
-    console.log('cleaning emails')
     // Regex pattern for emails
     const emailPattern = /[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}/g;
     const ATwithTextPattern = /\b\w+@\w+\b/g;
@@ -43,6 +47,10 @@ function removeNonAddressDetails(text, postcode) {
     text = text.replace(ATwithTextPattern, ' ');
     // Remove links
     text = text.replace(urlPattern, ' ');
+
+    // Replace the placeholder with the original postcode
+    text = text.replace(new RegExp(placeholder, 'g'), postcode);
+
     console.log('done cleaning phones and emails')
     // Return the cleaned text
     return text;

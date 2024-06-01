@@ -2,15 +2,26 @@ const { Worker } = require('worker_threads');
 const parquet = require('@dsnp/parquetjs');
 
 (async () => {
-    let reader = await parquet.ParquetReader.openFile('websitesFiltered.snappy.parquet');
+    let reader = await parquet.ParquetReader.openFile('falseResultedLinks.parquet');
     let cursor = reader.getCursor();
     let domains = [];
 
+    let beginAt = 1000;
+    let endAt = 2000;
+    let index = 0;
+
     let record;
     while (record = await cursor.next()) {
-        domains.push(record.domain);
+        // if (index < beginAt) {
+        //     index++;
+        //     continue;
+        // }
+        if (!record.domain.endsWith('.us') || !record.domain.endsWith('.com') || !record.domain.endsWith('.net') || !record.domain.endsWith('.org')) {
+            domains.push(record.domain);
+        }
     }
-
+    console.log('number of domains:', domains.length);
+    
     const numThreads = 8; // Adjust based on your CPU cores
     const chunkSize = Math.ceil(domains.length / numThreads);
     const workerPromises = [];

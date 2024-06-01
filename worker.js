@@ -31,7 +31,8 @@ let ORGs_GPEs_Sorted = [];
 
 (async () => {  // the main function that starts the search, loops trough all linkfs from .parquet and starts search for data
 
-    const domains = workerData.domains;
+    // const domains = workerData.domains;
+    const domains = ['andymagro.com']
     // let beginAt = 1105; // skip the first 100 records
     // let stopAT = 500; // stop at 100 records
     // let index = 0;
@@ -199,16 +200,11 @@ async function retrieveLocationData(htmlContent, pageText, url, googleScraping =
     if(postcodeObject){
         postcode = postcodeObject.postcode;
         postcodeAPIResponse = postcodeObject.postcodeAPIResponse;
-        if (postcodeAPIResponse && postcodeAPIResponse?.city?.name) { // check for parseAPI response
-            city = postcodeAPIResponse?.city?.name;
-            region = postcodeAPIResponse?.state?.name;
-        } else if(postcodeAPIResponse && postcodeAPIResponse?.city){  // check for zpicodeBase api response
-            city = postcodeAPIResponse?.city;
-            region = postcodeAPIResponse?.state;
-        } 
+        city = postcodeAPIResponse?.city;
+        region = postcodeAPIResponse?.region;
         
         if (!country) { //in case country hasn't been found off the URLm take it from the postcode if available
-            country = postcodeObject.postcodeAPIResponse?.country?.name ?? postcodeObject.postcodeAPIResponse?.country;
+            country = postcodeObject.postcodeAPIResponse?.country;
         }
     }
 

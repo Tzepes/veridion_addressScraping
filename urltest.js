@@ -1,15 +1,17 @@
 const axios = require('axios');
 const puppeteer = require('puppeteer');
 const cheerio = require('cheerio');
-const {countries, countryAbbreviations, getCountryAbbreviation} = require('./countriesCodes.js');
+const {countries, countryAbbreviations, getCountryAbbreviation} = require('./utils/countriesCodes.js');
 const getFirstPageLinks = require('./Extractors/firstPageLinksExtractor.js');
-const getPostalCodeFormat = require('./postalcodeRegex.js');
+const getPostalCodeFormat = require('./utils/postalcodeRegex.js');
 const { findCountry, getCountryFromURL, getCountryFromLanguage } = require('./Extractors/countryExtractor.js');
 const {findPostcode, loopForPostcodeIfCountry} = require('./Extractors/postcodeExtractor.js');
 const findRoad = require('./Extractors/roadExtractor.js');
-const {elementTextCleanUp, textCleanUp}= require('./dataCleanup.js');
+const {elementTextCleanUp, textCleanUp}= require('./utils/dataCleanup.js');
 const {fetchStreetDetails, fetchGPEandORG} = require('./apis/spacyLocalAPI.js');
 const {getLanguage} = require('./MLM/languageNLP.js');
+const { getCountryByScore } = require('./Extractors/countryProbabilityScore.js');
+
 
 const SBR_WS_ENDPOINT = 'wss://brd-customer-hl_39f6f47e-zone-scraping_browser1:20tfspbnsze2@brd.superproxy.io:9222';
 
@@ -54,7 +56,10 @@ async function retrieveLocationData(url) {
         console.log('got first page links')
         console.log(firstPageLinks)
         console.log('getting country');
-        country = getCountryFromURL(url);
+        if(!country){
+            country = getCountryFromURL(url);
+            country = getCountryByScore(GPEs, country, pageLanguage);
+        }
         console.log('country:', country)
 
         let postcodeObject;
@@ -64,12 +69,9 @@ async function retrieveLocationData(url) {
         if(postcodeObject){
             postcode = postcodeObject.postcode;
             postcodeAPIResponse = postcodeObject.postcodeAPIResponse;
-            if (postcodeAPIResponse && postcodeAPIResponse?.city?.name) { // check for parseAPI response
-                city = postcodeAPIResponse?.city?.name;
-                region = postcodeAPIResponse?.state?.name;
-            } else if(postcodeAPIResponse && postcodeAPIResponse?.city){  // check for zpicodeBase api response
+            if(postcodeAPIResponse && postcodeAPIResponse?.city){  // check for zpicodeBase api response
                 city = postcodeAPIResponse?.city;
-                region = postcodeAPIResponse?.state;
+                region = postcodeAPIResponse?.region;
             } 
             
             if (!country) {
@@ -82,8 +84,8 @@ async function retrieveLocationData(url) {
         }
 
         
-        if(postcode && postcodeObject.streetDetails){
-            let streetLabeled = postcodeObject.streetDetails;
+        if(postcode && postcodeObject.addressDetails){
+            let streetLabeled = postcodeObject.addressDetails;
             road = streetLabeled.Street_Name;
             roadNumber = streetLabeled.Street_Num;
         }
@@ -199,7 +201,7 @@ const urlsToTest = [
     //37
     'https://www.heavensbestofbirmingham.com/Contact-Us.html',
     //38
-    'https://newfield.co.uk'
+    'https://www.digipress.co.uk/contact/'
 ];
 
 retrieveLocationData(urlsToTest[38]);

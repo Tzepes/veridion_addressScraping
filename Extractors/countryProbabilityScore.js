@@ -1186,6 +1186,8 @@ let scores = {
 function getCountryByScore(locations, countryFromURL = null, language) {
 
     if(countryFromURL){
+        countryFromURL = convertCountryFromURLToCountryCode(countryFromURL);
+        console.log('Country from URL: ', countryFromURL);
         scores[countryFromURL].score += 5;
     }
 
@@ -1222,10 +1224,10 @@ function getCountryByScore(locations, countryFromURL = null, language) {
         return null;
     }
     
-    let highestScoreCountry = Object.entries(scores).reduce((a, b) => a[1] > b[1] ? a : b)[0];
+    let highestScoreCountry = Object.entries(scores).reduce((a, b) => a[1].score > b[1].score ? a : b)[1];
     console.log(scores);
     resetScores();
-    return highestScoreCountry.name;
+    return highestScoreCountry.score >= 5 ? highestScoreCountry.name : null;
 }
 
 function convertCountryFromURLToCountryCode(countryFromURL){
