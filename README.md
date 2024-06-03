@@ -331,8 +331,8 @@ One that seems to be the trickiest of all is deciding from which country the com
 
 For many other cases, it is easy to establish this by guessing the language with NLP language guessers, and based on this we use the correct regex format for finding the postcode. 
 
-We can go with a probability score for the cases of US, UK, Australia, Germany and Austria (because there are cases where Austrian links have .de). The country probability score will be calculated based on the GPE's extracted by Spacy, and score based on that.
-So on a .com page, where we get mentions of: "England", "Southampton", we can assume it's a UK company or institution, and search for the postcode with a proper regex and use a model trained for UK addresses.
+We can go with a probability score for the cases of US, UK, Australia, Germany and Austria (because there are cases where Austrian links have .de). The country probability score will be calculated based on the GPE's extracted by Spacy, and decide based on that.
+So on a .com page, where we get mentions of: "England", "Southampton", we can assume it's a UK company or institution, and search for the postcode with the proper regex and use a model trained for UK addresses.
 
 There will be cases where we will have foreign mentions of, for example, business parteners, and let's say we get mentions as following: "England", "Southampton", "London", "New York". In this case, UK would have a higher score then US and we can assume it's a UK company, so we'll search for a UK address.
 ### Conclusion, overall results and accuracy
@@ -352,11 +352,14 @@ But there are cases where the extracted text is not an address:
 
 2. An other option would be to use the databases and API's of each individual country, which can be free for access
 
+Second thing we can improve on is the fact that we need to train individual models for each country. It's a great approach because it increases accuracy, but it can be difficult to maintain.
+
+##### Performance 
+
 ### Sources
 
 -  [How to parse freeform street/postal address out of text, and into components](https://stackoverflow.com/questions/11160192/how-to-parse-freeform-street-postal-address-out-of-text-and-into-components)
 *  [Statistical NLP on OpenStreetMap Toward a machine-interpretable understanding of place](https://medium.com/@albarrentine/statistical-nlp-on-openstreetmap-b9d573e6cc86)
 * [Named Entity Recognition for Address Extraction in Speech-to-Text Transcriptions Using Synthetic Data](https://arxiv.org/pdf/2402.05545)((1)Slovak National Supercomputing Centre, Bratislava, Slovak Republic (3)Institute of Information Engineering, Automation, and Mathematics, Slovak University of Technology in Bratislava, Slovak Republic)
 * [Machine learning innovations in address matching: A practical comparison of word2vec and CRFs](https://onlinelibrary.wiley.com/doi/full/10.1111/tgis.12522)
-* [Attackdet: Combining web data parsing and real-time analysis with machine learning](https://www.tafpublications.com/gip_content/paper/Jater-6.1.4.pdf)
 * [Multinational Address Parsing: A Zero-Shot Evaluation](https://arxiv.org/pdf/2112.04008)
