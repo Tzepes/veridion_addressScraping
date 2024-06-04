@@ -17,10 +17,10 @@ Python (with which we will create APIs to access trained ML Models)
 Every country has it's own pattern or format for a full address, so, let's see what we have to work it. Before we get into the initial scraping, let's see what extensions are we have and what languages. After making a quick script to add each domain to a CSV file and label the domain extension: .com, .co.uk etc., and also taking the text of the first page and use Node-NLP's language guess to see what languages are on these pages, i have added these to Mongo's Charts so we can see visualize this.
 
 Based on URL:
-![[Pasted image 20240527171621.png]]
+![Description](./screenshots/Pasted%20image%2020240527171621.png)
 
 And based on Language:
-![[Pasted image 20240527171714.png]]
+![Description2](./screenshots/Pasted%20image%2020240527171714.png)
 
 I have compared both the domain and language because, just if a domain is .com, it can be anything, and if it's .de, it could easily be Austrian instead of German. This is something we will need to address later down the development of the scraper, but for now, we know that the main countries we need to take into account are US, UK and Germany. This way we can focus on the functionality of the scraper, to then later on expand it's reach.
 ### Getting the Data
@@ -69,7 +69,7 @@ For the moment, a great solution is gathering all matching numbers, and pass the
 Every country has it's own database for their zipcodes and we can get their APIs. But for the moment, we will use ParseAPI, which is a postcode API for US, which is free, and ZipCodeBase which has a limited amount of uses, but it's international, so it will be a great tool durring development.
 
 Here is an example of how our data looks so far:
-![[Pasted image 20240526213841.png]]
+![Description 3](./screenshots/Pasted%20image%2020240526213841.png)
 It's a great start! But the data is incomplete of course, the street is missing, and there seem to be occasions when not even the postcode is extracted, But now we know where the address is located in the page, we can take the text where the postcode is located, and it will contain the rest of the address.
 
 We will have to clean our data up to make it easier for our code to extract the address.
@@ -252,10 +252,10 @@ NOTE: Due to the approach we've taken, we will need to train and individual mode
 We have to address one little inconvenience, and that is that our scraper is build in NodeJS and the NER model is in Python. But we can easily create a local Python API. So we will send the text we want analyzed trough the API and get it back to post it into our results CSV file. We will declare a body to be sent trough the API, because we will also want a field for the country to select the proper model. The python script can also be made to recognize the language and select based on that, but it wont be the main approach for this can come with issues.
 
 Here is a look at our API in postman:
-![[Pasted image 20240527164111.png]]
+![Description 4](./screenshots/Pasted%20image%2020240527164111.png)
 
 Looks great, it's all coming together now. Let's implement it in our scraper and look at the results:
-![[Pasted image 20240527164206.png]]
+![Description 5](./screenshots/Pasted%20image%2020240527164206.png)
 
 It looks great! Apart from some wrong extractions, and some symbols that we should clean up. From now on, all we have to do is address these edge cases and train the models for other countries
 
@@ -264,7 +264,7 @@ But before that, there is one more main thing we need to take care of, and that 
 There is plenty of cases where it acts as no more then just a landing page, talking about the company and what it does, or cases where the address is very inconsistent, or only half of it is in the page.
 
 Well, this is where Spacy comes to the resque again. Spacy has it's pretrained NER models for many languages, which we can use to extract Company names and Locations. Here is an example from their documentation: 
-![[Pasted image 20240527165246.png]]
+![Description 6](./screenshots/Pasted%20image%2020240527165246.png)
 
 Let's take one of their model's, put it on another local API, and pass in a text from a page from our list and see what we get.
 Here is the result from the text of Umbra Window Tinting:
