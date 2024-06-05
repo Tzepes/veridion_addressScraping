@@ -3,7 +3,7 @@ const rulesByCountry = {
         const defaultVars = {
             min: 6,
             max: 12,
-            take: 9,
+            take: 10,
         };
         
         return {
@@ -16,8 +16,8 @@ const rulesByCountry = {
     "UK": (() => {
         const defaultVars = {
             min: 4,
-            max: 8,
-            take: 6,
+            max: 10,
+            take: 7,
         };
         
         return {
@@ -30,8 +30,8 @@ const rulesByCountry = {
     "GB": (() => {
         defaultVars = {
             min: 4,
-            max: 8,
-            take: 6,
+            max: 10,
+            take: 7,
         };
 
         return {

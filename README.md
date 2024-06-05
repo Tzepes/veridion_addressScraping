@@ -70,6 +70,7 @@ Every country has it's own database for their zipcodes and we can get their APIs
 
 Here is an example of how our data looks so far:
 ![Description 3](./screenshots/Pasted%20image%2020240526213841.png)
+
 It's a great start! But the data is incomplete of course, the street is missing, and there seem to be occasions when not even the postcode is extracted, But now we know where the address is located in the page, we can take the text where the postcode is located, and it will contain the rest of the address.
 
 We will have to clean our data up to make it easier for our code to extract the address.

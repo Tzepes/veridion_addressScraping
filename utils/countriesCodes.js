@@ -11,6 +11,7 @@ const countryAbbreviations = [
 ];
 
 function getCountryAbbreviation(countryName) {
+    console.log('countryName:', countryName)
     const index = countries.indexOf(countryName);
     if (index !== -1) {
         return countryAbbreviations[index];

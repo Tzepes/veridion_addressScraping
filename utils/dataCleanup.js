@@ -17,12 +17,20 @@ function elementTextCleanUp(element, $) {
 }
 
 function textCleanUp(text) {
-    text = text.replace(/\n|\t|\n811/g, ' ');      
+    // Replace new lines, tabs, and specific string patterns
+    text = text.replace(/\n|\t|\n811/g, ' ');
+
+    // Replace specific unicode characters and collapse multiple spaces
     text = text.replace(/[\uE017©•*|/]/g, ' ').replace(/\s+/g, ' ');
+
+    // Replace non-ASCII characters except specific allowed ones
     text = text.replace(/[^\x20-\x7EäöüßÄÖÜàâéèêëîïôùûüÿçÀÂÉÈÊËÎÏÔÙÛÜŸÇáíóúýčďěňřšťžČĎĚŇŘŠŤŽæøåÆØÅăâîșțĂÂÎȘȚñÑáéíóúü]/g, ' ');
-    //Remove CSS and HTML-like content
-    text = text.replace(/\w+[-\w]*\s*{[^}]*}/g, ' ');
-    
+
+    // ADD CSS AND HTML REMOVAL IF NEEDED, THIS PROCESS IS ALREADY DONE IN elementTextCleanUp()
+    // Remove CSS and HTML-like content
+    // text = text.replace(/\w+[-\w]*\s*{[^}]*}/g, ' ');
+    // console.log('after fourth replace');
+
     return text;
 }
 

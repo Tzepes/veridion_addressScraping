@@ -63,7 +63,7 @@ async function processFiles(parquetFilePath, csvFilePath, outputFilePath) {
 }
 
 // Define file paths
-const parquetFilePath = 'websitesFiltered.snappy.parquet';
+const parquetFilePath = 'websites.snappy .parquet';
 const csvFilePath = './results/finalResults/fullAddressResults.csv';
 const outputFilePath = 'websitesFiltered.snappy.parquet';
 
