@@ -40,6 +40,7 @@ async function getDataFromUKAPI(postcode) {
         return {city: data.result[0].result.admin_district, region: data.result[0].result.country, country: 'United Kingdom'};
     } catch (error) {
         console.error(error);
+        return null;
     }
 
 }
@@ -54,26 +55,35 @@ async function getDataFromOpenPLZ(postcode) {
         return {city: data[0].name, region: data[0].federalState.name, country: 'Germany'};
     } catch (error) {
         console.error(error);
-    }
-}
-
-async function getDataFromZipcodeBase(postcode) {
-    const apiUrl = `https://app.zipcodebase.com/api/v1/search?apikey=${zipcodeBaseKey}&codes=${postcode}`;
-
-    try {
-        const response = await axios.get(apiUrl);
-        const data = response.data;
-        return data;
-    } catch (error) {
-     console.log(error);   
+        return null;
     }
 }
 
 async function passPostcodeToAPI(postcode, country){
-    let countryCode = getCountryAbbreviation(country);
-    console.log('countryCode:', countryCode);
+    let countryCode;
+    let response;
+
+    if(!country){
+        country = ['United States', 'Germany', 'France']
+    }
+
+    if(Array.isArray(country)){
+        for(let i = 0; i < country.length; i++){
+            countryCode = getCountryAbbreviation(country[i]);
+            console.log('countryCode:', countryCode);
+            response = await apiFunctionsByCountry[countryCode](postcode);
+            if(response){
+                console.log(response)
+                return response;
+            }
+        }
+    } else {
+        countryCode = getCountryAbbreviation(country);
+        console.log('countryCode:', countryCode);
+        
+        return await apiFunctionsByCountry[countryCode](postcode);
+    }
     //returns: {city: 'city', state(region): 'state', country: 'country'}
-    return apiFunctionsByCountry[countryCode](postcode);
 }
 
 module.exports = {passPostcodeToAPI};
