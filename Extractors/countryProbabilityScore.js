@@ -2,7 +2,7 @@ const countryData = {
     US: {
         country: 10,
         language: 'en',
-        countryMentions: ['US', 'USA', 'United States', 'United States of America'],
+        countryMentions: ['US','U.S', 'USA', 'United States', 'United States of America'],
         regions: [
             "Alabama", "AL",
             "Alaska", "AK",
@@ -134,6 +134,7 @@ const countryData = {
             "Durham",
             "Chula Vista",
             "Fort Wayne",
+            "Wayne",
             "Jersey City",
             "St. Petersburg",
             "Laredo",
@@ -1159,7 +1160,7 @@ let scores = {
         score: 0,
         name: "Germany"
     },
-    AST: {
+    AT: {
         score: 0,
         name: "Austria"
     
@@ -1184,17 +1185,20 @@ let scores = {
 }
 
 function getCountryByScore(locations, countryFromURL = null, language) {
-
+    
+    //TODO increase score by domain extension: .co.uk., .de, etc.
+    
+    console.log('received country: ', countryFromURL);
     if(countryFromURL){
         countryFromURL = convertCountryFromURLToCountryCode(countryFromURL);
         console.log('Country from URL: ', countryFromURL);
         scores[countryFromURL].score += 5;
     }
-
+    
     for (const country in countryData) {
-
+        
         const data = countryData[country];
-
+        
         
         for(const lang of data.language){
             if(lang === language){
@@ -1202,14 +1206,13 @@ function getCountryByScore(locations, countryFromURL = null, language) {
             }
         }
         
-
         // Check for region mentions
         for (const region of data.regions) {
             if (locations.includes(region)) {
                 scores[country].score += 10;
             }
         }
-
+        
         // Check for city mentions
         for (const city of data.cities) {
             if (locations.includes(city)) {
@@ -1217,17 +1220,15 @@ function getCountryByScore(locations, countryFromURL = null, language) {
             }
         }
     }
-
+    
     if (Object.values(scores).every(score => score === 0)) {
-        console.log(scores);
-        resetScores();
         return null;
     }
     
     let highestScoreCountry = Object.entries(scores).reduce((a, b) => a[1].score > b[1].score ? a : b)[1];
     console.log(scores);
     resetScores();
-    return highestScoreCountry.score >= 5 ? highestScoreCountry.name : null;
+    return highestScoreCountry.score >= 5 ? highestScoreCountry : null;
 }
 
 function convertCountryFromURLToCountryCode(countryFromURL){
@@ -1243,7 +1244,7 @@ function convertCountryFromURLToCountryCode(countryFromURL){
         case 'Germany':
             return 'DE';
         case 'Austria':
-            return 'AST';
+            return 'AT';
         case 'France':
             return 'FR';
         case 'Italy':
