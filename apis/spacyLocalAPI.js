@@ -1,14 +1,32 @@
 const axios = require('axios');
 let domain;
 async function fetchStreetDetails(text, country) {
+    console.log('Sending text to API:', text);
+    console.log('Country:', country);
+    
     if (!text) {
         return null;
     }
+
+    const payload = {
+        text: text,
+        country: country
+    };
+
     try {
-        const response = await axios.post('http://127.0.0.1:8000/extract_street/', {
-            text: text,
-            country: country
+        // Log the payload being sent to the API
+        console.log('Payload:', JSON.stringify(payload, null, 2));
+        
+        // Send the request
+        const response = await axios.post('http://127.0.0.1:8000/extract_street/', payload, {
+            headers: {
+                'Content-Type': 'application/json'
+            }
         });
+        
+        // Log the response from the API
+        console.log('Address parser response:', JSON.stringify(response.data, null, 2));
+        
         return response.data;
     } catch (error) {
         console.error('Error fetching street details:', error);
