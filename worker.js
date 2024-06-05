@@ -1,5 +1,6 @@
 const { parentPort, workerData } = require('worker_threads');
 const puppeteer = require('puppeteer');
+const axios = require('axios');
 const cheerio = require('cheerio');
 
 const { writeCSV } = require('./utils/writeCsv.js');
@@ -11,8 +12,6 @@ const {loopForPostcodeIfCountry} = require('./Extractors/postcodeExtractor.js');
 const findRoad = require('./Extractors/roadExtractor.js');
 const getPostalCodeFormat = require('./utils/postalcodeRegex.js');
 
-const { getLanguage } = require('./MLM/languageNLP.js');
-
 const { elementTextCleanUp, textCleanUp, cleanUpFromGPEs, cleanUpStreet } = require('./utils/dataCleanup.js');
 
 const {fetchStreetDetails, fetchGPEandORG, setDomainForSpacy} = require('./apis/spacyLocalAPI.js');
@@ -21,60 +20,93 @@ const { getCountryByScore } = require('./Extractors/countryProbabilityScore.js')
 
 const SBR_WS_ENDPOINT = 'wss://brd-customer-hl_39f6f47e-zone-scraping_browser1:20tfspbnsze2@brd.superproxy.io:9222';
 
+const userAgents = [
+    'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36',
+    'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Edge/91.0.4472.124',
+    // Add more user agents if needed
+];
+
 // Declare links array:
 let firstPageLinks = [];
 let country;
+let countryScore;
 let language;
+let currentDomain;
 let ORGs = [];
 let GPEs = [];
 let ORGs_GPEs_Sorted = [];
 
 (async () => {  // the main function that starts the search, loops trough all linkfs from .parquet and starts search for data
-
-    // const domains = workerData.domains;
-    const domains = ['andymagro.com']
-    // let beginAt = 1105; // skip the first 100 records
-    // let stopAT = 500; // stop at 100 records
-    // let index = 0;
+    const domains = workerData.domains;
+    // const domains = ['dbfcc.com'];
 
     console.log('Connecting to Scraping Browser...');
-    let browser = await puppeteer.launch();
+    let browser = await puppeteer.launch({ 
+        headless: false, 
+        ignoreHTTPSErrors: true,
+        args: [
+            "--proxy-bypass-list=*",
+            "--disable-gpu",
+            "--disable-dev-shm-usage",
+            "--disable-setuid-sandbox",
+            "--no-first-run",
+            "--no-sandbox",
+            "--no-zygote",
+            "--single-process",
+            "--ignore-certificate-errors",
+            "--ignore-certificate-errors-spki-list",
+            "--enable-features=NetworkService",
+        ],
+    });
     let page = await browser.newPage();
+    await page.setUserAgent(userAgents[0]);
+    await page.setViewport({ width: 1280, height: 800 });
 
     for(let domain of domains) {
-
+        currentDomain = domain;
         let retreivedData = {country: null, region: null, city: null, postcode: null, road: null, roadNumber: null};
-        retreivedData = await accessDomain('https://' + domain, page);
-        setDomainForSpacy(domain) // THIS DOESN T WORK FIX IT MAYBE
-        let lastRetreivedActualData = {country: retreivedData?.country, region: retreivedData?.region, city: retreivedData?.city, postcode: retreivedData?.postcode, road: retreivedData?.road, roadNumber: retreivedData?.roadNumber};
-        
-        if(!retreivedData?.postcode || !retreivedData?.road){
-            if(ORGs_GPEs_Sorted){
-                retreivedData = await googleScrape(ORGs_GPEs_Sorted, page);
-            } else if(ORGs){
-                retreivedData = await googleScrape(ORGs, page);
+        try {
+            retreivedData = await accessDomain('https://' + domain, page);
+            setDomainForSpacy(domain) // THIS DOESN T WORK FIX IT MAYBE
+            let lastRetreivedActualData = {country: retreivedData?.country, region: retreivedData?.region, city: retreivedData?.city, postcode: retreivedData?.postcode, road: retreivedData?.road, roadNumber: retreivedData?.roadNumber};
+            
+            // for now check only if postcode has not been found, the NER needs updated training + better data cleaning and text selection from element
+            if(!retreivedData?.postcode && !retreivedData?.road){ //incase the postcode hasn't been found, get the linkfs of the landing page and search trough them as well (initiate only if postcode missing since street tends to be placed next to it)
+                for(let link of firstPageLinks){
+                    await new Promise(resolve => setTimeout(resolve, 500)); // delay to prevent blocking by athe server
+                    retreivedData = await accessDomain(link, page);
+                    lastRetreivedActualData = updateRetrievedData(retreivedData, lastRetreivedActualData); 
+                    if(retreivedData?.postcode && retreivedData?.road){
+                        break;
+                    }
+                }
+                retreivedData = updateMissingData(retreivedData, lastRetreivedActualData);
             }
-            lastRetreivedActualData = updateRetrievedData(retreivedData, lastRetreivedActualData); 
+            
+            if(!retreivedData?.postcode || !retreivedData?.road){
+                if(ORGs_GPEs_Sorted){
+                    retreivedData = await googleScrape(ORGs_GPEs_Sorted, page);
+                } else if(ORGs){
+                    retreivedData = await googleScrape(ORGs, page);
+                }
+                lastRetreivedActualData = updateRetrievedData(retreivedData, lastRetreivedActualData); 
+            }
+        } catch (error) {
+            console.error(`An error occurred while scraping ${domain}:`, error);
+            try {
+                retreivedData = await axiosFallback();
+            } catch (error) {
+                console.error(`An error occurred while scraping ${domain} with Axios:`, error);
+            }
+            // Continue with the next domain
+            continue;
         }
 
-        // for now check only if postcode has not been found, the NER needs updated training + better data cleaning and text selection from element
-        if(!retreivedData?.postcode && !retreivedData?.road){ //incase the postcode hasn't been found, get the linkfs of the landing page and search trough them as well (initiate only if postcode missing since street tends to be placed next to it)
-            for(let link of firstPageLinks){
-                await new Promise(resolve => setTimeout(resolve, 500)); // delay to prevent blocking by athe server
-                retreivedData = await accessDomain(link, page);
-                lastRetreivedActualData = updateRetrievedData(retreivedData, lastRetreivedActualData); 
-                if(retreivedData?.postcode && retreivedData?.road){
-                    break;
-                }
-            }
-            retreivedData = updateMissingData(retreivedData, lastRetreivedActualData);
+        if(!retreivedData?.postcode && !retreivedData?.road){
+            retreivedData = await googleScrape(ORGs_GPEs_Sorted, page);
         }
-        firstPageLinks = [];
-        country = null;
-        language = null;
-        ORGs = [];
-        GPEs = [];
-        ORGs_GPEs_Sorted = [];
+
+        resetGlobalValues();
         // console.log('postcode:', retreivedData?.postcode, 'road:', retreivedData?.road)
         await writeCSV(retreivedData, domain); //write data into CSV file
     }
@@ -125,7 +157,7 @@ async function accessDomain(domain, page, googleScraping = false){
 
         let pageText = await page.evaluate(() => document.body.innerText); //inner text fails sometimes
 
-        language = getLanguage(pageText);
+        // language = getLanguage(pageText);
 
         if (contentType === 'application/pdf' || contentType === 'audio/mpeg' || contentType === 'video/mp4') {
             console.log('Irrelevant file detected. Skipping...');
@@ -147,6 +179,8 @@ async function accessDomain(domain, page, googleScraping = false){
         } else if (error.request) {
             console.log(`Error request: ${error.request}`);
         }
+
+        retreivedData = await axiosFallback();
     }
     return retreivedData;
 }
@@ -161,6 +195,29 @@ async function googleScrape(queries, page){
             return retreivedData;
         }
     }
+}
+
+async function axiosFallback() {
+    let retreivedData = null;
+    console.log('Accessing domain with Axios: ' + currentDomain);
+    try {
+        const response = await axios.get(`http://www.${currentDomain}`, {
+            httpsAgent: new (require('https').Agent)({  
+                rejectUnauthorized: false
+            })
+        });
+        const html = response.data;
+        const $ = cheerio.load(html);
+        const pageText = $('body').text();
+
+        await getGPEandORG(pageText, currentDomain);
+
+        retreivedData = await retrieveLocationData(html, pageText, currentDomain);
+    } catch (error) {
+        console.error(`Error accessing domain ${currentDomain} with Axios: ${error.message}`);
+        throw error;
+    }
+    return retreivedData;
 }
 
 async function retrieveLocationData(htmlContent, pageText, url, googleScraping = false) {
@@ -183,14 +240,24 @@ async function retrieveLocationData(htmlContent, pageText, url, googleScraping =
 
     htmlText = $(targetTag).text(); // select google maps div with address
 
-    if(firstPageLinks.length === 0){
-        firstPageLinks = await getFirstPageLinks(url, $);
-    }
+    // if(firstPageLinks.length === 0){
+    //     firstPageLinks = await getFirstPageLinks(url, $);
+    // }
 
+    //if porbability score <= 10, fetch GPEs again and getCountryByScore
+    if (countryScore <= 10 && !googleScrape){
+        await getGPEandORG(pageText, url)
+        country = null;
+    }
+    
     if(!country){
         country = getCountryFromURL(url);
-        country = getCountryByScore(GPEs, country, language);
+        let countryScoreObject = getCountryByScore(GPEs, country, language);
+        country = countryScoreObject.name;
+        countryScore = countryScoreObject.score;
     }
+
+    console.log('Country:', country, countryScore)
 
     // Extract postcode
     let postcodeObject;
@@ -204,6 +271,7 @@ async function retrieveLocationData(htmlContent, pageText, url, googleScraping =
         region = postcodeAPIResponse?.region;
         
         if (!country) { //in case country hasn't been found off the URLm take it from the postcode if available
+            console.log('Getting country from postcode response')
             country = postcodeObject.postcodeAPIResponse?.country;
         }
     }
@@ -250,9 +318,7 @@ async function retrieveLocationData(htmlContent, pageText, url, googleScraping =
 async function getGPEandORG(pageText, domain){
     console.log(`Getting GPE and ORG entities of ${domain}...`)
     pageText = textCleanUp(pageText);
-    
-    let pageLanguage = getLanguage(pageText);
-    
+        
     let fetchResult = await fetchGPEandORG(pageText, domain);
 
     ORGs = fetchResult.ORG;
@@ -262,5 +328,17 @@ async function getGPEandORG(pageText, domain){
     } else {
         ORGs_GPEs_Sorted = fetchResult?.ORG_GPE_Sorted;
     }
+    language = fetchResult.language;
     console.log(fetchResult);
+}
+
+function resetGlobalValues(){
+    firstPageLinks = [];
+    country = null;
+    countryScore = 0;
+    currentDomain = null;
+    language = null;
+    ORGs = [];
+    GPEs = [];
+    ORGs_GPEs_Sorted = [];
 }
