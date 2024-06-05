@@ -2,23 +2,23 @@ const { Worker } = require('worker_threads');
 const parquet = require('@dsnp/parquetjs');
 
 (async () => {
-    let reader = await parquet.ParquetReader.openFile('falseResultedLinks.parquet');
+    let reader = await parquet.ParquetReader.openFile('websitesFiltered.snappy.parquet');
     let cursor = reader.getCursor();
     let domains = [];
 
-    let beginAt = 1000;
+    let beginAt = 0;
     let endAt = 2000;
     let index = 0;
 
     let record;
     while (record = await cursor.next()) {
-        // if (index < beginAt) {
-        //     index++;
-        //     continue;
-        // }
-        if (!record.domain.endsWith('.us') || !record.domain.endsWith('.com') || !record.domain.endsWith('.net') || !record.domain.endsWith('.org')) {
-            domains.push(record.domain);
+        if (index < beginAt) {
+            index++;
+            continue;
         }
+        
+        domains.push(record.domain);
+        
     }
     console.log('number of domains:', domains.length);
     
@@ -31,20 +31,27 @@ const parquet = require('@dsnp/parquetjs');
         workerPromises.push(runWorker(chunk));
     }
 
-    await Promise.all(workerPromises);
+    try {
+        await Promise.all(workerPromises);
+        console.log('All workers have finished processing');
+    } catch (error) {
+        console.error('An error occurred:', error);
+    }
     await reader.close();
-    console.log('All workers have finished processing');
 })();
 
 function runWorker(domains) {
     return new Promise((resolve, reject) => {
         const worker = new Worker('./worker.js', { workerData: { domains } });
+
         worker.on('message', (message) => {
             if (message === 'done') {
                 resolve();
             }
         });
+
         worker.on('error', reject);
+
         worker.on('exit', (code) => {
             if (code !== 0) {
                 reject(new Error(`Worker stopped with exit code ${code}`));
