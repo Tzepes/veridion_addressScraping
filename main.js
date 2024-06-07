@@ -4,7 +4,7 @@ const parquet = require('@dsnp/parquetjs');
 (async () => {
     let reader = await parquet.ParquetReader.openFile('websitesFiltered.snappy.parquet');
     let cursor = reader.getCursor();
-    let domains = [];
+    const domains = [];
 
     let beginAt = 0;
     let endAt = 2000;
@@ -17,7 +17,9 @@ const parquet = require('@dsnp/parquetjs');
             continue;
         }
         
-        domains.push(record.domain);
+        // if (!record.domain.endsWith('.de') && !record.domain.endsWith('.uk')){
+            domains.push(record.domain);
+        // }
         
     }
     console.log('number of domains:', domains.length);

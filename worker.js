@@ -2,11 +2,12 @@ const { parentPort, workerData } = require('worker_threads');
 const puppeteer = require('puppeteer');
 const axios = require('axios');
 const cheerio = require('cheerio');
+const fs = require('fs');
 
 const { writeCSV } = require('./utils/writeCsv.js');
 
 const {countries, getCountryAbbreviation} = require('./utils/countriesCodes.js');
-const getFirstPageLinks = require('./Extractors/firstPageLinksExtractor.js');
+const {getFirstPageLinks, getDomainName} = require('./Extractors/firstPageLinksExtractor.js');
 const {findCountry, getCountryFromURL} = require('./Extractors/countryExtractor.js');
 const {loopForPostcodeIfCountry} = require('./Extractors/postcodeExtractor.js');
 const findRoad = require('./Extractors/roadExtractor.js');
@@ -16,7 +17,7 @@ const { elementTextCleanUp, textCleanUp, cleanUpFromGPEs, cleanUpStreet } = requ
 
 const {fetchStreetDetails, fetchGPEandORG, setDomainForSpacy} = require('./apis/spacyLocalAPI.js');
 
-const { getCountryByScore } = require('./Extractors/countryProbabilityScore.js');
+const { getCountryByScore, resetCountryScores } = require('./Extractors/countryProbabilityScore.js');
 
 const SBR_WS_ENDPOINT = 'wss://brd-customer-hl_39f6f47e-zone-scraping_browser1:20tfspbnsze2@brd.superproxy.io:9222';
 
@@ -29,7 +30,8 @@ const userAgents = [
 // Declare links array:
 let firstPageLinks = [];
 let country;
-let countryScore;
+let countryScore = 0;
+let secondaryCountry;
 let language;
 let currentDomain;
 let ORGs = [];
@@ -37,8 +39,8 @@ let GPEs = [];
 let ORGs_GPEs_Sorted = [];
 
 (async () => {  // the main function that starts the search, loops trough all linkfs from .parquet and starts search for data
-    const domains = workerData.domains;
-    // const domains = ['dbfcc.com'];
+    // const domains = workerData.domains;
+    const domains = ['studentsuccessjournal.org/about/contact'];
 
     console.log('Connecting to Scraping Browser...');
     let browser = await puppeteer.launch({ 
@@ -64,12 +66,19 @@ let ORGs_GPEs_Sorted = [];
 
     for(let domain of domains) {
         currentDomain = domain;
+
+        let logMessage = `scraping nr: ${domains.indexOf(domain) + 1} out of: ${domains.length} domain: ${domain}\n`;
+
+        fs.appendFile('log.txt', logMessage, (err) => {
+            if (err) throw err;
+        });        
         let retreivedData = {country: null, region: null, city: null, postcode: null, road: null, roadNumber: null};
+        
         try {
             retreivedData = await accessDomain('https://' + domain, page);
             setDomainForSpacy(domain) // THIS DOESN T WORK FIX IT MAYBE
             let lastRetreivedActualData = {country: retreivedData?.country, region: retreivedData?.region, city: retreivedData?.city, postcode: retreivedData?.postcode, road: retreivedData?.road, roadNumber: retreivedData?.roadNumber};
-            
+            console.log('retrived data is:', retreivedData)
             // for now check only if postcode has not been found, the NER needs updated training + better data cleaning and text selection from element
             if(!retreivedData?.postcode && !retreivedData?.road){ //incase the postcode hasn't been found, get the linkfs of the landing page and search trough them as well (initiate only if postcode missing since street tends to be placed next to it)
                 for(let link of firstPageLinks){
@@ -84,6 +93,11 @@ let ORGs_GPEs_Sorted = [];
             }
             
             if(!retreivedData?.postcode || !retreivedData?.road){
+                let domainNameQuery = getDomainName(domain);
+                retreivedData = await googleScrape(domainNameQuery, page);
+            }
+
+            if(!retreivedData?.postcode && !retreivedData?.road){
                 if(ORGs_GPEs_Sorted){
                     retreivedData = await googleScrape(ORGs_GPEs_Sorted, page);
                 } else if(ORGs){
@@ -91,13 +105,14 @@ let ORGs_GPEs_Sorted = [];
                 }
                 lastRetreivedActualData = updateRetrievedData(retreivedData, lastRetreivedActualData); 
             }
+
         } catch (error) {
             console.error(`An error occurred while scraping ${domain}:`, error);
-            try {
-                retreivedData = await axiosFallback();
-            } catch (error) {
-                console.error(`An error occurred while scraping ${domain} with Axios:`, error);
-            }
+            // try {
+            //     retreivedData = await axiosFallback();
+            // } catch (error) {
+            //     console.error(`An error occurred while scraping ${domain} with Axios:`, error);
+            // }
             // Continue with the next domain
             continue;
         }
@@ -180,7 +195,7 @@ async function accessDomain(domain, page, googleScraping = false){
             console.log(`Error request: ${error.request}`);
         }
 
-        retreivedData = await axiosFallback();
+        // retreivedData = await axiosFallback();
     }
     return retreivedData;
 }
@@ -188,8 +203,16 @@ async function accessDomain(domain, page, googleScraping = false){
 async function googleScrape(queries, page){
     console.log('Beginning search on google for:', queries);
     //query will be an array, loop trough it
-    for(let query of queries){
-        let searchQuery = encodeURIComponent(query);
+    if(typeof queries === Array){
+        for(let query of queries){
+            let searchQuery = encodeURIComponent(query);
+            let retreivedData = await accessDomain('https://www.google.com/search?q=' + searchQuery, page, true);
+            if(retreivedData?.postcode && retreivedData?.road){
+                return retreivedData;
+            }
+        }
+    } else {
+        let searchQuery = encodeURIComponent(queries);
         let retreivedData = await accessDomain('https://www.google.com/search?q=' + searchQuery, page, true);
         if(retreivedData?.postcode && retreivedData?.road){
             return retreivedData;
@@ -236,25 +259,31 @@ async function retrieveLocationData(htmlContent, pageText, url, googleScraping =
         targetTag = 'body'
     } else {
         targetTag = '.gqkR3b.hP3ybd';
+        //TQc1id IVvPP Jb0Zif yqK6Z k5T88b -> element for eniter container
     }
 
     htmlText = $(targetTag).text(); // select google maps div with address
 
-    // if(firstPageLinks.length === 0){
-    //     firstPageLinks = await getFirstPageLinks(url, $);
-    // }
+    if(firstPageLinks.length === 0){
+        firstPageLinks = await getFirstPageLinks(url, $);
+    }
 
-    //if porbability score <= 10, fetch GPEs again and getCountryByScore
-    if (countryScore <= 10 && !googleScrape){
+    // if porbability score <= 10, fetch GPEs again and getCountryByScore
+    if (countryScore <= 10 || !googleScrape){
         await getGPEandORG(pageText, url)
         country = null;
     }
-    
-    if(!country){
+
+    if(!country || countryScore < 5){
+        console.log('GETTING COUNTRY FROM URL')
         country = getCountryFromURL(url);
         let countryScoreObject = getCountryByScore(GPEs, country, language);
+        console.log('Country score object:', countryScoreObject)
         country = countryScoreObject.name;
         countryScore = countryScoreObject.score;
+        if(countryScoreObject.countryHighProbabilityByURL){
+            secondaryCountry = countryScoreObject.countryHighProbabilityByURL.name;
+        }
     }
 
     console.log('Country:', country, countryScore)
@@ -263,7 +292,7 @@ async function retrieveLocationData(htmlContent, pageText, url, googleScraping =
     let postcodeObject;
     // the returned JSONs are different for parseAPI and zipcodebase API
     // we first check if the JSON is of parseAPI, otherwise, we try zipcodebase JSON format
-    postcodeObject = await loopForPostcodeIfCountry(pageText, getPostalCodeFormat(country), country, $, targetTag);  
+    postcodeObject = await loopForPostcodeIfCountry(pageText, getPostalCodeFormat(country), country, getPostalCodeFormat(secondaryCountry), secondaryCountry, $, targetTag);  
     if(postcodeObject){
         postcode = postcodeObject.postcode;
         postcodeAPIResponse = postcodeObject.postcodeAPIResponse;
@@ -341,4 +370,5 @@ function resetGlobalValues(){
     ORGs = [];
     GPEs = [];
     ORGs_GPEs_Sorted = [];
+    resetCountryScores();
 }
