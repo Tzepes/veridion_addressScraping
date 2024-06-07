@@ -1,6 +1,7 @@
 const domainExtensionMap = {
     // European Countries
     'uk': 'United Kingdom',
+    'uk.com': 'United Kingdom',
     'de': 'Germany',
     'fr': 'France',
     'it': 'Italy',

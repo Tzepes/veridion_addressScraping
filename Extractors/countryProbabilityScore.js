@@ -1185,18 +1185,17 @@ let scores = {
 }
 
 function getCountryByScore(locations, countryFromURL = null, language) {
+    let countryHighProbabilityByURL= null;
     
-    //TODO increase score by domain extension: .co.uk., .de, etc.
-    
-    console.log('received country: ', countryFromURL);
+    console.log('received locations: ', locations);
+    console.log('received language: ', language);
     if(countryFromURL){
         countryFromURL = convertCountryFromURLToCountryCode(countryFromURL);
-        console.log('Country from URL: ', countryFromURL);
         scores[countryFromURL].score += 5;
+        countryHighProbabilityByURL = scores[countryFromURL];
     }
     
     for (const country in countryData) {
-        
         const data = countryData[country];
         
         
@@ -1224,11 +1223,18 @@ function getCountryByScore(locations, countryFromURL = null, language) {
     if (Object.values(scores).every(score => score === 0)) {
         return null;
     }
-    
+
     let highestScoreCountry = Object.entries(scores).reduce((a, b) => a[1].score > b[1].score ? a : b)[1];
     console.log(scores);
-    resetScores();
-    return highestScoreCountry.score >= 5 ? highestScoreCountry : null;
+    if (highestScoreCountry.score >= 5) {
+        if (countryHighProbabilityByURL && (highestScoreCountry.name !== countryHighProbabilityByURL.name)) {
+            return { score: highestScoreCountry.score, name: highestScoreCountry.name, countryHighProbabilityByURL };
+        } else {
+            return highestScoreCountry;
+        }
+    } 
+
+    return { score: 0, name: 'United States'};
 }
 
 function convertCountryFromURLToCountryCode(countryFromURL){
@@ -1258,19 +1264,10 @@ function convertCountryFromURLToCountryCode(countryFromURL){
     }
 }
 
-function resetScores (){
-    scores = {
-        US: 0,
-        UK: 0,
-        AU: 0,
-        NZ: 0,
-        DE: 0,
-        AT: 0,
-        FR: 0,
-        IT: 0,
-        ES: 0,
-        DN: 0
+function resetCountryScores(){
+    for (let country in scores) {
+        scores[country].score = 0;
     }
 }
 
-module.exports = { getCountryByScore };
+module.exports = { getCountryByScore, resetCountryScores };
