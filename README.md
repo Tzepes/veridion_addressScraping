@@ -1,8 +1,6 @@
 ## Introduction
 We have the following problem to tackle: get addresses off websites of companies from a given list of links, and organize the data in the following format: Domain,Country,Region,City,Postcode,Road,Road Number .
 Why gather this information? Such data can be used for geospatial analysis, enabling mapping of regional market trends and demographic data. This data can also help in logistical planning and risk management.
-
-We will go ahead and access each link from ``websites.snappy.parquet``. We will have to get the textual data from it and find the address inside
 ## Technologies
 Languages used: 
 NodeJS (which will be the scraper) 
@@ -14,33 +12,38 @@ Python (with which we will create APIs to access trained ML Models)
 * FastAPI
 
 ## Addresses types
-Every country has it's own pattern or format for a full address, so, let's see what we have to work it. Before we get into the initial scraping, let's see what extensions are we have and what languages. After making a quick script to add each domain to a CSV file and label the domain extension: .com, .co.uk etc., and also taking the text of the first page and use Node-NLP's language guess to see what languages are on these pages, i have added these to Mongo's Charts so we can see visualize this.
+Every country has it's own pattern or format for an address, so, let's see what we have to work with. Before we get into the initial scraping, let's see what extensions are in the list of our links, and what languages can be extracted from the pages. After making a quick script to add each domain to a CSV file and label the domain extension: .com, .co.uk etc., and also taking the text of the first page and use Node-NLP's language guesser to see what languages are on these pages, I have then added these to Mongo's Charts so we can visualize this.
 
 Based on URL:
-![Description](./screenshots/Pasted%20image%2020240527171621.png)
+![Description](Pasted%20image%2020240527171621.png)
 
 And based on Language:
-![Description2](./screenshots/Pasted%20image%2020240527171714.png)
+![Description2](Pasted%20image%2020240527171714.png)
 
-I have compared both the domain and language because, just if a domain is .com, it can be anything, and if it's .de, it could easily be Austrian instead of German. This is something we will need to address later down the development of the scraper, but for now, we know that the main countries we need to take into account are US, UK and Germany. This way we can focus on the functionality of the scraper, to then later on expand it's reach.
+I have compared both the domain and language because, just if a domain is .com, it can be anything, and if it's .de, it could easily be Austrian instead of German. This is something we will need to address later down the development of the scraper, but for now, we know that the main countries we need to take into account are US, UK and Germany. This way we can focus on the functionality of the scraper, then later on expand it's reach.
+
+## Approach
+The approach I've taken and present, is as follows:
+* Access the page of the domain, and extract the page text itself and the full `<body>` with the html, so we can loop trough elements. The text will be used to extract geografical mentions and organization's names.
+* Based on the extracted geografical entities extracted, we can decide the country of the business.
+* We then search trough the page for the postcode with regex, once found, the rest of the address will be in the same text, which then we can parse.
 ## Getting the Data
 First things first, we need to get the data. We can do that just with Axios but there will be cases where Axios will fail, especially in the case of JS loaded content. Puppeteer is a very popular tool used for scraping, a headless browser, an open-source project owned by Google. Using puppeteer will also open up the door to using other tools that can help our scraping script alot, such as Bright Data, in case we want to bypass Chaptas or we have issues with IP Bans. We will also use Cheerio to ease control over HTML elements.
 
 Now, getting the html content will be easy, having our script loop trough the links from the .parquet file, and then take the data of each link and process it. But the issue is that sometimes, it will be a lot of irrelevant information. Such as `<script>` tags, the header or anything else. We will ignore these and take only the `<body>`.
 
 ### Finding and verifying the Address
-Now that we have the HTML content, how do we go about in finding the address? If we look at any example, it's a huge mess of HTML. And the address could be located anywhere within the page, in the middle of it, top, bottom, or on another link of the page like a `contacts` tab.
+Now that we have the HTML content, how do we go about finding the address? If we look at any example, it's a huge mess of HTML, to big to even show in this presentation, for it will take to much space. And the address could be located anywhere within the page, in the middle of it, top, bottom, or on another link of the page like in a `contacts` or `about` route.
 
-We'll first do a bit of data pre-processing as mentioned before, taking only the `<body>`, and inside it we will also make sure to remove irrelevant data, like images, scripts, and so on. Such data will cause big issues to our scrapper, resulting in inaccuarate and eronus extraction.
+We'll first do a bit of data pre-processing as mentioned before, taking only the `<body>`, and we will also make sure to remove irrelevant data, like images, scripts, and so on. Such data will cause big issues to our scrapper, resulting in inaccuarate and eronus extraction.
 
-But what do we do with the remaining HTML? All of our text is inside of those elements. 
-We will use the HTML elements to our advantage, this way we can take segments of text, which will be much easier to work with. 
+But what do we do with the remaining HTML? We can extract directly just the text from the page with puppeteer, and while that would work, we can do something different to actually help in our search, extraction and parsing. We will use the HTML elements to our advantage, this way we can take segments of text, which will be much easier to work with. 
 
-While we are at this, we will also extract the links from `a` tags, so in case the address is not on the main page, we will search on other pages. Later on we will implement a local API built with python, where we will use matching tehniques, so we prioritize routes that are similar to the initial domain and avoid going on potential foreign domains of other companies.
+While we are at this, we will also extract the links from `a` tags, to later search on other pages if needed. We can also prioritize the search trough key routes, as mentioned at earlier.
 
 After looking trough a couple of pages to see the pattern, I've decided to have the scrapper loop trough elements with the following priority: `'p', 'address', 'font', 'span', 'strong', 'div'`.  This way, we can prioritize small segments of text in which addresses are located most of the times. The `div` tag will be a good backup in case the data is not structured the way we want it to.
 
-Now how do we know when to stop when looping trough the page? Addressed come in many forms and can be irregular. Here are some examples of valid addresses: 
+Now how do we know when to stop when looping trough the page? Addresses come in many forms and can be irregular. Here are some examples of valid addresses: 
 
 ```
 1)  102 main street
@@ -51,7 +54,7 @@ Now how do we know when to stop when looping trough the page? Addressed come in 
 3)  p.o. #104 60203
 ```
 
-Even these are possibly valid:
+Even these are valid:
 
 ```
 4)  829 LKSDFJlkjsdflkjsdljf Bkpw 12345
@@ -59,27 +62,70 @@ Even these are possibly valid:
 5)  205 1105 14 90210
 ```
 
-But one thing seems to always be present, and that is the postcode, which has a unique format for every country. US postcodes are formed of 5 numbers, German also of 5, Romanian of 6 and UK of a set of characters and numbers. 
+But one thing seems to always be present, and that is the postcode, which has a unique format for every country. US postcodes are formed of 5 numbers, and always all the time, the state is mentioned, Germany also of 5, Romanian of 6 and UK of a set of characters and numbers. 
 
 Regex will find the postcode perfectly and we can create a list of regexes for each country. 
+### Extracting the country of the company
+Before we go about searching for the postcode, we need to find out what is the country the business is from and then decide what address format are we looking for, specifically the postcode format which is easier to find.
 
-Although this is not enough, we need to validate it. There can be cases where we look for a US postcode, and a 5 digit number is located in the page, and it's not the postcode. We will extract the wrong text and we can't allow that.
+Later down the presentation, in the "[What if there is no address on the page?](#what-if-there-is-no-address-on-the-page)" chapter, I have introduced SpaCy's NER models that can extract Geographical Entities and Organization names. We will use such a model to pass the text to and have the Geographical entities extracted. Based on that, we will introduce a scoring system.
 
-For the moment, a great solution is gathering all matching numbers, and pass them trough postcode APIs, which will also return the City and Region. This way we have already satisfied 3 of the columns of our resulted dataset. 
+Each mention of the country's name, region and city, will increase it's score. The country with the highest score will help us use the correct regex for the postcode format we need. Here is an example of a resulted score:
 
-Every country has it's own database for their zipcodes and we can get their APIs. But for the moment, we will use ParseAPI, which is a postcode API for US, which is free, and ZipCodeBase which has a limited amount of uses, but it's international, so it will be a great tool durring development.
+```
+locations mentions:  [
+  'Europe',
+  'Canada',
+  'Nordics',
+  'Norway',
+  'Erwitte',
+  'Germany',
+  'Düsseldorf',
+  'Germany',
+  'Friedrichshafen',
+  'Germany'
+]
+
+received language:  en
+
+{
+  US: { score: 0, name: 'United States' },
+  UK: { score: 0, name: 'United Kingdom' },
+  AU: { score: 0, name: 'Australia' },
+  NZ: { score: 0, name: 'New Zealand' },
+  DE: { score: 10, name: 'Germany' },
+  AT: { score: 0, name: 'Austria' },
+  FR: { score: 0, name: 'France' },
+  IT: { score: 0, name: 'Italy' },
+  ES: { score: 0, name: 'Spain' },
+  DN: { score: 0, name: 'Denmark' }
+}
+
+Country: Germany (score 10)
+```
+
+With a pre-generated list of regions and cities of the countries, we can easily count the score, and then use the correct regex to find the postcode and the rest of the address.
+
+In case the score is not high enough, the scraper will continue to score countries until it gets a relevant score. We will also take the country that is in second place as a backup, in case the scoring was wrong
+### Finding the postcode
+Now knowing for what postcode format to find, all matches with the regex will be found in the page.
+
+We also need to validate the postcode as well once found. There can be cases where we look for a US postcode, and a 5 digit number is located in the page, and it's not the postcode. This will end up in extracting the wrong text.
+
+For the moment, a great solution is gathering all matching numbers, and pass them trough postcode APIs, which will also return the City and Region. This way we have already completed 3 of the columns of our resulted dataset. 
+
+Every country has it's own database for their zipcodes and we can use their APIs for free. But for the moment, we will use ParseAPI, which is a postcode API for US, and ZipCodeBase which has a limited amount of uses, but it's international, so it will be a great tool during development.
 
 Here is an example of how our data looks so far:
 ![[Pasted image 20240609194857.png]]
 
-It's a great start! But the data is incomplete of course, the street is missing, and there seem to be occasions when not even the postcode is extracted, But now we know where the address is located in the page, we can take the text where the postcode is located, and it will contain the rest of the address.
+It's a great start! But the data is incomplete ofcourse, the street is missing, and there seem to be occasions when not even the postcode is extracted, But now we know where the address is located in the page, we can take the text where the postcode is located, and it will contain the rest of the address.
 
 We will also have to clean our data up to make it easier for our code to extract the address.
-
 ### Cleaning the Data
-Before we get the rest of the details from the address, we need to clean the text up. Many text samples we extract will come in with unencoded characters, potentially, leftover HTML and so on. These will hinder our process of accurately and correctly extract address. 
+Before we get the rest of the details from the address, we need to clean the text up. Many text samples we extract will come in with unencoded characters, break line characters like `\n` or `\t`, and potentially, even leftover HTML, and so on. This will hinder our process of accurately and correctly extracting addresses. 
 
-We don't want to remove to many content either. A lot of symbols can provide context like comas, and many german street names, have '-' in them. So we will only focus for the text to look clean and human like.
+We don't want to remove to much content either. A lot of symbols can provide context like comas, and many german street names, have '-' in them. So we will only focus for the text to look clean and human like.
 
 With proper cleaning, we can ensure that the texts which we will evaluate, will look as the following:
 ```
@@ -108,33 +154,30 @@ span
 122 E Patrick St 120, Frederick, MD 21701, Statele Unite ale Americii 
 ```
 
-We can also remove irrelevant information that can be spotted, such as phone numbers and emails, which might make the label of addresses finicky. So in the case of this text: `101 S Market Street Frederick, MD 21701 301-228-3670`, we will have `101 S Market Street Frederick, MD 21701`. Better looking text for a small amount of effort.
+We can also remove irrelevant information that can be spotted, such as phone numbers and emails, which might make the parsing of the addresses finicky. So in the case of this text: `101 S Market Street Frederick, MD 21701 301-228-3670`, we will have `101 S Market Street Frederick, MD 21701`. 
 ## NER Models
-So, how do we go about labeling our addresses in the format we want? Because, at the end of the day, as much data cleaning we try to do, we will surely miss something. Addresses in companies websites will be very irregular, many might have a pattern but it will not be always the same. And let's say we want to use regex, we can definitely look for Street, St, Drive, etc.  
+So, how do we go about labeling our addresses in the format we want? Because, at the end of the day, as much data cleaning we try to do, we will surely miss something. Addresses in companies websites will be irregular, many might have a pattern but it will not be always the same. And let's say we want to use regex, we can definitely look for words like Street, St, Drive, etc.  
 
 But what about this street? `1739 S Jade Way`
-We put way in our regex, but how do we know how many tokens we take to take the full name? There are cases like this, numbers at the start and end of the street name `122 E Patrick St 120`.
+We can put 'way' in our regex, but how do we know how many tokens we need to take to have the full street name? There are cases like this, numbers at the start and end of the street name `122 E Patrick St 120`.
 
-List goes on, regex is not the solution of such a task. It works great for the postcode, yes, but that's because in that case, we look only for one singular token with a very specific pattern. 
+List goes on, regex is not the solution for such a task. It works great for the postcode, yes, but that's because in that case, we look only for one singular token with a very specific pattern. 
 
-This is a great task for a Named Entity Recognition model. It's an ML tehnique that works on classification and it's statistical, and that's what we need to do, we need to classify which element of the address is what. These models are also rule based, and work great if they are trained with a context in mind. 
+This is where Named Entity Recognition (NER) models come into play. NER is a machine learning technique that classifies elements within a text into predefined categories such as names of people, organizations, locations, and more. For our purposes, NER can help classify and label different components of an address. They use statistical methods to understand and categorize text based on the context, which makes them highly adaptable and accurate.
 
-But they can still fail when it comes to context. For example, `Jordan`, can be both a person and the country, if we come with a text `I'm going to Jordan`, the result will be based on the context and entities we trained the model with. 
-
-Fortunately this is not a big issue for us, because address still tend to have a pattern, and we already have our trusty postcode APIs that finish more then half of the job. We only need to get the street now.
-
-I have chosen to go with Spacy after reading trough some articles about NER Models. Spacy has it's own models for many purposes, including an NER system which we can train specifically for our task. And their trained pipeline is already very good at finding companies and locations, which will help us even more.
-
+One of the strengths of NER models is their ability to understand context. For instance, the word "Jordan" could refer to a person's name or a country. An NER model determines the correct classification based on the surrounding text. If the text says "I'm going to Jordan," the model uses context to infer that "Jordan" is likely a country.
+ 
+After researching various NER models, I chose SpaCy for our address labeling task. SpaCy is a robust NLP library with pre-trained models for many tasks, including NER. SpaCy’s pre-trained pipelines are particularly adept at identifying companies and locations, providing a solid foundation for further training specific to our needs.
 #### Training Strategy
 How do we go about training the model? What is a good approach? 
-This paper: [Named Entity Recognition for Address Extraction in Speech-to-Text Transcriptions Using Synthetic Data](https://arxiv.org/pdf/2402.05545), present's a popular approach for our type of problem, BIO annotation (Beginning, Inside, Outside). So we will mark texts containing an address with the Outside text of the address, which is text non related to the address itself, Beginning text of the address, which will be the first token of the address, and the Inside text of the address. This is a great approach because as mentioned, no matter how much we clean our data, we can't address all edge cases, we need to teach our model what does an address look like, where does it start and where does it end. 
+This paper: [Named Entity Recognition for Address Extraction in Speech-to-Text Transcriptions Using Synthetic Data](https://arxiv.org/pdf/2402.05545), present's a popular approach for our type of problem, BIO annotation (Beginning, Inside, Outside). So we will mark texts containing an address with the Outside text of the address, which is text non related to the address itself, Beginning text of the address, which will be the first token of the address, and the Inside text of the address. This is a great approach because as mentioned, no matter how much we clean our data, we can't address all edge cases, we need to teach our model how does an address look like, where does it start and where does it end. 
 
 Here is a BIO annotation example (as presented in the paper): 
 `Plant Location: 835 Township Line Rd Phoenixville, PA 19460-3097`
 O - Plant; O - Location; O - : ; B - 835 (Beginning of street num); B - Township(Beginning of street name); I - Line (Inside street name); 
 I - Rd (Inside street name) B - PhoenixVille (Beginning of city), O - , ; B - PA (Beginning of state); B - 19460(Beginning of postcode); I - '-' (Inside postcode); I - '3097'(Inside of postcode)
 
-Now, Spacy doesn't present a BIO annotation available for their model, but something rather similar. Training data for Spacy is by mentioned the limits of each token, having it labeled aproprietly. 
+Now, Spacy doesn't have a BIO annotation available for their model, but something rather similar. Training data for Spacy is by defining the limits of each token, having it labeled appropriately. 
 
 ```
 {
@@ -178,12 +221,11 @@ Now, Spacy doesn't present a BIO annotation available for their model, but somet
 }
 ```
 
-We'll label our texts in a csv format, which will then be processed by a python script and transformed into the corpus format Spacy understand.
-
+We will structure and label training data inside a CSV file, which will then be processed by a python script and transformed into the corpus format Spacy understands.
 #### Training Data
 Now that we have a strategy, we only need the right data to train our Spacy NER address parser. Unfortunately, it's easier said then done.
 
-It is a similar issue the authors of the earlier mentioned paper came across too. We need to train the model with the type of data we will send to him to evaluate, and that's very organic data, and we will need alot of examples. It will not be enough to train our model with a plain full address because the texts we will find wont always be like that.
+This is an issue the authors of the earlier mentioned paper came across too. We need to train the model with the type of data we will send to him to evaluate, and that will tend to be organic data, and we will need a lot of examples. It will not be enough to train our model with a plain full address because the texts we will find wont always be like that.
 
 The good thing is, we already have some data. We can use the scraper we've build so far, and take the texts extracted together with the postcode, which comes in various forms:
 `WICKED ISLAND BAKERY 7 B BAYBERRY COURT NANTUCKET, MA 02554 WICKEDISLANDBAKERY@GMAIL COM`
@@ -194,7 +236,7 @@ The good thing is, we already have some data. We can use the scraper we've build
 
 `Country Inn Suites, 236 Old Epps Bridge Road, Athens 30606 SCHEDULED TO SPEAK`
 
-And with this, we can follow the approach of the paper, because we'll need more example texts. We will take about 100 of the extracted texts we have, and make calls to the OpenAI api to have it generate more texts similar to them. We will also ask OpenAI to generate them in a CSV Format. The results still required some manual work, since the generation and labeling was not perfect. 
+And with this, we can follow the approach of the paper, because we'll need more example texts. For now, we can take about 100 of the extracted texts we have, and make calls to the OpenAI api to have it generate more texts similar to them. We will also ask OpenAI to generate them in a CSV Format. The results still required some manual work, since the generation and labeling was not always correct. 
 
 ```
 Text,Address,Street_Number,Street_Name,Street_Address,City,Zip_Code,State,Country
@@ -296,23 +338,29 @@ At least now we have the Street and Zipcode correct, but with a bit more text pr
 
 NOTE: Due to the approach we've taken, we will need to train and individual model for each country. We have the strategy so it will only be repetitive work.
 ## Putting the scraper and NER model together
-We have to address one little inconvenience, and that is that our scraper is build in NodeJS and the NER model is in Python. But we can easily create a local Python API. So we will send the text we want analyzed trough the API and get it back to post it into our results CSV file. We will declare a body to be sent trough the API, because we will also want a field for the country to select the proper model. The python script can also be made to recognize the language and select based on that, but it wont be the main approach for this can come with issues.
+We have to address one little inconvenience, and that is that our scraper is build in NodeJS and the NER model is in Python. But we can easily create a local Python API. So we will send the text we want parsed trough the API and get it back to post it into our results CSV file. We will declare a body to be sent trough the API, because we will also want a field for the country to select the proper model. The python script can also be made to recognize the language and select based on that, but it wont be the main approach, since it can cause issues.
 
 Here is a look at our API in postman:
-![Description 4](./screenshots/Pasted%20image%2020240527164111.png)
+![Description 4](Pasted%20image%2020240527164111.png)
 
 Looks great, it's all coming together now. Let's implement it in our scraper and look at the results:
-![Description 5](./screenshots/Pasted%20image%2020240527164206.png)
+![Description 5](Pasted%20image%2020240527164206.png)
 
-It looks great! Apart from some wrong extractions, and some symbols that we should clean up. From now on, all we have to do is address these edge cases and train the models for other countries
+Results are promising, apart from some wrong extractions, and some symbols that we should clean up. From now on, all we have to do is address these edge cases and train the models for other countries
 
 But before that, there is one more main thing we need to take care of, and that is, not all companies have their address on their page.
 
 ### What if there is no address on the page?
 There is plenty of cases where it acts as no more then just a landing page, talking about the company and what it does, or cases where the address is very inconsistent, or only half of it is in the page.
 
-Well, this is where Spacy comes to the resque again. Spacy has it's pretrained NER models for many languages, which we can use to extract Company names and Locations. Here is an example from their documentation: 
-![Description 6](./screenshots/Pasted%20image%2020240527165246.png)
+We will have 2 approaches, and when one fails, we will attempt another search with the other.
+
+First approach is the easiest one. We can simply just take the name of the domain, without the extension, and use it as a google search query. Google will prioritize the perfect matching of the domain, and if the company has posted it's location on Google Maps, we will receive a Google Maps container, which will have the full address and have it parsed.
+
+Most of the times, this approach will be successful, but we can add a backup too.
+
+For the second approach, we will use SpaCy's pre-trained NER models, which are trained for many languages, and we can use the appropriate one to extract Company names and Locations. Here is an example from their documentation: 
+![Description 6](Pasted%20image%2020240527165246.png)
 
 Let's take one of their model's, put it on another local API, and pass in a text from a page from our list and see what we get.
 Here is the result from the text of Umbra Window Tinting:
@@ -353,7 +401,7 @@ Here is the result from the text of Umbra Window Tinting:
     ],
 ```
 
-And now, let's take each ORG and sort it along with the GPE that was found next to it, and sort them based on the similarity to the URL(which in most cases, if not all, it's the name of the company or institution), and avoid duplicates.
+And now, let's take each ORG and sort it along with the GPE that was found next to it, and sort them based on the similarity to the URL(which in most cases, if not all, it's the name of the company or institution).
 
 ```
 "ORG_GPE_Sorted": [
@@ -368,70 +416,36 @@ And now, let's take each ORG and sort it along with the GPE that was found next 
     ],
 ```
 
-And now we can iterate trough the array, and use the item as a search query for google search, which will also display the google maps results with the address: `Adresă: 811 W Higgins Rd # B, Schaumburg, IL 60195, Statele Unite ale Americii`
+And now we can iterate trough the array, and use the item as a search query for google search, which will also display the Google Maps results with the address: `Adresă: 811 W Higgins Rd # B, Schaumburg, IL 60195, Statele Unite ale Americii`
 
-This is the resulted text is the full address. This approach in itself can be used for the same problem, but the issue here is that sometimes, google can give the result of a company that has a very similar name and it's no what we need, so we only use it as a last resort.
-
-All there is remaining  to do train NER models for each country and address remaining edge cases and we will end up with a very accurate address scraper that avoids wrong data, and takes only correct addresses.
+If we still don't receive a Google Maps container, we can search trough the most relevant links after the google search, but if we don't get the maps result, then it most probably means the company simply doesn't have it's address public and we cannot access it.
 ## Edge Cases
-No matter how many Edge Cases we try to address, there will always be more. But there are a couple we must address for our scraper to be robust.
+Currently, there are 2 edge cases our scraper faces.
+One of the bigger issues is the country probability score which can be improved. With this method, we can't know for sure whether the mentioned regions, cities or country names are relevant. Sometimes, these mentions can be of business partners of a foreign country, and a wrong decision can be made. Or another example is of a turism company website, where it mentions countries and regions where the business runs, such case returning a confusing score.
 
-One that seems to be the trickiest of all is deciding from which country the company is. Our scrapper depends on this so it utilizes the correct postcode. In our list we have most of the examples with correct domain extensions, .com mostly used by US companies, and .co.uk used for UK companies, and so on. But this is not always the case.
-
-For many other cases, it is easy to establish this by guessing the language with NLP language guessers, and based on this we use the correct regex format for finding the postcode. 
-
-We can go with a probability score for the cases of US, UK, Australia, Germany and Austria (because there are cases where Austrian links have .de). The country probability score will be calculated based on the GPE's extracted by Spacy, and decide based on that.
-So on a .com page, where we get mentions of: "England", "Southampton", we can assume it's a UK company or institution, and search for the postcode with the proper regex and use a model trained for UK addresses.
-
-There will be cases where we will have foreign mentions of, for example, business parteners, and let's say we get mentions as following: "England", "Southampton", "London", "New York". In this case, UK would have a higher score then US and we can assume it's a UK company, so we'll search for a UK address.
+Another one is puppeteer's functionality. While it's a great choice because it can handle JS loaded content, it has failed in cases where the domain would have outdated SSL protocols. Some of these links became accessible once configuring puppeteer to ignore SSL verification, but it doesn't work all the time. A viable solution seemed to be an Axios fallback, being able to extract the data because Axios is not a headless browser scraper, but a direct fetcher.
 ## Conclusion, overall results and accuracy
+The scraper ended up being very robust. After testing and scraping, the majority of cases when the scraper fails to extract the address, is when the link is simply unaccessible or the address is not public.
 
+The scraper has successfully extracted close to 70% of addresses.
 ## Problems and improvements
 While our final scraper yielded great results, it is not without problems and there is room for improvement. 
 
-First thing we notice is cost effectiveness. Our scraper currently depends on the Zipcodebase API which brings costs at higher numbers of requests. It worked as a great tool during development, but there are a couple of solutions that will be cheaper to run.
+First thing we notice is cost effectiveness. Our scraper currently depends on the Zipcodebase API which brings costs at higher numbers of requests. It worked as a great tool during development, and the simplest solution is to use a postcode API for each country, which are free, and return all the details we need
 
-1. We use it specifically to validate the address we find in page. Therefore, one option would be to train a model for classification, to tell whether the returned text from which our regex has found the postcode, is an address or not.
+Results are not always perfect yet, they can be incomplete:
+![Description 7][./screenshots/Pasted%20image%2020240609235232.png]
+But this is mostly due to incomplete training, or sometimes wrong extraction. For example, updating the postalcode regex for the US by searching for the state next to the code itself, fixed many issues, one being the extraction of road numbers that were big as the postcode, and more training of the models with more generalized examples has increased accuracy. The models themselfes are still not perfect, failing 5-10% of the time, but it can be improved over time.
 
-Because there will be cases where a text is an address:
-`300 S Main St, Weatherford, TX 76086, United States`
+We can also improve on the fact that we need to train individual models for each country. It's a great approach because it increases accuracy, but it can be difficult to maintain. In this paper [^5], the authors propose the addition of attention mechanisms that are used to focus on relevant address parts, and domain adversarial training ensures the model generalizes well across different countries. This method, leveraging zero-shot transfer learning, allows the model to effectively parse addresses from countries not seen during training without requiring extensive retraining.
+## Performance 
+When it comes to performance, the scraper can be slow. As long as many of the links we scrape, have their address on the first page, or can be found with a simple query search, the process wont take long, but this wont always be the case and deep searching might be required. Even the first two steps wont always be that fast, especially if we have thousands of links to process.
 
-But there are cases where the extracted text is not an address:
-`7 Associated companies 390+ Beautiful Themes 15+ Easy Plugins 24150+ Active users`
-
-2. An other option would be to use the databases and API's of each individual country, which can be free for access
-
-Second thing we can improve on is the fact that we need to train individual models for each country. It's a great approach because it increases accuracy, but it can be difficult to maintain.
-
-##### Performance 
-
+I've used multithreading to extract the results, breaking the list of links into `n` amount of chunks, for each thread, using worder.js for the scraper, and FastAPI for the python API as well, otherwise the API would get flodded and it wont be able to handle to many concurrent requests. So the more cores the machine the script running on has, the faster it can finish the process.
 ### Sources
 
--  [How to parse freeform street/postal address out of text, and into components](https://stackoverflow.com/questions/11160192/how-to-parse-freeform-street-postal-address-out-of-text-and-into-components)
-*  [Statistical NLP on OpenStreetMap Toward a machine-interpretable understanding of place](https://medium.com/@albarrentine/statistical-nlp-on-openstreetmap-b9d573e6cc86)
-* [Named Entity Recognition for Address Extraction in Speech-to-Text Transcriptions Using Synthetic Data](https://arxiv.org/pdf/2402.05545)((1)Slovak National Supercomputing Centre, Bratislava, Slovak Republic (3)Institute of Information Engineering, Automation, and Mathematics, Slovak University of Technology in Bratislava, Slovak Republic)
-* [Machine learning innovations in address matching: A practical comparison of word2vec and CRFs](https://onlinelibrary.wiley.com/doi/full/10.1111/tgis.12522)
-* [Multinational Address Parsing: A Zero-Shot Evaluation](https://arxiv.org/pdf/2112.04008)
-
-
-### Summary (not actual, but to develop into)
-```
-* Introduction
-* Tech
-* Address Types (what are we dealing with)
-* Approach
-* Getting the data
-* Deciding Country
-* Finding and verifying the address
-* Cleaning the Data
-* NER Models
-	- Training strategy
-	- Training Data
-	- Training the models
-* Putting the scraper and parser together
-* What if no address on page?
-* Edge Cases
-* Conclusion
-* Improvements
-* Sources
-```
+[^1]: [How to parse freeform street/postal address out of text, and into components](https://stackoverflow.com/questions/11160192/how-to-parse-freeform-street-postal-address-out-of-text-and-into-components) 
+[^2]: [Statistical NLP on OpenStreetMap Toward a machine-interpretable understanding of place](https://medium.com/@albarrentine/statistical-nlp-on-openstreetmap-b9d573e6cc86) 
+[^3]: [Named Entity Recognition for Address Extraction in Speech-to-Text Transcriptions Using Synthetic Data](https://arxiv.org/pdf/2402.05545) (Slovak National Supercomputing Centre, Bratislava, Slovak Republic, Institute of Information Engineering, Automation, and Mathematics, Slovak University of Technology in Bratislava, Slovak Republic) 
+[^4]: [Machine learning innovations in address matching: A practical comparison of word2vec and CRFs](https://onlinelibrary.wiley.com/doi/full/10.1111/tgis.12522) 
+[^5]: [Multinational Address Parsing: A Zero-Shot Evaluation](https://arxiv.org/pdf/2112.04008)
