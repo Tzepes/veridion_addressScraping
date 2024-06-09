@@ -444,8 +444,8 @@ When it comes to performance, the scraper can be slow. As long as many of the li
 I've used multithreading to extract the results, breaking the list of links into `n` amount of chunks, for each thread, using worder.js for the scraper, and FastAPI for the python API as well, otherwise the API would get flodded and it wont be able to handle to many concurrent requests. So the more cores the machine the script running on has, the faster it can finish the process.
 ### Sources
 
-[^1]: [How to parse freeform street/postal address out of text, and into components](https://stackoverflow.com/questions/11160192/how-to-parse-freeform-street-postal-address-out-of-text-and-into-components) 
-[^2]: [Statistical NLP on OpenStreetMap Toward a machine-interpretable understanding of place](https://medium.com/@albarrentine/statistical-nlp-on-openstreetmap-b9d573e6cc86) 
+[How to parse freeform street/postal address out of text, and into components](https://stackoverflow.com/questions/11160192/how-to-parse-freeform-street-postal-address-out-of-text-and-into-components) 
+[Statistical NLP on OpenStreetMap Toward a machine-interpretable understanding of place](https://medium.com/@albarrentine/statistical-nlp-on-openstreetmap-b9d573e6cc86) 
 [^3]: [Named Entity Recognition for Address Extraction in Speech-to-Text Transcriptions Using Synthetic Data](https://arxiv.org/pdf/2402.05545) (Slovak National Supercomputing Centre, Bratislava, Slovak Republic, Institute of Information Engineering, Automation, and Mathematics, Slovak University of Technology in Bratislava, Slovak Republic) 
-[^4]: [Machine learning innovations in address matching: A practical comparison of word2vec and CRFs](https://onlinelibrary.wiley.com/doi/full/10.1111/tgis.12522) 
+[Machine learning innovations in address matching: A practical comparison of word2vec and CRFs](https://onlinelibrary.wiley.com/doi/full/10.1111/tgis.12522) 
 [^5]: [Multinational Address Parsing: A Zero-Shot Evaluation](https://arxiv.org/pdf/2112.04008)
