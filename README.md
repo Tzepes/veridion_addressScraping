@@ -445,7 +445,11 @@ I've used multithreading to extract the results, breaking the list of links into
 ### Sources
 
 [How to parse freeform street/postal address out of text, and into components](https://stackoverflow.com/questions/11160192/how-to-parse-freeform-street-postal-address-out-of-text-and-into-components) 
+
 [Statistical NLP on OpenStreetMap Toward a machine-interpretable understanding of place](https://medium.com/@albarrentine/statistical-nlp-on-openstreetmap-b9d573e6cc86) 
+
 [^3]: [Named Entity Recognition for Address Extraction in Speech-to-Text Transcriptions Using Synthetic Data](https://arxiv.org/pdf/2402.05545) (Slovak National Supercomputing Centre, Bratislava, Slovak Republic, Institute of Information Engineering, Automation, and Mathematics, Slovak University of Technology in Bratislava, Slovak Republic) 
+
 [Machine learning innovations in address matching: A practical comparison of word2vec and CRFs](https://onlinelibrary.wiley.com/doi/full/10.1111/tgis.12522) 
+
 [^5]: [Multinational Address Parsing: A Zero-Shot Evaluation](https://arxiv.org/pdf/2112.04008)
