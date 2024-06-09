@@ -15,10 +15,10 @@ Python (with which we will create APIs to access trained ML Models)
 Every country has it's own pattern or format for an address, so, let's see what we have to work with. Before we get into the initial scraping, let's see what extensions are in the list of our links, and what languages can be extracted from the pages. After making a quick script to add each domain to a CSV file and label the domain extension: .com, .co.uk etc., and also taking the text of the first page and use Node-NLP's language guesser to see what languages are on these pages, I have then added these to Mongo's Charts so we can visualize this.
 
 Based on URL:
-![Description](Pasted%20image%2020240527171621.png)
+![Description](./screenshots/URLGraph.png)
 
 And based on Language:
-![Description2](Pasted%20image%2020240527171714.png)
+![Description2](./screenshots/Languages.png)
 
 I have compared both the domain and language because, just if a domain is .com, it can be anything, and if it's .de, it could easily be Austrian instead of German. This is something we will need to address later down the development of the scraper, but for now, we know that the main countries we need to take into account are US, UK and Germany. This way we can focus on the functionality of the scraper, then later on expand it's reach.
 
@@ -117,7 +117,7 @@ For the moment, a great solution is gathering all matching numbers, and pass the
 Every country has it's own database for their zipcodes and we can use their APIs for free. But for the moment, we will use ParseAPI, which is a postcode API for US, and ZipCodeBase which has a limited amount of uses, but it's international, so it will be a great tool during development.
 
 Here is an example of how our data looks so far:
-![[Pasted image 20240609194857.png]]
+![[./screenshots/PostcodeResults.png]]
 
 It's a great start! But the data is incomplete ofcourse, the street is missing, and there seem to be occasions when not even the postcode is extracted, But now we know where the address is located in the page, we can take the text where the postcode is located, and it will contain the rest of the address.
 
@@ -170,7 +170,7 @@ One of the strengths of NER models is their ability to understand context. For i
 After researching various NER models, I chose SpaCy for our address labeling task. SpaCy is a robust NLP library with pre-trained models for many tasks, including NER. SpaCy’s pre-trained pipelines are particularly adept at identifying companies and locations, providing a solid foundation for further training specific to our needs.
 #### Training Strategy
 How do we go about training the model? What is a good approach? 
-This paper: [Named Entity Recognition for Address Extraction in Speech-to-Text Transcriptions Using Synthetic Data](https://arxiv.org/pdf/2402.05545), present's a popular approach for our type of problem, BIO annotation (Beginning, Inside, Outside). So we will mark texts containing an address with the Outside text of the address, which is text non related to the address itself, Beginning text of the address, which will be the first token of the address, and the Inside text of the address. This is a great approach because as mentioned, no matter how much we clean our data, we can't address all edge cases, we need to teach our model how does an address look like, where does it start and where does it end. 
+This paper: [^3], present's a popular approach for our type of problem, BIO annotation (Beginning, Inside, Outside). So we will mark texts containing an address with the Outside text of the address, which is text non related to the address itself, Beginning text of the address, which will be the first token of the address, and the Inside text of the address. This is a great approach because as mentioned, no matter how much we clean our data, we can't address all edge cases, we need to teach our model how does an address look like, where does it start and where does it end. 
 
 Here is a BIO annotation example (as presented in the paper): 
 `Plant Location: 835 Township Line Rd Phoenixville, PA 19460-3097`
@@ -341,10 +341,10 @@ NOTE: Due to the approach we've taken, we will need to train and individual mode
 We have to address one little inconvenience, and that is that our scraper is build in NodeJS and the NER model is in Python. But we can easily create a local Python API. So we will send the text we want parsed trough the API and get it back to post it into our results CSV file. We will declare a body to be sent trough the API, because we will also want a field for the country to select the proper model. The python script can also be made to recognize the language and select based on that, but it wont be the main approach, since it can cause issues.
 
 Here is a look at our API in postman:
-![Description 4](Pasted%20image%2020240527164111.png)
+![Description 4](./screenshots/SpacyAPIResult.png)
 
 Looks great, it's all coming together now. Let's implement it in our scraper and look at the results:
-![Description 5](Pasted%20image%2020240527164206.png)
+![Description 5](./screenshots/SuccsesfulExtractions.png)
 
 Results are promising, apart from some wrong extractions, and some symbols that we should clean up. From now on, all we have to do is address these edge cases and train the models for other countries
 
@@ -360,7 +360,7 @@ First approach is the easiest one. We can simply just take the name of the domai
 Most of the times, this approach will be successful, but we can add a backup too.
 
 For the second approach, we will use SpaCy's pre-trained NER models, which are trained for many languages, and we can use the appropriate one to extract Company names and Locations. Here is an example from their documentation: 
-![Description 6](Pasted%20image%2020240527165246.png)
+![Description 6](./screenshots/SpacyDocs.png)
 
 Let's take one of their model's, put it on another local API, and pass in a text from a page from our list and see what we get.
 Here is the result from the text of Umbra Window Tinting:
@@ -434,7 +434,7 @@ While our final scraper yielded great results, it is not without problems and th
 First thing we notice is cost effectiveness. Our scraper currently depends on the Zipcodebase API which brings costs at higher numbers of requests. It worked as a great tool during development, and the simplest solution is to use a postcode API for each country, which are free, and return all the details we need
 
 Results are not always perfect yet, they can be incomplete:
-![Description 7][./screenshots/Pasted%20image%2020240609235232.png]
+![Description 7][./screenshots/ErrounusExtractions.png]
 But this is mostly due to incomplete training, or sometimes wrong extraction. For example, updating the postalcode regex for the US by searching for the state next to the code itself, fixed many issues, one being the extraction of road numbers that were big as the postcode, and more training of the models with more generalized examples has increased accuracy. The models themselfes are still not perfect, failing 5-10% of the time, but it can be improved over time.
 
 We can also improve on the fact that we need to train individual models for each country. It's a great approach because it increases accuracy, but it can be difficult to maintain. In this paper [^5], the authors propose the addition of attention mechanisms that are used to focus on relevant address parts, and domain adversarial training ensures the model generalizes well across different countries. This method, leveraging zero-shot transfer learning, allows the model to effectively parse addresses from countries not seen during training without requiring extensive retraining.
