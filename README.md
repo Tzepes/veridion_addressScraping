@@ -136,7 +136,7 @@ I - Rd (Inside street name) B - PhoenixVille (Beginning of city), O - , ; B - PA
 
 Now, Spacy doesn't present a BIO annotation available for their model, but something rather similar. Training data for Spacy is by mentioned the limits of each token, having it labeled aproprietly. 
 
-```json
+```
 {
   "annotations": [
     {
@@ -316,7 +316,7 @@ Well, this is where Spacy comes to the resque again. Spacy has it's pretrained N
 
 Let's take one of their model's, put it on another local API, and pass in a text from a page from our list and see what we get.
 Here is the result from the text of Umbra Window Tinting:
-```javascript
+```
 "GPE": [
         "Glendale Heights",
         "Schaumburg",
@@ -355,7 +355,7 @@ Here is the result from the text of Umbra Window Tinting:
 
 And now, let's take each ORG and sort it along with the GPE that was found next to it, and sort them based on the similarity to the URL(which in most cases, if not all, it's the name of the company or institution), and avoid duplicates.
 
-```javascript
+```
 "ORG_GPE_Sorted": [
         "Umbra Glendale Heights",
         "Umbra Window Tinting Schaumburg",
