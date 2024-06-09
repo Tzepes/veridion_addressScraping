@@ -70,7 +70,7 @@ For the moment, a great solution is gathering all matching numbers, and pass the
 Every country has it's own database for their zipcodes and we can get their APIs. But for the moment, we will use ParseAPI, which is a postcode API for US, which is free, and ZipCodeBase which has a limited amount of uses, but it's international, so it will be a great tool durring development.
 
 Here is an example of how our data looks so far:
-![Description 3](./screenshots/Pasted%20image%2020240609194857)
+![[Pasted image 20240609194857.png]]
 
 It's a great start! But the data is incomplete of course, the street is missing, and there seem to be occasions when not even the postcode is extracted, But now we know where the address is located in the page, we can take the text where the postcode is located, and it will contain the rest of the address.
 
@@ -187,8 +187,11 @@ It is a similar issue the authors of the earlier mentioned paper came across too
 
 The good thing is, we already have some data. We can use the scraper we've build so far, and take the texts extracted together with the postcode, which comes in various forms:
 `WICKED ISLAND BAKERY 7 B BAYBERRY COURT NANTUCKET, MA 02554 WICKEDISLANDBAKERY@GMAIL COM`
+
 `Plant Location: 835 Township Line Rd Phoenixville, PA 19460-3097`
+
 `Mailing Address 160 Alamo Plaza Unit 1239 Alamo, CA 94507 Phone: 925-674-1000 Toll Free: 800-510-1095 Fax: 925-503-0472 Email: info@brmins com`
+
 `Country Inn Suites, 236 Old Epps Bridge Road, Athens 30606 SCHEDULED TO SPEAK`
 
 And with this, we can follow the approach of the paper, because we'll need more example texts. We will take about 100 of the extracted texts we have, and make calls to the OpenAI api to have it generate more texts similar to them. We will also ask OpenAI to generate them in a CSV Format. The results still required some manual work, since the generation and labeling was not perfect. 
@@ -313,7 +316,7 @@ Well, this is where Spacy comes to the resque again. Spacy has it's pretrained N
 
 Let's take one of their model's, put it on another local API, and pass in a text from a page from our list and see what we get.
 Here is the result from the text of Umbra Window Tinting:
-```json
+```javascript
 "GPE": [
         "Glendale Heights",
         "Schaumburg",
@@ -352,7 +355,7 @@ Here is the result from the text of Umbra Window Tinting:
 
 And now, let's take each ORG and sort it along with the GPE that was found next to it, and sort them based on the similarity to the URL(which in most cases, if not all, it's the name of the company or institution), and avoid duplicates.
 
-```json
+```javascript
 "ORG_GPE_Sorted": [
         "Umbra Glendale Heights",
         "Umbra Window Tinting Schaumburg",
