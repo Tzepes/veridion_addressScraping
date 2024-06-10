@@ -360,6 +360,7 @@ First approach is the easiest one. We can simply just take the name of the domai
 Most of the times, this approach will be successful, but we can add a backup too.
 
 For the second approach, we will use SpaCy's pre-trained NER models, which are trained for many languages, and we can use the appropriate one to extract Company names and Locations. Here is an example from their documentation: 
+
 ![Description 6](./screenshots/SpacyDocs.png)
 
 Let's take one of their model's, put it on another local API, and pass in a text from a page from our list and see what we get.
@@ -420,7 +421,7 @@ And now we can iterate trough the array, and use the item as a search query for 
 
 If we still don't receive a Google Maps container, we can search trough the most relevant links after the google search, but if we don't get the maps result, then it most probably means the company simply doesn't have it's address public and we cannot access it.
 ## Edge Cases
-Currently, there are 2 edge cases our scraper faces.
+Currently, there are a couple of edge cases our scraper faces.
 One of the bigger issues is the country probability score which can be improved. With this method, we can't know for sure whether the mentioned regions, cities or country names are relevant. Sometimes, these mentions can be of business partners of a foreign country, and a wrong decision can be made. Or another example is of a turism company website, where it mentions countries and regions where the business runs, such case returning a confusing score.
 
 Another one is puppeteer's functionality. While it's a great choice because it can handle JS loaded content, it has failed in cases where the domain would have outdated SSL protocols. Some of these links became accessible once configuring puppeteer to ignore SSL verification, but it doesn't work all the time. A viable solution seemed to be an Axios fallback, being able to extract the data because Axios is not a headless browser scraper, but a direct fetcher.
@@ -428,6 +429,8 @@ Another one is puppeteer's functionality. While it's a great choice because it c
 The scraper ended up being very robust. After testing and scraping, the majority of cases when the scraper fails to extract the address, is when the link is simply unaccessible or the address is not public.
 
 The scraper has successfully extracted close to 70% of addresses.
+
+All of the results can be found inside the results/finalResults folder.
 ## Problems and improvements
 While our final scraper yielded great results, it is not without problems and there is room for improvement. 
 
@@ -445,11 +448,7 @@ I've used multithreading to extract the results, breaking the list of links into
 ### Sources
 
 [How to parse freeform street/postal address out of text, and into components](https://stackoverflow.com/questions/11160192/how-to-parse-freeform-street-postal-address-out-of-text-and-into-components) 
-
 [Statistical NLP on OpenStreetMap Toward a machine-interpretable understanding of place](https://medium.com/@albarrentine/statistical-nlp-on-openstreetmap-b9d573e6cc86) 
-
 [^3]: [Named Entity Recognition for Address Extraction in Speech-to-Text Transcriptions Using Synthetic Data](https://arxiv.org/pdf/2402.05545) (Slovak National Supercomputing Centre, Bratislava, Slovak Republic, Institute of Information Engineering, Automation, and Mathematics, Slovak University of Technology in Bratislava, Slovak Republic) 
-
 [Machine learning innovations in address matching: A practical comparison of word2vec and CRFs](https://onlinelibrary.wiley.com/doi/full/10.1111/tgis.12522) 
-
 [^5]: [Multinational Address Parsing: A Zero-Shot Evaluation](https://arxiv.org/pdf/2112.04008)
