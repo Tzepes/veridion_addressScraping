@@ -6,7 +6,8 @@ const apiFunctionsByCountry = {
     'US': getDataFromParseAPI,
     'GB': getDataFromUKAPI,
     'UK': getDataFromUKAPI,
-    'DE': getDataFromOpenPLZ
+    'DE': getDataFromOpenPLZ,
+    'AU': getDataFromAUAPI,
     // Add more country-function pairs as needed
 };
 
@@ -59,6 +60,32 @@ async function getDataFromOpenPLZ(postcode) {
     }
 }
 
+async function getDataFromAUAPI(postcode) {
+    const apiUrl = `https://data.handyapi.com/au-postcodes/${postcode}`;
+
+    try {
+        const response = await axios.get(apiUrl);
+        let data = response.data;
+        data = transformResponse(data.Locations[0]);
+
+        return {city: data.Name, region: data.State, country: 'Australia'};
+    } catch (error) {
+        console.error(error);
+        return null;
+    }
+
+}
+
+function transformResponse(obj) {
+    let newObj = {};
+    for (let key in obj) {
+        if (obj.hasOwnProperty(key)) {
+            newObj[key] = obj[key].toLowerCase().replace(/\b\w/g, char => char.toUpperCase());
+        }
+    }
+    return newObj;
+}
+
 async function passPostcodeToAPI(postcode, country){
     let countryCode;
     let response;
@@ -83,7 +110,7 @@ async function passPostcodeToAPI(postcode, country){
         
         return await apiFunctionsByCountry[countryCode](postcode);
     }
-    //returns: {city: 'city', state(region): 'state', country: 'country'}
+    return null;
 }
 
 module.exports = {passPostcodeToAPI};

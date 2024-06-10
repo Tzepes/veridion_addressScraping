@@ -39,8 +39,8 @@ let GPEs = [];
 let ORGs_GPEs_Sorted = [];
 
 (async () => {  // the main function that starts the search, loops trough all linkfs from .parquet and starts search for data
-    // const domains = workerData.domains;
-    const domains = ['studentsuccessjournal.org/about/contact'];
+    const domains = workerData.domains;
+    // const domains = ['helmag.com'];
 
     console.log('Connecting to Scraping Browser...');
     let browser = await puppeteer.launch({ 
@@ -75,26 +75,26 @@ let ORGs_GPEs_Sorted = [];
         let retreivedData = {country: null, region: null, city: null, postcode: null, road: null, roadNumber: null};
         
         try {
-            retreivedData = await accessDomain('https://' + domain, page);
-            setDomainForSpacy(domain) // THIS DOESN T WORK FIX IT MAYBE
+            let domainNameQuery = getDomainName(domain);
+            retreivedData = await googleScrape(domainNameQuery, page);
             let lastRetreivedActualData = {country: retreivedData?.country, region: retreivedData?.region, city: retreivedData?.city, postcode: retreivedData?.postcode, road: retreivedData?.road, roadNumber: retreivedData?.roadNumber};
-            console.log('retrived data is:', retreivedData)
-            // for now check only if postcode has not been found, the NER needs updated training + better data cleaning and text selection from element
-            if(!retreivedData?.postcode && !retreivedData?.road){ //incase the postcode hasn't been found, get the linkfs of the landing page and search trough them as well (initiate only if postcode missing since street tends to be placed next to it)
-                for(let link of firstPageLinks){
-                    await new Promise(resolve => setTimeout(resolve, 500)); // delay to prevent blocking by athe server
-                    retreivedData = await accessDomain(link, page);
-                    lastRetreivedActualData = updateRetrievedData(retreivedData, lastRetreivedActualData); 
-                    if(retreivedData?.postcode && retreivedData?.road){
-                        break;
-                    }
-                }
-                retreivedData = updateMissingData(retreivedData, lastRetreivedActualData);
-            }
             
-            if(!retreivedData?.postcode || !retreivedData?.road){
-                let domainNameQuery = getDomainName(domain);
-                retreivedData = await googleScrape(domainNameQuery, page);
+            if(!retreivedData?.postcode){
+                retreivedData = await accessDomain('https://' + domain, page);
+                setDomainForSpacy(domain) // THIS DOESN T WORK FIX IT MAYBE
+                console.log('retrived data is:', retreivedData)
+                // for now check only if postcode has not been found, the NER needs updated training + better data cleaning and text selection from element
+                if(!retreivedData?.postcode && !retreivedData?.road){ //incase the postcode hasn't been found, get the linkfs of the landing page and search trough them as well (initiate only if postcode missing since street tends to be placed next to it)
+                    for(let link of firstPageLinks){
+                        await new Promise(resolve => setTimeout(resolve, 500)); // delay to prevent blocking by athe server
+                        retreivedData = await accessDomain(link, page);
+                        lastRetreivedActualData = updateRetrievedData(retreivedData, lastRetreivedActualData); 
+                        if(retreivedData?.postcode && retreivedData?.road){
+                            break;
+                        }
+                    }
+                    retreivedData = updateMissingData(retreivedData, lastRetreivedActualData);
+                }  
             }
 
             if(!retreivedData?.postcode && !retreivedData?.road){
@@ -264,12 +264,12 @@ async function retrieveLocationData(htmlContent, pageText, url, googleScraping =
 
     htmlText = $(targetTag).text(); // select google maps div with address
 
-    if(firstPageLinks.length === 0){
+    if(firstPageLinks.length === 0 && !googleScraping){
         firstPageLinks = await getFirstPageLinks(url, $);
     }
 
     // if porbability score <= 10, fetch GPEs again and getCountryByScore
-    if (countryScore <= 10 || !googleScrape){
+    if (countryScore <= 15 && !googleScrape){
         await getGPEandORG(pageText, url)
         country = null;
     }

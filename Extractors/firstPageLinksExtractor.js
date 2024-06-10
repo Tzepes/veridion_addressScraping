@@ -3,7 +3,7 @@ const fs = require('fs');
 
 const knownSLDs = ['co.uk', 'ac.uk', 'gov.uk', 'co.jp', 'com.au', 'net.au', '.uk.com'];
 const keywords = {
-    'about': 1, 'contact': 1, 'location': 1, 'address': 1, 'visit': 1, 'find': 1, 'privacy': 1,
+    'about': 1, 'contact': 1, 'location': 2,'locations': 2, 'address': 2, 'visit': 1, 'find': 1, 'privacy': 1,
     'über': 1, 'info': 1, 'information': 1, 'impressum': 2, 'kontakt': 2, 'datenschutz': 1, 'datenschutzerklärung': 1,
     'kontaktiere': 1, 'kontaktieren': 1, 'standort': 1, 'lage': 1, 'anschrift': 1, 
     'adresse': 1, 'besuch': 1, 'besuchen': 1, 'finden': 1, 'auffinden': 1,

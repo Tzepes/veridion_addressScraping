@@ -118,7 +118,7 @@ async function loopForPostcodeIfCountry(pageText, countryRegex = null, countryFr
 
 function handlePostcodeMatch(postcodeMatch, matchingPostcodes, postcodeTextLocation, element, text, _country) {
     let postcode; 
-    if(country == 'United States'){
+    if(country == 'United States' || country == 'Australia'){
         postcode = postcodeMatch[1];
     } else {
         postcode = postcodeMatch[0];

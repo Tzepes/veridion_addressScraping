@@ -13,6 +13,20 @@ const rulesByCountry = {
             takeAmmountOfTokens: defaultVars.take,
         };
     })(),
+    "AU": (() => {
+        const defaultVars = {
+            min: 6,
+            max: 10,
+            take: 7,
+        };
+        
+        return {
+            defaultVars,
+            minNumberOfTokens: defaultVars.min,
+            maxNumberOfTokens: defaultVars.max,
+            takeAmmountOfTokens: defaultVars.take,
+        };
+    })(),
     "UK": (() => {
         const defaultVars = {
             min: 4,
@@ -43,9 +57,9 @@ const rulesByCountry = {
     })(),
     "DE": (() => {
         const defaultVars = {
-            min: 3,
-            max: 6,
-            take: 4,
+            min: 4,
+            max: 10,
+            take: 7,
         };
 
         return {

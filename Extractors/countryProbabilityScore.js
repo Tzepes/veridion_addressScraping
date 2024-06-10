@@ -464,7 +464,7 @@ const countryData = {
     UK: {
         country: 10,
         language: 'en',
-        countryMentions: ['UK', 'United Kingdom', 'England', 'Great Britain', 'GB'],
+        countryMentions: ['UK', 'United Kingdom', 'England', 'Great Britain', 'GB', 'Regatul Unit'],
         regions: [
             "East Midlands", "Derbyshire", "Leicestershire", "Lincolnshire", "Northamptonshire", "Nottinghamshire", "Rutland",
             "East of England", "Bedfordshire", "Cambridgeshire", "Essex", "Hertfordshire", "Norfolk", "Suffolk",
@@ -482,6 +482,7 @@ const countryData = {
         ],
         cities: [
             "London",
+            "Londra",
             "Birmingham",
             "Manchester",
             "Glasgow",
@@ -577,7 +578,8 @@ const countryData = {
             "Perth",
             "Inverness",
             "Stirling",
-            "Dumfries"
+            "Dumfries",
+            "Winchester"
             // Add more cities
         ]
     },
@@ -1224,17 +1226,20 @@ function getCountryByScore(locations, countryFromURL = null, language) {
         return null;
     }
 
-    let highestScoreCountry = Object.entries(scores).reduce((a, b) => a[1].score > b[1].score ? a : b)[1];
+    let sortedScores = Object.entries(scores).sort((a, b) => b[1].score - a[1].score);
+    let highestScoreCountry = sortedScores[0][1];
     console.log(scores);
     if (highestScoreCountry.score >= 5) {
         if (countryHighProbabilityByURL && (highestScoreCountry.name !== countryHighProbabilityByURL.name)) {
             return { score: highestScoreCountry.score, name: highestScoreCountry.name, countryHighProbabilityByURL };
+        } else if (!countryHighProbabilityByURL && sortedScores[1] && sortedScores[1][1].score >= 10) {
+            return sortedScores[1][1];
         } else {
             return highestScoreCountry;
         }
     } 
 
-    return { score: 0, name: 'United States'};
+    return { score: 0, name: 'United States' };
 }
 
 function convertCountryFromURLToCountryCode(countryFromURL){
