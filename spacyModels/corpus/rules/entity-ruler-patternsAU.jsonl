@@ -1,0 +1,18 @@
+{"label":"STATE","pattern":[{"LOWER":"new south wales"}]}
+{"label":"STATE","pattern":[{"LOWER":"nsw"}]}
+{"label":"STATE","pattern":[{"LOWER":"victoria"}]}
+{"label":"STATE","pattern":[{"LOWER":"vic"}]}
+{"label":"STATE","pattern":[{"LOWER":"queensland"}]}
+{"label":"STATE","pattern":[{"LOWER":"qld"}]}
+{"label":"STATE","pattern":[{"LOWER":"south australia"}]}
+{"label":"STATE","pattern":[{"LOWER":"sa"}]}
+{"label":"STATE","pattern":[{"LOWER":"western australia"}]}
+{"label":"STATE","pattern":[{"LOWER":"wa"}]}
+{"label":"STATE","pattern":[{"LOWER":"tasmania"}]}
+{"label":"STATE","pattern":[{"LOWER":"tas"}]}
+{"label":"STATE","pattern":[{"LOWER":"northern territory"}]}
+{"label":"STATE","pattern":[{"LOWER":"nt"}]}
+{"label":"STATE","pattern":[{"LOWER":"australian capital territory"}]}
+{"label":"STATE","pattern":[{"LOWER":"act"}]}
+{"label":"COUNTRY","pattern":[{"LOWER":"au"}]}
+{"label":"COUNTRY","pattern":[{"LOWER":"australia"}]}
