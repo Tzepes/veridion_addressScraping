@@ -2,7 +2,7 @@ const { Worker } = require('worker_threads');
 const parquet = require('@dsnp/parquetjs');
 
 (async () => {
-    let reader = await parquet.ParquetReader.openFile('falseResultedLinks.parquet');
+    let reader = await parquet.ParquetReader.openFile('websitesFiltered.snappy.parquet');
     let cursor = reader.getCursor();
     const domains = [];
 
