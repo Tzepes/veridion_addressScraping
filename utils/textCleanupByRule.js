@@ -31,7 +31,7 @@ const rulesByCountry = {
         const defaultVars = {
             min: 4,
             max: 10,
-            take: 7,
+            take: 8,
         };
         
         return {
