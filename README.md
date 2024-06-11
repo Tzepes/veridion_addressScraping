@@ -236,11 +236,12 @@ Now that we have a strategy, we only need the right data to train our Spacy NER 
 This is an issue the authors of the earlier mentioned paper came across too. We need to train the model with the type of data we will send to him to evaluate, and that will tend to be organic data, and we will need a lot of examples. It will not be enough to train our model with a plain full address because the texts we will find wont always be like that.
 
 The good thing is, we already have some data. We can use the scraper we've build so far, and take the texts extracted together with the postcode, which comes in various forms:
+
 `WICKED ISLAND BAKERY 7 B BAYBERRY COURT NANTUCKET, MA 02554 WICKEDISLANDBAKERY@GMAIL COM`
 
 `Plant Location: 835 Township Line Rd Phoenixville, PA 19460-3097`
 
-`Mailing Address 160 Alamo Plaza Unit 1239 Alamo, CA 94507 Phone: 925-674-1000 Toll Free: 800-510-1095 Fax: 925-503-0472 Email: info@brmins com`
+``Mailing Address 160 Alamo Plaza Unit 1239 Alamo, CA 94507 Phone: 925-674-1000 Toll Free: 800-510-1095 Fax: 925-503-0472 Email: info@brmins com``
 
 `Country Inn Suites, 236 Old Epps Bridge Road, Athens 30606 SCHEDULED TO SPEAK`
 
@@ -322,7 +323,7 @@ Score looks good, while the LOSS NER is still pretty high, but that's because th
 
 Before testing, let's have a look at the confusion matrix:
 
-![[./screenshots/ConfusionMatrUS.png|{width=200,height=200}]]
+![[./screenshots/ConfusionMatrUS.png]]
 
 The true predictions are great, but we can see a lot of confusion between the Zip_Code and non relevant text. The same with the State, and City. The confusion for the Zip_Code must come from phone numbers that can look very similar to it, we will see this behaviour in the following examples:
 
