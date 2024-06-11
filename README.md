@@ -323,7 +323,7 @@ Score looks good, while the LOSS NER is still pretty high, but that's because th
 
 Before testing, let's have a look at the confusion matrix:
 
-![[./screenshots/ConfusionMatrUS.png]]
+![ConfMatr](./screenshots/ConfusionMatrUS.png)
 
 The true predictions are great, but we can see a lot of confusion between the Zip_Code and non relevant text. The same with the State, and City. The confusion for the Zip_Code must come from phone numbers that can look very similar to it, we will see this behaviour in the following examples:
 
