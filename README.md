@@ -175,9 +175,9 @@ This paper: [^3], present's a popular approach for our type of problem, BIO anno
 Here is a BIO annotation example (as presented in the paper): 
 `Plant Location: 835 Township Line Rd Phoenixville, PA 19460-3097`
 O - Plant; O - Location; O - : ; B - 835 (Beginning of street num); B - Township(Beginning of street name); I - Line (Inside street name); 
-I - Rd (Inside street name) B - PhoenixVille (Beginning of city), O - , ; B - PA (Beginning of state); B - 19460(Beginning of postcode); I - '-' (Inside postcode); I - '3097'(Inside of postcode)
+I - Rd (Inside street name) B - PhoenixVille (Beginning of city); B - PA (Beginning of state); B - 19460(Beginning of postcode); I - '-' (Inside postcode); I - '3097'(Inside of postcode)
 
-Now, Spacy doesn't have a BIO annotation available for their model, but something rather similar. Training data for Spacy is by defining the limits of each token, having it labeled appropriately. 
+Training data for Spacy is made by defining the limits of each token, having it labeled appropriately. So the labels themselfs would look as such:
 
 ```
 {
@@ -220,6 +220,14 @@ Now, Spacy doesn't have a BIO annotation available for their model, but somethin
   ]
 }
 ```
+
+And the annotation will be as following:
+
+```
+['O', 'O', 'B-Street_Number', 'B-Street_Name', 'I-Street_Name' 'I-Street_Name', 'I-Street_Name', 'B-City', 'B-Region', 'B-Postcode' 'I-Postcode'}]
+```
+
+NOTE: in cases such as UK addresses, the postcode is a string of characters and numbers which are also separated, so in their case, we would have `B` and `I`, while for most postcodes there will be only a `B` tag.
 
 We will structure and label training data inside a CSV file, which will then be processed by a python script and transformed into the corpus format Spacy understands.
 #### Training Data
