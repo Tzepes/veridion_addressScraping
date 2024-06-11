@@ -270,42 +270,61 @@ So now that we have the data, let's initiate training!
 ============================= Training pipeline =============================
 ℹ Pipeline: ['ner', 'entity_ruler']
 ℹ Initial learn rate: 0.001
-E    #       LOSS NER  ENTS_F  ENTS_P  ENTS_R  SCORE
+E    #       LOSS NER  ENTS_F  ENTS_P  ENTS_R  SCORE 
 ---  ------  --------  ------  ------  ------  ------
-  0       0     65.92   12.28    9.26   18.23    0.12
-  0      10    832.94    8.61   52.94    4.69    0.09
-  1      20    556.31   56.19   66.91   48.44    0.56
-  1      30    322.49   74.57   83.77   67.19    0.75
-  2      40    225.68   72.92   72.92   72.92    0.73
-  3      50    155.22   83.65   86.19   81.25    0.84
-  3      60    109.78   86.24   87.63   84.90    0.86
-  4      70     96.27   86.91   87.37   86.46    0.87
-  5      80     89.88   92.03   90.86   93.23    0.92
-  5      90     49.84   91.24   90.31   92.19    0.91
-  6     100     40.01   94.63   92.96   96.35    0.95
-  7     110     28.16   93.19   93.68   92.71    0.93
-  7     120     16.62   95.14   93.47   96.88    0.95
-  8     130      6.21   93.81   92.86   94.79    0.94
-  9     140      6.91   94.30   93.81   94.79    0.94
-  9     150      7.04   93.85   92.42   95.31    0.94
- 10     160     28.90   93.30   92.35   94.27    0.93
- 11     170     13.93   93.30   92.35   94.27    0.93
- 12     180     11.61   93.81   92.86   94.79    0.94
- 12     190     11.70   94.85   93.88   95.83    0.95
- 13     200      6.62   94.87   93.43   96.35    0.95
- 14     210      8.99   94.60   93.40   95.83    0.95
- 15     220     11.48   92.99   92.75   93.23    0.93
- 15     230      7.40   94.87   93.43   96.35    0.95
- 16     240      6.17   94.63   92.96   96.35    0.95
- 17     250      0.93   95.38   93.94   96.88    0.95
- 18     260      2.49   94.87   93.43   96.35    0.95
- 18     270      3.61   94.09   92.89   95.31    0.94
- 19     280      2.01   94.60   93.40   95.83    0.95
- 20     290      0.05   94.87   93.43   96.35    0.95
- 21     300      0.00   94.87   93.43   96.35    0.95
+  0       0     74.90   12.81   10.66   16.04    0.13
+  0      10    878.63    2.74   61.54    1.40    0.03
+  0      20    722.68   56.31   80.82   43.21    0.56
+  0      30    520.13   78.09   80.22   76.07    0.78
+  0      40    411.62   81.61   76.30   87.73    0.82
+  0      50    310.47   85.69   83.35   88.17    0.86
+  0      60    222.42   87.87   85.99   89.83    0.88
+  1      70    236.85   89.28   85.78   93.08    0.89
+  1      80    235.32   90.84   88.00   93.87    0.91
+  1      90    233.10   89.76   87.77   91.85    0.90
+  1     100    188.69   90.55   86.94   94.48    0.91
+  1     110    185.27   89.52   89.56   89.48    0.90
+  1     120    165.77   90.92   87.39   94.74    0.91
+  1     130    141.24   90.29   88.21   92.46    0.90
+  2     140    146.29   92.20   89.32   95.27    0.92
+  2     150    135.29   91.60   89.61   93.69    0.92
+  2     160    139.22   91.72   89.83   93.69    0.92
+  2     170    165.71   91.26   90.16   92.38    0.91
+  2     180    148.93   92.22   89.99   94.57    0.92
+  3     190    125.18   91.42   90.83   92.02    0.91
+  3     200    112.43   93.17   90.30   96.23    0.93
+  3     210    109.19   91.47   90.84   92.11    0.91
+  3     220    123.72   92.54   90.60   94.57    0.93
+  3     230    118.35   91.90   89.46   94.48    0.92
+  3     240    119.76   91.67   90.31   93.08    0.92
+  4     250    130.71   91.68   91.16   92.20    0.92
+  4     260     74.66   91.64   90.58   92.73    0.92
+  4     270    126.23   90.99   89.97   92.02    0.91
+  4     280    104.48   91.89   90.48   93.34    0.92
+  4     290     82.84   92.02   90.58   93.51    0.92
+  5     300     74.54   91.64   91.01   92.29    0.92
+  ...
+ 65    1700     56.90   92.72   92.27   93.16    0.93
+ 66    1710     47.54   91.98   92.02   91.94    0.92
+ 67    1720     43.62   92.65   91.46   93.87    0.93
+ 67    1730     51.70   91.99   91.36   92.64    0.92
+ 68    1740     51.95   91.84   91.48   92.20    0.92
+ 69    1750     32.38   92.06   91.15   92.99    0.92
+ 70    1760     45.85   92.54   92.10   92.99    0.93
+ 71    1770     50.64   92.51   92.47   92.55    0.93
+ 72    1780     42.67   92.80   91.85   93.78    0.93
+ 72    1790     44.66   92.33   91.77   92.90    0.92
+ 73    1800     47.40   92.55   91.45   93.69    0.93
+  
 ```
 
-Score looks great and the Loss score went to 0. Now this doesn't mean our model is perfect, but we are on the right path. We can continue to train or model along development, once we gather more data and we come across more edge cases.
+Score looks good, while the LOSS NER is still pretty high, but that's because this training was done with only 1500 examples and we are labeling non address details with O. It will frequently come across words it hasn't seen before, but this way, the model understand context and knows the pattern of the address way better. Once we gather more data and we come across more edge cases, we will train the model more. So for the moment, our model isn't perfect, but we are on the right path. 
+
+Before testing, let's have a look at the confusion matrix:
+
+![[./screenshots/ConfusionMatrUS.png|{width=200,height=200}]]
+
+The true predictions are great, but we can see a lot of confusion between the Zip_Code and non relevant text. The same with the State, and City. The confusion for the Zip_Code must come from phone numbers that can look very similar to it, we will see this behaviour in the following examples:
 
 Let's give it a text and see the result:
 ```
