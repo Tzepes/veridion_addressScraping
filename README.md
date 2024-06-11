@@ -326,7 +326,7 @@ Before testing, let's have a look at the confusion matrix:
 ![ConfsMatrUS.](./screenshots/ConfsMatrUS.png)
 
 
-The true predictions are great, but we can see a lot of confusion between the Zip_Code and non relevant text. The same with the State, and City. The confusion for the Zip_Code must come from phone numbers that can look very similar to it, we will see this behaviour in the following examples:
+The true predictions are great, but we can see a lot of confusion between the Zip_Code and non relevant text. The same with the State, and City. The confusion for the Zip_Code must come from phone numbers that can look very similar to it, we will see this behaviour in the following examples. One more thing to mention is the small score for the country, and the reason to that is simply that a lot of the examples did not have a mention of the country, so there was nothing to be labeled. We can easily add it to our examples, but for the moment, our approach for deciding the country by score and finding the postcode and passing it trough it's respective API, returns the country as well, so I haven't focused on getting examples with country mentions. It is also the case that a lot of the websites do not mention the country in the address anyways, which gives us even fewer examples to train with.
 
 Let's give it a text and see the result:
 ```
