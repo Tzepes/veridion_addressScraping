@@ -429,6 +429,7 @@ Another one is puppeteer's functionality. While it's a great choice because it c
 The scraper ended up being very robust. After testing and scraping, the majority of cases when the scraper fails to extract the address, is when the link is simply unaccessible or the address is not public.
 
 The scraper has successfully extracted close to 70% of addresses.
+After the addition of an Axios fallback to ignore the SSL issues, the number of addresses extracted has reached 80%.
 
 All of the results can be found inside the results/finalResults folder.
 ## Problems and improvements
