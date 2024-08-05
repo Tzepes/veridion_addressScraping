@@ -474,7 +474,7 @@ We can also improve on the fact that we need to train individual models for each
 ## Performance 
 When it comes to performance, the scraper can be slow. As long as many of the links we scrape, have their address on the first page, or can be found with a simple query search, the process wont take long, but this wont always be the case and deep searching might be required. Even the first two steps wont always be that fast, especially if we have thousands of links to process.
 
-I've used multithreading to extract the results, breaking the list of links into `n` amount of chunks, for each thread, using worder.js for the scraper, and FastAPI for the python API as well, otherwise the API would get flodded and it wont be able to handle to many concurrent requests. So the more cores the machine the script running on has, the faster it can finish the process.
+I've used multithreading to extract the results, breaking the list of links into `n` amount of chunks, for each thread, using worker.js for the scraper, and FastAPI for the python API as well, otherwise the API would get flodded and it wont be able to handle to many concurrent requests. So the more cores the machine the script running on has, the faster it can finish the process.
 ### Sources
 
 [How to parse freeform street/postal address out of text, and into components](https://stackoverflow.com/questions/11160192/how-to-parse-freeform-street-postal-address-out-of-text-and-into-components) 
