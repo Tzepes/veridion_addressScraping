@@ -468,6 +468,7 @@ First thing we notice is cost effectiveness. Our scraper currently depends on th
 
 Results are not always perfect yet, they can be incomplete:
 ![Description 7](./screenshots/ErrounusExtractions.png)
+
 But this is mostly due to incomplete training, or sometimes wrong extraction. For example, updating the postalcode regex for the US by searching for the state next to the code itself, fixed many issues, one being the extraction of road numbers that were big as the postcode, and more training of the models with more generalized examples has increased accuracy. The models themselfes are still not perfect, failing 5-10% of the time, but it can be improved over time.
 
 We can also improve on the fact that we need to train individual models for each country. It's a great approach because it increases accuracy, but it can be difficult to maintain. In this paper [^5], the authors propose the addition of attention mechanisms that are used to focus on relevant address parts, and domain adversarial training ensures the model generalizes well across different countries. This method, leveraging zero-shot transfer learning, allows the model to effectively parse addresses from countries not seen during training without requiring extensive retraining.
