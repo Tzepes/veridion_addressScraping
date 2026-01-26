@@ -258,7 +258,7 @@ async function retrieveLocationData(htmlContent, pageText, url, googleScraping =
     if(!googleScraping){
         targetTag = 'body'
     } else {
-        targetTag = '.gqkR3b.hP3ybd';
+        targetTag = '.gqkR3b.hP3ybd'; // this is the exact target class that retrieves the address from the google maps container
         //TQc1id IVvPP Jb0Zif yqK6Z k5T88b -> element for eniter container
     }
 
